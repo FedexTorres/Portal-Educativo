@@ -1,0 +1,46 @@
+body {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin: 20px;
+}
+
+.titulo {
+    color: #17a2b8;
+}
+
+.btn-menu {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+.carousel-image {
+    height: 300px;
+    object-fit: cover;
+}
+
+.card-image {
+    height: 200px;
+    object-fit: cover;
+}
+
+.nav-link {
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    border: none;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+
+.btn-info:hover {
+    background-color: #138496;
+}
