@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Portal educativo</title>
+    <link rel="stylesheet" href="css/estilosprofesor.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.js'></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#" id="btn-espacio">Mi espacio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="btn-calendario">Calendario</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="btn-cursos">Cursos</a>
+            </li>
+            <!-- Conversaciones dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Conversaciones
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#"  id="btn-nueva-conversacion">Nueva conversación</a></li>
+                <li><a class="dropdown-item" href="#" id="btn-iniciar-debate">Iniciar debate</a></li>
+                <li><a class="dropdown-item" href="#" id="btn-recibidas">Recibidas</a></li>
+                <li><a class="dropdown-item" href="#" id="btn-enviadas">Enviadas</a></li>
+                <li><a class="dropdown-item" href="#" id="btn-pendientes">Pendientes</a></li>
+              </ul>
+            </li>
+            <!-- Evaluaciones dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Evaluaciones
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Crear</a></li>
+                <li><a class="dropdown-item" href="#">Ver creadas</a></li>
+                <li><a class="dropdown-item" href="#">Rendimientos</a></li>
+              </ul>
+            </li>
+            <!-- Informes dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Informes
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Cargar por alumno</a></li>
+                <li><a class="dropdown-item" href="#">Cargar por curso</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <div id="mi-espacio">Bienvenido a tu espacio personal.</div> <!-- Sección Mi Espacio -->
+      <div id="calendar" style="display:none;"></div> <!-- Calendario oculto inicialmente -->
+      <div id="filtros-cursos" style="display:none;">
+        <div class="mb-3">
+          <input type="text" id="filtro-curso" class="form-control" placeholder="Filtrar por nombre de curso">
+        </div>
+        <div class="mb-3">
+          <input type="text" id="filtro-nivel" class="form-control" placeholder="Filtrar por nivel">
+        </div>
+        <div class="mb-3">
+          <input type="text" id="filtro-tipo" class="form-control" placeholder="Filtrar por tipo">
+        </div>
+        <!-- Tabla similar a Excel -->
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Nombre del Curso</th>
+              <th>Nivel</th>
+              <th>Tipo</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-cursos">
+            <!-- Aquí se agregarán dinámicamente los cursos -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="container mt-4">
+        <!-- Sección de Nueva Conversación -->
+        <div id="nueva-conversacion" class="nueva-conversacion" style="display:none;">
+          <h2>Nueva Conversación</h2>
+          <h4>Destinatarios</h4>
+          <div class="mb-3">
+            <input type="text" id="buscar-destinatario" class="form-control" placeholder="Buscar destinatarios">
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="envio-directo">
+            <label class="form-check-label" for="envio-directo">Envío directo</label>
+          </div>
+  
+          <h4>Contenido</h4>
+          <div class="mb-3">
+            <label for="asunto" class="form-label">Asunto <span class="text-danger">*</span></label>
+            <input type="text" id="asunto" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="etiquetas" class="form-label">Etiquetas</label>
+            <input type="text" id="etiquetas" class="form-control" placeholder="Escribir etiquetas (opcional)">
+          </div>
+          <div class="mb-3">
+            <label for="contenido" class="form-label">Texto</label>
+            <textarea id="contenido" class="form-control"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Iniciar conversacion</button>
+        </div>
+        
+    
+      </div>
+
+     <!-- Sección de Iniciar Debate -->
+<div id="iniciar-debate" class="area_debate" style="display:none;">
+    <h2>Iniciar Debate</h2>
+    
+    <h4>Tema del Debate</h4>
+    <div class="mb-3">
+      <input type="text" id="tema-debate" class="form-control" placeholder="Escribe el tema del debate" required>
+    </div>
+    
+    <h4>Contenido</h4>
+    <div class="mb-3">
+      <label for="contenido-debate" class="form-label">Texto</label>
+      <textarea id="contenido-debate" class="form-control" rows="5" placeholder="Escribe aquí tu mensaje..." required></textarea>
+    </div>
+  
+    <h4>Etiquetas</h4>
+    <div class="mb-3">
+      <input type="text" id="etiquetas-debate" class="form-control" placeholder="Escribir etiquetas (opcional)">
+    </div>
+  
+    <div class="mb-3">
+      <input class="form-check-input" type="checkbox" id="envio-directo-debate">
+      <label class="form-check-label" for="envio-directo-debate">Envío directo</label>
+    </div>
+  
+    <button type="submit" class="btn btn-primary">Iniciar Debate</button>
+  </div>
+
+  <<div class="container mt-4">
+    <div id="recibidas" style="display:none;">
+        <h2>Conversaciones Recibidas</h2>
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Buscar por contenido o asunto...">
+        </div>
+        <div>
+            <button class="btn btn-secondary">Búsqueda avanzada</button>
+        </div>
+        <div class="alert alert-info mt-3" role="alert">
+            No hay conversaciones recibidas.
+        </div>
+    </div>
+
+    <div id="enviadas" style="display:none;">
+        <h2>Conversaciones Enviadas</h2>
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Buscar por contenido o asunto...">
+        </div>
+        <p>(búsqueda avanzada)</p>
+        <div class="alert alert-info">No hay conversaciones enviadas.</div>
+    </div>
+
+    <div id="pendientes" style="display:none;">
+        <h2>Conversaciones Pendientes</h2>
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Buscar por contenido o asunto...">
+        </div>
+        <p>(búsqueda avanzada)</p>
+        <div class="alert alert-info">No hay conversaciones pendientes.</div>
+    </div>
+</div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Archivo JS personalizado -->
+
+    <script src="scripts/profesor.js"></script>
+  </body>
+</html>
