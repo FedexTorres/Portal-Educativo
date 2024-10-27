@@ -1,0 +1,17 @@
+.btn-menu {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+body {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin: 20px;
+}
+
+.titulo {
+    color: #17a2b8;
+}
+
+.imgadmin {
+    width: 300px;
+}
