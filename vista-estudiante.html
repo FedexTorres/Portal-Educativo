@@ -210,51 +210,51 @@
   <br>
 </section>
 
-<!-- ############################################# SECCION DE MENSAJES ############################################# -->
+  <!-- ############################################# SECCION DE MENSAJES ############################################# -->
 
-<section id="seccion-mensajes" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light d-none">
-<h1 class="my-4 titulo">Mensajes</h1>
-<hr>
+  <section id="seccion-mensajes" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light d-none">
+  <h1 class="my-4 titulo">Mensajes</h1>
+  <hr>
 
-  <div class="row">
-    <!-- Panel de Mensajes Recibidos -->
-    <!-- Simulacion de envio y recepcion de mensajes hasta que se conozcan 
-     herramientas de backend y BBDD para terminar el desarrollo -->
-    <div class="col-md-6">
-      <h2>Mensajes Recibidos</h2>
-      <div id="lista-mensajes" class="list-group">
-        <!-- Aquí se agregarán los mensajes recibidos dinámicamente -->
-        <a href="#" class="list-group-item list-group-item-action">
-          <strong>Remitente:</strong> Juan Pérez <br>
-          <strong>Mensaje:</strong> Hola, ¿cómo estás? <br>
-          <small>Fecha: 26/09/2024</small>
-        </a>
-        <a href="#" class="list-group-item list-group-item-action">
-          <strong>Remitente:</strong> Dani García <br>
-          <strong>Mensaje:</strong> Recuerda la reunión mañana. <br>
-          <small>Fecha: 25/09/2024</small>
-        </a>
+    <div class="row">
+      <!-- Panel de Mensajes Recibidos -->
+      <!-- Simulacion de envio y recepcion de mensajes hasta que se conozcan 
+      herramientas de backend y BBDD para terminar el desarrollo -->
+      <div class="col-md-6">
+        <h2>Mensajes Recibidos</h2>
+        <div id="lista-mensajes" class="list-group">
+          <!-- Aquí se agregarán los mensajes recibidos dinámicamente -->
+          <a href="#" class="list-group-item list-group-item-action">
+            <strong>Remitente:</strong> Juan Pérez <br>
+            <strong>Mensaje:</strong> Hola, ¿cómo estás? <br>
+            <small>Fecha: 26/09/2024</small>
+          </a>
+          <a href="#" class="list-group-item list-group-item-action">
+            <strong>Remitente:</strong> Dani García <br>
+            <strong>Mensaje:</strong> Recuerda la reunión mañana. <br>
+            <small>Fecha: 25/09/2024</small>
+          </a>
+        </div>
+      </div>
+
+      <!-- Panel para Enviar Mensajes -->
+      <div class="col-md-6">
+        <h2>Enviar Mensaje</h2>
+        <form action="" method="POST" id="form-enviar-mensaje">
+          <div class="mb-3">
+            <label for="destinatario" class="form-label">Destinatario</label>
+            <input type="text" class="form-control" id="destinatario" placeholder="Nombre del destinatario" required>
+          </div>
+          <div class="mb-3">
+            <label for="mensaje" class="form-label">Mensaje</label>
+            <textarea class="form-control" id="mensaje" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+        <br>
       </div>
     </div>
-
-    <!-- Panel para Enviar Mensajes -->
-    <div class="col-md-6">
-      <h2>Enviar Mensaje</h2>
-      <form action="" method="POST" id="form-enviar-mensaje">
-        <div class="mb-3">
-          <label for="destinatario" class="form-label">Destinatario</label>
-          <input type="text" class="form-control" id="destinatario" placeholder="Nombre del destinatario" required>
-        </div>
-        <div class="mb-3">
-          <label for="mensaje" class="form-label">Mensaje</label>
-          <textarea class="form-control" id="mensaje" rows="3" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Enviar</button>
-      </form>
-      <br>
-    </div>
-  </div>
-</section>
+  </section>
 
 <!-- ############################################# SECCION DEL PERFIL ############################################# -->
 

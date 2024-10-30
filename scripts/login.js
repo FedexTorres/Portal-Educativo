@@ -1,12 +1,12 @@
 // Validar el formulario de login
-function validarLogin(e) {
+async function validarLogin(e) {
     e.preventDefault();
     let isValid = true;
 
     // Validar usuario
-    const username = document.getElementById('nombreUsuario').value;
+    const username = document.getElementById('usuario').value;
     const nomUsuarioError = document.getElementById('nomUsuarioError');
-    if (username === '' || !/^[a-zA-Z0-9]+$/.test(username)) {
+    if (username === '') {
         nomUsuarioError.classList.remove('d-none');
         isValid = false;
     } else {
@@ -24,8 +24,37 @@ function validarLogin(e) {
     }
 
     if (isValid) {
-        alert('Formulario válido. Enviando a la base de datos para autenticación.');
+        try {
+            // Construimos los datos para enviar
+            const formulario = document.getElementById('loginForm');
+            const datos = new FormData(formulario);
+            const response = await fetch('Modelo/login.php', {
+                method: 'POST',
+                body: datos,
+            });
+
+            const resultado = await response.json(); // Procesamos la respuesta como JSON
+            console.log(resultado); // Imprimir la respuesta en consola
+
+            if (resultado.status === 'success') {
+                alert("login exitoso");
+                // Si el login es exitoso, redirigir a la vista de estudiante
+                window.location.href = 'vista-estudiante.html'; // Redirigir en caso de éxito
+            } else {
+                mostrarErrorGlobal(resultado.message); // Mostrar el mensaje de error en caso de fallo
+            }
+        } catch (error) {
+            console.log('Error en la petición:', error);
+            mostrarErrorGlobal('Ocurrió un problema al iniciar sesión.');
+        }
     }
+}
+
+// Funciones para mostrar errores globales
+function mostrarErrorGlobal(mensaje) {
+    const errorGlobal = document.getElementById('errorGlobal');
+    errorGlobal.classList.remove('d-none');
+    errorGlobal.innerHTML = mensaje;
 }
 
 // Mostrar formulario de recuperación de contraseña

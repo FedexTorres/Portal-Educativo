@@ -5,8 +5,6 @@ function validarFormuMensaje(e) {
     //const destinatario = document.getElementById('destinatario').value; // variable para guardar el destino
     const mensaje = document.getElementById('mensaje').value;
 
-    // Aquí se deberia agregar codigo para conectar con php?
-
     // Añadir el mensaje a la lista de mensajes recibidos
     const listaMensajes = document.getElementById('lista-mensajes');
     const nuevoMensaje = document.createElement('a');

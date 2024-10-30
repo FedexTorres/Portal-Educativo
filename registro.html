@@ -14,35 +14,40 @@
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="card shadow p-4 text-center" style="width: 40rem;">
             <h1 class="mb-4">Registro Estudiante</h1>
-            <form id="registroForm">
+            <!-- Div para mostrar mensajes de éxito -->
+            <div id="mensajeExito" class="alert alert-success d-none"></div>
+            <!-- Div para mostrar errores globales -->
+            <div id="errorGlobal" class="alert alert-danger d-none"></div>
+            <form id="registroForm" action="" method="POST">                
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" placeholder="Ingrese su nombre" required>
-                    <div id="errorNombre" class="text-danger"></div> <!-- Div para mostrar el error -->
+                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese su nombre" >
+                    <div id="errorNombre" class="invalid-feedback text-danger"></div> <!-- Div para mostrar el error -->
                 </div>
                 <div class="mb-3">
                     <label for="apellido" class="form-label">Apellido</label>
-                    <input type="text" class="form-control" id="apellido" placeholder="Ingrese su apellido" required>
-                    <div id="errorApellido" class="text-danger"></div> <!-- Div para mostrar el error -->
+                    <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Ingrese su apellido" >
+                    <div id="errorApellido" class="invalid-feedback text-danger"></div> <!-- Div para mostrar el error -->
                 </div>
                 <div class="mb-3">
                     <label for="correo" class="form-label">Correo</label>
-                    <input type="email" class="form-control" id="correo" placeholder="Ingrese su correo" required>
-                    <div id="errorCorreo" class="text-danger"></div> <!-- Div para mostrar el error -->
+                    <input type="text" class="form-control" id="correo" name="correo" placeholder="Ingrese su correo" >
+                    <div id="errorCorreo" class="invalid-feedback text-danger"></div> <!-- Div para mostrar el error -->
                 </div>
                 <div class="mb-3">
                     <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
-                    <input type="date" class="form-control" id="fechaNacimiento" required>
-                    <div id="errorFechaNacimiento" class="text-danger"></div> <!-- Div para mostrar el error -->
+                    <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" >
+                    <div id="errorFecha" class="invalid-feedback text-danger"></div> <!-- Div para mostrar el error -->
                 </div>
                 <div class="mb-3">
                     <label for="clave" class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="clave" placeholder="Ingrese su contraseña" required>
+                    <input type="password" class="form-control" id="clave" name="clave" placeholder="Ingrese su contraseña" >
+                    <div class="invalid-feedback" id="errorRegistroClave"></div>
                 </div>
                 <div class="mb-3">
                     <label for="confirmClave" class="form-label">Repetir Contraseña</label>
-                    <input type="password" class="form-control" id="confirmClave" placeholder="Repita su contraseña" required>
-                    <div id="errorClave" class="text-danger"></div> <!-- Div para mostrar el error -->
+                    <input type="password" class="form-control" id="confirmClave" name="confirmClave" placeholder="Repita su contraseña" >
+                    <div id="errorClave" class="invalid-feedback text-danger"></div> <!-- Div para mostrar el error -->
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Registrarse</button>

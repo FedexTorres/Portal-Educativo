@@ -1,80 +1,155 @@
+// Función para mostrar errores en campos específicos
+function mostrarError(campo, mensajeElemento, mensaje) {
+    campo.classList.add('is-invalid'); // Añadir la clase de error al campo
+    mensajeElemento.innerHTML = mensaje; // Mostrar el mensaje de error
+}
 
-function validarFormularioRegistro(e) {
+// Función para mostrar errores globales
+function mostrarErrorGlobal(mensaje) {
+    const errorGlobal = document.getElementById('errorGlobal');
+    errorGlobal.classList.remove('d-none'); // Muestra el contenedor de error
+    // Construimos el HTML con viñetas
+    const listaErrores = mensaje.map(error => `<li>${error}</li>`).join('');
+    errorGlobal.innerHTML = `<ul>${listaErrores}</ul>`; // Establece el mensaje de error como una lista
+
+}
+
+// Función para limpiar mensajes de error
+function limpiarErrores(campo, mensajeElemento) {
+    campo.classList.remove('is-invalid');
+    mensajeElemento.innerHTML = '';
+}
+
+// Función para mostrar mensajes de éxito
+function mostrarMensajeExito(mensaje) {
+    const mensajeExito = document.getElementById('mensajeExito');
+    mensajeExito.classList.remove('d-none');
+    mensajeExito.innerHTML = mensaje;
+}
+
+// Función principal para validar el formulario de registro
+async function validarFormularioRegistro(e) {
     e.preventDefault(); // Prevenir el envío del formulario
+    // Obtener los elementos de DOM y sus valores
+    const nombre = document.getElementById('nombre');
+    const apellido = document.getElementById('apellido');
+    const correo = document.getElementById('correo');
+    const fechaNacimiento = document.getElementById('fechaNacimiento');
+    const contraseña = document.getElementById('clave');
+    const confirmPassword = document.getElementById('confirmClave');
 
-    errorNombre.innerHTML = ""; // Limpiar mensajes anteriores
-    errorApellido.innerHTML = ""; // Limpiar mensajes anteriores
-    errorCorreo.innerHTML = ""; // Limpiar mensajes anteriores
-    errorFecha.innerHTML = ""; // Limpiar mensajes anteriores
-    errorClave.innerHTML = ""; // Limpiar mensajes anteriores
+    // Limpiar mensajes de error previos
+    limpiarErrores(nombre, errorNombre);
+    limpiarErrores(apellido, errorApellido);
+    limpiarErrores(correo, errorCorreo);
+    limpiarErrores(fechaNacimiento, errorFecha);
+    limpiarErrores(contraseña, errorRegistroClave);
+    limpiarErrores(confirmPassword, errorClave);
 
-    let esValido = true; // Bandera para indicar si el formulario es válido o no
+    // Variables de validación
+    let esValido = true;
 
-    // Validación de nombre
-    const nombre = document.getElementById('nombre').value.trim();
+    // Validaciones de cada campo
     const regexNombreApellido = /^[a-zA-ZáéíóúÁÉÍÓÚ ]+$/;
-    if (!regexNombreApellido.test(nombre)) {
-        errorNombre.innerHTML = "<b>El nombre solo debe contener letras y espacios</b>";
+    if (nombre.value.trim() === '') {
+        mostrarError(nombre, errorNombre, "El campo 'Nombre' no puede estar vacío.");
+        esValido = false;
+    } else if (!regexNombreApellido.test(nombre.value.trim())) {
+        mostrarError(nombre, errorNombre, "El nombre solo debe contener letras y espacios.");
         esValido = false;
     }
 
-    // Validación de apellido
-    const apellido = document.getElementById('apellido').value.trim();
-    if (!regexNombreApellido.test(apellido)) {
-        errorApellido.innerHTML = "<b>El apellido solo debe contener letras y espacios</b>";
+    if (apellido.value.trim() === '') {
+        mostrarError(apellido, errorApellido, "El campo 'Apellido' no puede estar vacío.");
+        esValido = false;
+    } else if (!regexNombreApellido.test(apellido.value.trim())) {
+        mostrarError(apellido, errorApellido, "El apellido solo debe contener letras y espacios.");
         esValido = false;
     }
 
-    // Validación de correo
-    //No se muestra el mensaje de error ya que en el html se puso type=email, si se cambia a text, si se muestra el error.
-
-    const correo = document.getElementById('correo').value.trim();
     const regexCorreo = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!regexCorreo.test(correo)) {
-        errorCorreo.innerHTML = "<b>El correo no es válido</b>";
+    if (correo.value.trim() === '') {
+        mostrarError(correo, errorCorreo, "El campo 'Correo' no puede estar vacío.");
+        esValido = false;
+    } else if (!regexCorreo.test(correo.value.trim())) {
+        mostrarError(correo, errorCorreo, "El correo no es válido.");
         esValido = false;
     }
 
     // Validación de fecha de nacimiento
-    const fechaNacimiento = document.getElementById('fechaNacimiento').value;
-    const hoy = new Date();
-    const fechaNacimientoDate = new Date(fechaNacimiento);
-
-    if (fechaNacimientoDate > hoy) {
-        errorFecha.innerHTML = "<b>La fecha de nacimiento no puede ser en el futuro</b>";
+    if (fechaNacimiento.value.trim() === '') {
+        mostrarError(fechaNacimiento, errorFecha, "El campo 'Fecha de Nacimiento' no puede estar vacío.");
         esValido = false;
     } else {
-        // Validar que el usuario tenga al menos 18 años
-        const edadMinima = 16;
-        const diferencia = hoy.getFullYear() - fechaNacimientoDate.getFullYear();
-        const mesDiferencia = hoy.getMonth() - fechaNacimientoDate.getMonth();
-        const diaDiferencia = hoy.getDate() - fechaNacimientoDate.getDate();
-
-        if (diferencia < edadMinima || (diferencia === edadMinima && (mesDiferencia < 0 || (mesDiferencia === 0 && diaDiferencia < 0)))) {
-            errorFecha.innerHTML = "<b>Debes tener al menos 16 años</b>";
+        const hoy = new Date();
+        const fechaNacimientoDate = new Date(fechaNacimiento.value);
+        if (fechaNacimientoDate > hoy) {
+            mostrarError(fechaNacimiento, errorFecha, "<b>La fecha de nacimiento no puede ser en el futuro</b>");
             esValido = false;
+        } else {
+            // Validar que el usuario tenga al menos 16 años
+            const edadMinima = 16;
+            const diferencia = hoy.getFullYear() - fechaNacimientoDate.getFullYear();
+            const mesDiferencia = hoy.getMonth() - fechaNacimientoDate.getMonth();
+            const diaDiferencia = hoy.getDate() - fechaNacimientoDate.getDate();
+
+            if (diferencia < edadMinima || (diferencia === edadMinima && (mesDiferencia < 0 || (mesDiferencia === 0 && diaDiferencia < 0)))) {
+                mostrarError(fechaNacimiento, errorFecha, "Debes tener al menos 16 años.");
+                esValido = false;
+            }
         }
     }
-
-    // Validación de contraseñas
-    const contraseña = document.getElementById('clave').value;
-    const confirmPassword = document.getElementById('confirmClave').value;
-
-    if (contraseña !== confirmPassword) {
-        errorClave.innerHTML = "<b>Las contraseñas no coinciden</b>";
+    // Validación de contraseña
+    if (contraseña.value.trim() === '') {
+        mostrarError(contraseña, errorRegistroClave, 'La contraseña no puede estar vacía.');
+        esValido = false;
+    } else if (contraseña.value.length < 4) {
+        mostrarError(contraseña, errorRegistroClave, 'La contraseña debe tener al menos 4 caracteres.');
         esValido = false;
     }
 
-    // Mostrar alerta si todo es válido
+    // Confirmar que las contraseñas coinciden
+    if (confirmPassword.value.trim() === '') {
+        mostrarError(confirmPassword, errorClave, 'Debes confirmar tu contraseña.');
+        esValido = false;
+    } else if (contraseña.value !== confirmPassword.value) {
+        mostrarError(confirmPassword, errorClave, "Las contraseñas no coinciden.");
+        esValido = false;
+    }
+    // Si es válido, enviar datos al servidor
     if (esValido) {
-        alert("Registro exitoso. Bienvenido a la plataforma educativa!");
-        // Aquí podríamos agregar código para enviar los datos al servidor o guardarlos en la base de datos simulada
+        //alert("Registro exitoso. Bienvenido a la plataforma educativa!");
+        try {
+            const datos = new FormData(e.target);
+            const response = await fetch('Modelo/registro_Estudiante.php', {
+                method: 'POST',
+                body: datos,
+            });
+            // Verificar si la respuesta es exitosa
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del servidor');
+            }
+
+            const resultado = await response.json();
+            console.log(resultado);
+
+            if (resultado.status === 'success') {
+                mostrarMensajeExito("Registro exitoso. Redirigiendo...");
+                setTimeout(() => {
+                    window.location.href = './index-login.html';
+                }, 2500);
+            } else if (resultado.status === 'error') {
+                mostrarErrorGlobal(resultado.message);
+            }
+        } catch (error) {
+            mostrarErrorGlobal(`Error en la conexión: ${error.message}`);
+        }
     }
 }
-
-
+// Inicializar la validación al cargar la página
 function inicio() {
     document.getElementById('registroForm').addEventListener('submit', validarFormularioRegistro);
 }
 
 window.onload = inicio;
+
