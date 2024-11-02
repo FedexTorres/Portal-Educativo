@@ -121,7 +121,7 @@ async function validarFormularioRegistro(e) {
         //alert("Registro exitoso. Bienvenido a la plataforma educativa!");
         try {
             const datos = new FormData(e.target);
-            const response = await fetch('Modelo/registro_Estudiante.php', {
+            const response = await fetch('Modulos/registro_Estudiante.php', {
                 method: 'POST',
                 body: datos,
             });

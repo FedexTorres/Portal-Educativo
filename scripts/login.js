@@ -28,7 +28,7 @@ async function validarLogin(e) {
             // Construimos los datos para enviar
             const formulario = document.getElementById('loginForm');
             const datos = new FormData(formulario);
-            const response = await fetch('Modelo/login.php', {
+            const response = await fetch('Modulos/login.php', {
                 method: 'POST',
                 body: datos,
             });
