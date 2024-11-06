@@ -1,23 +1,27 @@
 <?php
 require './conexion_bbdd.php'; // Asegúrate de que este archivo exista
 
+session_start();
+if (!isset($_SESSION['usuario']['id'])) {
+    header('Location: login.php');  // redirige al login si no hay sesión
+    exit;
+}
+
 // Validar que se reciban los parámetros requeridos
-if (isset($_POST['destinatario_id']) && isset($_POST['mensaje']) && isset($_POST['remitente_id'])) {
+if (isset($_POST['destinatario_id']) && isset($_POST['mensaje'])) {
     $destinatarioId = trim($_POST['destinatario_id']);
     $mensaje = trim($_POST['mensaje']);
-    $remitenteId = trim($_POST['remitente_id']); // ID del remitente
+    $remitenteId = $_SESSION['usuario']['id']; // ID del remitente desde la sesión
 
     try {
-        // Preparar la consulta SQL
-        $stmt = $conn->prepare("INSERT INTO mensajes (contenido, id_remitente, id_destinatario) VALUES (:contenido, :remitente_id, :destinatario_id)");
+        $query = "INSERT INTO mensajes (contenido, id_remitente, id_destinatario) VALUES (:contenido, :remitente_id, :destinatario_id)";
+        $stmt = $conn->prepare($query);
 
         // Vincular parámetros
         $stmt->bindParam(':contenido', $mensaje);
-        $stmt->bindParam(':remitente_id', $remitenteId, PDO::PARAM_INT);
-        $stmt->bindParam(':destinatario_id', $destinatarioId, PDO::PARAM_INT);
-
-        // Ejecutar la consulta
-        $stmt->execute();
+        $stmt->bindParam(':remitente_id', $remitenteId, PDO::PARAM_INT); 
+        $stmt->bindParam(':destinatario_id', $destinatarioId, PDO::PARAM_INT);       
+        $stmt->execute(); // Ejecuta la consulta
 
         // Respuesta exitosa
         echo json_encode(['status' => 'success', 'message' => 'Mensaje enviado correctamente.']);

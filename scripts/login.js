@@ -4,7 +4,7 @@ async function validarLogin(e) {
     let isValid = true;
 
     // Validar usuario
-    const username = document.getElementById('usuario').value;
+    const username = document.getElementById('correo').value;
     const nomUsuarioError = document.getElementById('nomUsuarioError');
     if (username === '') {
         nomUsuarioError.classList.remove('d-none');
@@ -28,18 +28,17 @@ async function validarLogin(e) {
             // Construimos los datos para enviar
             const formulario = document.getElementById('loginForm');
             const datos = new FormData(formulario);
-            const response = await fetch('Modulos/login.php', {
+            const response = await fetch('Modulos/validarLogin.php', {
                 method: 'POST',
                 body: datos,
             });
 
             const resultado = await response.json(); // Procesamos la respuesta como JSON
-            console.log(resultado); // Imprimir la respuesta en consola
 
             if (resultado.status === 'success') {
-                alert("login exitoso");
-                // Si el login es exitoso, redirigir a la vista de estudiante
-                window.location.href = 'vista-estudiante.html'; // Redirigir en caso de éxito
+                //alert("login exitoso");
+                // Si el login es exitoso, redirigir a la URL específica según el rol
+                window.location.href = resultado.data.redirect; // Usamos la URL recibida del servidor
             } else {
                 mostrarErrorGlobal(resultado.message); // Mostrar el mensaje de error en caso de fallo
             }

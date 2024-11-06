@@ -1,3 +1,10 @@
+<?php
+session_start();
+
+  // Incluimos el navbar-base que cargará el navbar-logueado o navbar-visitante según la sesión
+  include 'navbar-base.php';
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -5,46 +12,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login - Plataforma Educativa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="css/estudiante.css">
+    <link rel="stylesheet" href="css/index.css">
     <script defer src="scripts/estudiante-manejarPerfil.js"></script>
     <script defer src="scripts/estudiante-menus.js"></script>
     <script defer src="scripts/estudiante-misCursos.js"></script>
     <script defer src="scripts/mensajes.js"></script>
   
 </head>
+<!-- ############################################# MENU LATERAL IZQUIERDO ############################################# -->
 
 <body class="text-dark">
-  <div class="container-fluid">
+<div class="container-fluid">
     <div class="row">
-      <!-- Menú lateral -->
-      <nav class="col-md-2 d-none d-md-block bg-light">
+      <nav class="col-md-2 d d-md-block bg-light">
         <div class="card-body bg-light text-dark border-0">
           <div class="card-body">
             <br>
-            <h4 class="card-title">Menú</h4>
             <br>
-            <ul class="nav flex-column">
-              <li class="nav-item mb-2">
-                <button id="inicio-btn" class="btn btn-menu">Inicio</button>
-              </li>
-              <li class="nav-item mb-2">
-                <button id="mis-cursos-btn" class="btn btn-menu">Mis Cursos</button>
-              </li>
-              <li class="nav-item mb-2">
-                <button id="mensajes-btn" class="btn btn-menu">Mensajes</button>
-              </li>
-              <li class="nav-item mb-2">
-                <button id="perfil-btn" class="btn btn-menu">Editar Perfil</button>
-              </li>
-            </ul>
+            <!-- Menú lateral solo visible si el usuario está logueado como Estudiante -->
+            <?php if (isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'estudiante') { ?>
+              <!-- Menú lateral solo se muestra si el usuario es Estudiante -->
+              <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                  <button id="inicio-btn" class="btn btn-menu">Inicio</button>
+                </li>
+                <li class="nav-item mb-2">
+                  <button id="mis-cursos-btn" class="btn btn-menu">Mis Cursos</button>
+                </li>
+                <li class="nav-item mb-2">
+                  <button id="mensajes-btn" class="btn btn-menu">Mensajes</button>
+                </li>
+                <li class="nav-item mb-2">
+                  <button id="perfil-btn" class="btn btn-menu">Editar Perfil</button>
+                </li>
+              </ul>
+              <?php } ?>
+            </div>
           </div>
-        </div>
-      </nav>
-
+        </nav>
 <!-- ############################################# AREA PRINCIPAL ############################################# -->
 
   <section id="seccion-inicio"  class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light">

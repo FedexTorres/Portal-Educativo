@@ -3,6 +3,13 @@ body {
     margin: 20px;
 }
 
+
+.navbar-brand .logo-navbar {
+    height: 140px;
+    /* mantiene la proporcion de la imagen */
+    width: auto;
+}
+
 .titulo {
     color: #17a2b8;
 }

@@ -9,13 +9,14 @@ function mostrarError(campo, mensajeElemento, mensaje) {
 
 async function validarFormuMensaje(e) {
     e.preventDefault(); // Prevenir la redirección
-    let remitenteId = 1; // Harcodeo de id, esto hay que cambiarlo luego se implemente las sesiones.
     const mensajeInput = document.getElementById('mensaje');
     const destinatarioInput = document.getElementById('destinatario');
     const alerta = document.getElementById('alerta');
     const exito = document.getElementById('exito'); // Obtener el div de éxito
-
     const mensaje = mensajeInput.value.trim();
+
+    // Usamos jQuery para obtener el valor de "data-destinatario-id" del elemento con id "destinatario".
+    // Este valor representa el ID del destinatario, asignado dinámicamente en el HTML.
     const destinatarioId = $("#destinatario").data("destinatario-id");
 
     // Limpiar validaciones anteriores
@@ -44,20 +45,24 @@ async function validarFormuMensaje(e) {
             },
             body: new URLSearchParams({
                 destinatario_id: destinatarioId,
-                mensaje: mensaje,
-                remitente_id: remitenteId // Asegúrate de definir correctamente este valor en el código
+                mensaje: mensaje
             })
         });
 
         const result = await response.json();
 
+        // Mostrar mensaje de éxito
         if (result.status === 'success') {
-            // Mostrar mensaje de éxito
             exito.classList.remove('d-none'); // Mostrar el div de éxito
             exito.innerHTML = result.message; // Mostrar mensaje de éxito
             cargarMensajesEnviados(); // Llamar a la función para cargar mensajes enviados
             cargarMensajesRecibidos(); // Llamar a la función para cargar mensajes recibidos hasta implementar las sesiones.
             document.getElementById('form-enviar-mensaje').reset();
+            // Limpiar el mensaje de éxito después de 3 segundos
+            setTimeout(() => {
+                exito.classList.add('d-none'); // Ocultar el div de éxito
+                exito.innerHTML = ''; // Limpiar el contenido
+            }, 2000);
         } else {
             mostrarError(mensajeInput, alerta, result.message);
         }
@@ -100,12 +105,15 @@ $(document).ready(function () { // Espera a que el DOM esté completamente carga
 
 // Función para cargar mensajes recibidos mediante AJAX
 async function cargarMensajesRecibidos() {
-    const destinatarioId = 2; // Hardcodear el ID del destinatario
     try {
-        const response = await fetch(`Modulos/obtenerMensajes.php?destinatario_id=${destinatarioId}`);
-        const data = await response.json();
-        console.log(data); // Para depuración
+        const response = await fetch(`Modulos/obtenerMensajes.php`);
 
+        // Validar si la respuesta es exitosa antes de convertirla en JSON
+        if (!response.ok) {
+            throw new Error("Error en la solicitud: " + response.statusText);
+        }
+
+        const data = await response.json();
         const listaMensajes = document.getElementById('lista-mensajes');
         listaMensajes.innerHTML = '';
 
@@ -125,8 +133,9 @@ async function cargarMensajesRecibidos() {
         console.error("Error de conexión al cargar los mensajes:", error);
     }
 }
-//Funcion para pedir medienta AJAX los mensajes enviados en el bbdd.
 
+
+//Funcion para pedir medienta AJAX los mensajes enviados en el bbdd.
 async function cargarMensajesEnviados() {
     try {
         const response = await fetch('Modulos/consultarMensajesEnviados.php');
@@ -150,15 +159,14 @@ async function cargarMensajesEnviados() {
         console.error('Error al cargar los mensajes enviados:', error);
     }
 }
-
 // Función para agregar mensaje enviado a la lista
-function agregarMensajeEnviado(mensaje, destinatarioId, fecha) {
+function agregarMensajeEnviado(mensaje, destinatarioNombre, fecha) {
     const listaMensajesEnviados = document.getElementById('mensajes-enviados');
     const nuevoMensaje = document.createElement('a');
     nuevoMensaje.className = 'list-group-item list-group-item-action';
-    nuevoMensaje.innerHTML = `<strong>Destinatario:</strong> ${destinatarioId} <br>
-    <strong>Mensaje:</strong> ${mensaje} <br>
-    <small>Fecha: ${new Date(fecha).toLocaleDateString()}</small>`;
+    nuevoMensaje.innerHTML = `<strong>Destinatario:</strong> ${destinatarioNombre} <br>
+                              <strong>Mensaje:</strong> ${mensaje} <br>
+                              <small>Fecha: ${new Date(fecha).toLocaleDateString()}</small>`;
     listaMensajesEnviados.appendChild(nuevoMensaje);
 }
 
@@ -175,3 +183,6 @@ function inicio() {
 }
 
 window.onload = inicio;
+
+
+/* ?destinatario_id=${destinatarioId} */

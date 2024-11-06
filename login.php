@@ -1,3 +1,7 @@
+<?php   
+session_start();
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -13,8 +17,7 @@
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div id="login-card" class="card shadow p-4 text-center" style="width: 22rem;">
             <!-- Logo -->
-            <img src="image/logo.jpg" alt="Logo de la plataforma" class="logo mb-3">
-            <h1 class="mb-4">PORTAL EDUCATIVO</h1>
+            <img src="image/logo-educativo.png" alt="Logo" class="logo-navbar" >
 
 <!-- ############################################ Formulario de Login ############################################### -->
 
@@ -22,8 +25,8 @@
             <div id="errorGlobal" class="alert alert-danger d-none"></div>
             <form id="loginForm" method="POST">
                 <div class="mb-3">
-                    <label for="usuario" class="form-label">Usuario</label>
-                    <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Ingrese su correo electrónico" >
+                    <label for="correo" class="form-label">Usuario</label>
+                    <input type="text" class="form-control" id="correo" name="correo" placeholder="Ingrese su correo electrónico" >
                     <small id="nomUsuarioError" class="text-danger d-none">El campo usuario no puede estar vacío.</small>
                 </div>
                 <div class="mb-3">

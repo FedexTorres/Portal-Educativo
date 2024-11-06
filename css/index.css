@@ -3,6 +3,21 @@ body {
     margin: 20px;
 }
 
+
+.navbar-brand .logo-navbar {
+    height: 120px;
+    /* mantiene la proporcion de la imagen */
+    width: auto;
+}
+
+.navbar-text {
+    line-height: 1.5;
+    /* Ajusta según sea necesario */
+    font-size: 1rem;
+    /* Asegúrate de que ambos tengan el mismo tamaño */
+}
+
+
 .error {
     color: red;
 }

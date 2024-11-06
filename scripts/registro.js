@@ -8,10 +8,16 @@ function mostrarError(campo, mensajeElemento, mensaje) {
 function mostrarErrorGlobal(mensaje) {
     const errorGlobal = document.getElementById('errorGlobal');
     errorGlobal.classList.remove('d-none'); // Muestra el contenedor de error
-    // Construimos el HTML con viñetas
-    const listaErrores = mensaje.map(error => `<li>${error}</li>`).join('');
-    errorGlobal.innerHTML = `<ul>${listaErrores}</ul>`; // Establece el mensaje de error como una lista
 
+    // Verificamos si `mensaje` es un array
+    if (Array.isArray(mensaje)) {
+        // Si es un array, construimos la lista de errores
+        const listaErrores = mensaje.map(error => `<li>${error}</li>`).join('');
+        errorGlobal.innerHTML = `<ul>${listaErrores}</ul>`;
+    } else {
+        // Si es una cadena de texto, la mostramos directamente
+        errorGlobal.innerHTML = `<p>${mensaje}</p>`;
+    }
 }
 
 // Función para limpiar mensajes de error
@@ -136,7 +142,7 @@ async function validarFormularioRegistro(e) {
             if (resultado.status === 'success') {
                 mostrarMensajeExito("Registro exitoso. Redirigiendo...");
                 setTimeout(() => {
-                    window.location.href = './index-login.html';
+                    window.location.href = './login.php';
                 }, 2500);
             } else if (resultado.status === 'error') {
                 mostrarErrorGlobal(resultado.message);
