@@ -3,12 +3,6 @@ session_start();
 header("Content-Type: application/json; charset=UTF-8");
 require 'conexion_bbdd.php';
 
-// Verificar que el usuario esté logueado
-if (!isset($_SESSION['usuario']['id'])) {
-    echo json_encode(['status' => 'error', 'message' => 'No estás logueado']);
-    exit;
-}
-
 try {
     // Preparar la consulta para obtener todos los cursos
     $query = "SELECT id, nombre, descripcion, programa_estudios, imagen_url, fecha_inicio, fecha_fin FROM cursos";
