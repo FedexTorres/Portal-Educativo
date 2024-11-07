@@ -55,10 +55,13 @@ CREATE TABLE cursos (
     id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     descripcion TEXT,
+    programa_estudios TEXT,
     vacantes INT DEFAULT 0,
+    imagen_url VARCHAR(255),
     fecha_inicio DATE NOT NULL,
     fecha_fin DATE NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 -- Tabla de Inscripciones (solicitudes de inscripción de estudiantes)
 CREATE TABLE inscripciones (

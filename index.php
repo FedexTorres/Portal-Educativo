@@ -18,12 +18,13 @@ session_start();
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="css/index.css">
-    <script defer src="scripts/estudiante-manejarPerfil.js"></script>
-    <script defer src="scripts/estudiante-menus.js"></script>
     <script defer src="scripts/estudiante-misCursos.js"></script>
+    <script defer src="scripts/estudiante-menus.js"></script>
+    <script defer src="scripts/editarPerfil.js"></script>
     <script defer src="scripts/mensajes.js"></script>
   
 </head>
+
 <!-- ############################################# MENU LATERAL IZQUIERDO ############################################# -->
 
 <body class="text-dark">
@@ -124,111 +125,111 @@ session_start();
 
 <!-- ############################################# SECCION MIS CURSOS #############################################-->
 
-<section id="seccion-mis-cursos" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light d-none">
-  <h1 class="my-4 titulo">Mis Cursos</h1>
-  <hr>
-  <p>Lista de cursos en los que estás inscrito.</p>
+    <section id="seccion-mis-cursos" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
+      <h1 class="my-4 titulo">Mis Cursos</h1>
+      <hr>
+      <p>Lista de cursos en los que estás inscrito.</p>
 
-  <!-- Card del Curso Refrigeración a modo de ejemplo-->
-  <div class="card mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Refrigeración</h5>
-      <h6 class="card-subtitle mb-2 text-muted">Profesor: Ing. Carlos López | Período: 2023-2024</h6>
-      <p class="card-text">Cantidad de clases: 16 | Cantidad de exámenes: 3</p>
+      <!-- Card del Curso Refrigeración a modo de ejemplo-->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Refrigeración</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Profesor: Ing. Carlos López | Período: 2023-2024</h6>
+          <p class="card-text">Cantidad de clases: 16 | Cantidad de exámenes: 3</p>
 
-      <!-- Botones de opciones para el curso -->
-      <button class="btn btn-primary btn-consultar-asistencia">Consultar Asistencia</button>
-      <button class="btn btn-secondary btn-consultar-calificacion">Consultar Calificación</button>
-      <button class="btn btn-info btn-realizar-examen">Realizar Examen</button>
-      <button class="btn btn-success btn-subir-trabajo">Subir Trabajo Práctico</button>
-      <button class="btn btn-warning btn-filtrar-asistencia">Filtrar Asistencia</button>
-    </div>
-  </div>
-
-  <!-- Sub-secciones dentro de la vista de Mis Cursos -->
-  <div id="sub-seccion-asistencia" class="d-none">
-    <h4>Asistencia del Curso de Refrigeración</h4>
-    <ul>
-      <li>Clase 1: Presente</li>
-      <li>Clase 2: Ausente</li>
-      <li>Clase 3: Presente</li>
-      <li>Clase 4: Presente</li>
-    </ul>
-    <button class="btn btn-secondary btn-volver">Volver</button>
-  </div>
-
-  <div id="sub-seccion-calificacion" class="d-none">
-    <h4>Calificaciones del Curso de Refrigeración</h4> <!-- Aqui se debera consultar la BBDD -->
-    <ul>
-      <li>Examen Parcial 1: 8</li>
-      <li>Examen Parcial 2: 7</li>
-      <li>Examen Final: 9</li>
-    </ul>
-    <button class="btn btn-secondary btn-volver">Volver</button>
-  </div>
-
-  <!-- Sub-sección para Realizar Examen -->
-
-  <div id="sub-seccion-examen" class="d-none">
-    <h4>Realizar Examen de Refrigeración</h4>
-    <p>Examen: ¿Cuál es la función de un compresor?</p>
-    <form action="" method="POST" id="form-realizar-examen">
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="respuesta" id="respuesta1" value="a">
-        <label class="form-check-label" for="respuesta1">A) Refrigerar el aire</label>
+          <!-- Botones de opciones para el curso -->
+          <button class="btn btn-primary btn-consultar-asistencia">Consultar Asistencia</button>
+          <button class="btn btn-secondary btn-consultar-calificacion">Consultar Calificación</button>
+          <button class="btn btn-info btn-realizar-examen">Realizar Examen</button>
+          <button class="btn btn-success btn-subir-trabajo">Subir Trabajo Práctico</button>
+          <button class="btn btn-warning btn-filtrar-asistencia">Filtrar Asistencia</button>
+        </div>
       </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="respuesta" id="respuesta2" value="b">
-        <label class="form-check-label" for="respuesta2">B) Calentar el aire</label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="respuesta" id="respuesta3" value="c">
-        <label class="form-check-label" for="respuesta3">C) Regular la presión</label>
-      </div>
-      <br>
-      <button type="submit" class="btn btn-primary">Enviar Respuesta</button>
-    </form>
-    <br>
-    <button class="btn btn-secondary btn-volver">Volver</button>
-  </div>
-  <br>
 
-  <!-- Sub-sección para Subir Trabajo Práctico -->
+      <!-- Sub-secciones dentro de la vista de Mis Cursos -->
+      <div id="sub-seccion-asistencia" class="d-none">
+        <h4>Asistencia del Curso de Refrigeración</h4>
+        <ul>
+          <li>Clase 1: Presente</li>
+          <li>Clase 2: Ausente</li>
+          <li>Clase 3: Presente</li>
+          <li>Clase 4: Presente</li>
+        </ul>
+        <button class="btn btn-secondary btn-volver">Volver</button>
+      </div>
 
-  <div id="sub-seccion-subir-trabajo" class="d-none">
-    <h4>Subir Trabajo Práctico</h4>
-    <form action="" method="POST" id="form-subir-trabajo">
-      <div class="mb-3">
-        <label for="archivo" class="form-label">Selecciona el archivo</label>
-        <input type="file" class="form-control" id="archivo" required>
+      <div id="sub-seccion-calificacion" class="d-none">
+        <h4>Calificaciones del Curso de Refrigeración</h4> <!-- Aqui se debera consultar la BBDD -->
+        <ul>
+          <li>Examen Parcial 1: 8</li>
+          <li>Examen Parcial 2: 7</li>
+          <li>Examen Final: 9</li>
+        </ul>
+        <button class="btn btn-secondary btn-volver">Volver</button>
+      </div>
+
+      <!-- Sub-sección para Realizar Examen -->
+
+      <div id="sub-seccion-examen" class="d-none">
+        <h4>Realizar Examen de Refrigeración</h4>
+        <p>Examen: ¿Cuál es la función de un compresor?</p>
+        <form action="" method="POST" id="form-realizar-examen">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="respuesta" id="respuesta1" value="a">
+            <label class="form-check-label" for="respuesta1">A) Refrigerar el aire</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="respuesta" id="respuesta2" value="b">
+            <label class="form-check-label" for="respuesta2">B) Calentar el aire</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="respuesta" id="respuesta3" value="c">
+            <label class="form-check-label" for="respuesta3">C) Regular la presión</label>
+          </div>
+          <br>
+          <button type="submit" class="btn btn-primary">Enviar Respuesta</button>
+        </form>
+        <br>
+        <button class="btn btn-secondary btn-volver">Volver</button>
       </div>
       <br>
-      <button type="submit" class="btn btn-primary">Subir Trabajo</button>
-    </form>
-    <br>
-    <button class="btn btn-secondary btn-volver">Volver</button>
-  </div>
-  <br>
 
-  <!-- Sub-sección para Filtrar Asistencia -->
+      <!-- Sub-sección para Subir Trabajo Práctico -->
 
-  <div id="sub-seccion-filtrar-asistencia" class="d-none"> <!-- Aqui se debera consultar la BBDD -->
-      <h4>Filtrar Asistencia</h4>
-      <label for="estado-asistencia">Selecciona el estado:</label>
-      <select id="estado-asistencia" class="form-select mb-3">
-          <option value="todos">Todos</option>
-          <option value="presente">Presentes</option>
-          <option value="ausente">Ausentes</option>
-      </select>
-      <button class="btn btn-primary">Filtrar</button>
-      <button class="btn btn-secondary btn-volver">Volver</button>
-  </div>
-  <br>
-</section>
+      <div id="sub-seccion-subir-trabajo" class="d-none">
+        <h4>Subir Trabajo Práctico</h4>
+        <form action="" method="POST" id="form-subir-trabajo">
+          <div class="mb-3">
+            <label for="archivo" class="form-label">Selecciona el archivo</label>
+            <input type="file" class="form-control" id="archivo" required>
+          </div>
+          <br>
+          <button type="submit" class="btn btn-primary">Subir Trabajo</button>
+        </form>
+        <br>
+        <button class="btn btn-secondary btn-volver">Volver</button>
+      </div>
+      <br>
+
+      <!-- Sub-sección para Filtrar Asistencia -->
+
+      <div id="sub-seccion-filtrar-asistencia" class="d-none"> <!-- Aqui se debera consultar la BBDD -->
+          <h4>Filtrar Asistencia</h4>
+          <label for="estado-asistencia">Selecciona el estado:</label>
+          <select id="estado-asistencia" class="form-select mb-3">
+              <option value="todos">Todos</option>
+              <option value="presente">Presentes</option>
+              <option value="ausente">Ausentes</option>
+          </select>
+          <button class="btn btn-primary">Filtrar</button>
+          <button class="btn btn-secondary btn-volver">Volver</button>
+      </div>
+      <br>
+    </section>
 
   <!-- ############################################# SECCION DE MENSAJES ############################################# -->
 
-  <section id="seccion-mensajes" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light d-none">
+  <section id="seccion-mensajes" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
   <h1 class="my-4 titulo">Mensajes</h1>
   <hr>
   <div id="alerta" class="alert alert-danger d-none" role="alert"></div>
@@ -271,43 +272,54 @@ session_start();
 
 <!-- ############################################# SECCION DEL PERFIL ############################################# -->
 
-<section id="seccion-perfil" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light d-none">
-  <h1 class="my-4 titulo">Perfil del Estudiante</h1>
-  <hr>
-  <form action="" method="POST" id="form-perfil">
-    <div class="mb-3">
-      <label for="nombre" class="form-label">Nombre</label>
-      <input type="text" class="form-control" id="nombre" value="Juan" required>
-      <p class="error" id="errorNombre" > </p>
-    </div>
-    <div class="mb-3">
-      <label for="apellido" class="form-label">Apellido</label>
-      <input type="text" class="form-control" id="apellido" value="Pérez" required>
-      <p class="error" id="errorApellido" > </p>
-    </div>
-    <div class="mb-3">
-      <label for="correo" class="form-label">Correo Electrónico</label>
-      <input type="email" class="form-control" id="correo" value="juan.perez@example.com" required>
-      <p class="error" id="errorCorreo"> </p>
-    </div>
-    <div class="mb-3">
-      <label for="fecha-nacimiento" class="form-label">Fecha de Nacimiento</label>
-      <input type="date" class="form-control" id="fecha-nacimiento" value="2000-01-01" required>
-      <p class="error" id="errorFecha"> </p>
-    </div>
-    <div class="mb-3">
-      <label for="clave" class="form-label">Contraseña</label>
-      <input type="password" class="form-control" id="clave" required>
-    </div>
-    <div class="mb-3">
-      <label for="claveConfirmacion" class="form-label">Repetir Contraseña</label>
-      <input type="password" class="form-control" id="claveConfirmacion" required>
-      <p class="error" id="errorClave"> </p>
-  </div>
-    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-  </form>
-  <br>
-</section>
+    <section id="seccion-perfil" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
+      <h1 class="my-4 titulo">Perfil del Estudiante</h1>
+      <hr>
+      
+      <!-- Contenedor de Errores Globales -->
+      <div id="errorGlobal" class="alert alert-danger d-none"></div>
+        <!-- Mensaje de éxito -->
+        <div id="mensajeExito" class="alert alert-success d-none"></div>
+
+      <form action="" method="POST" id="perfilForm">
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="nombre" name="nombre"  >
+          <p class="error" id="errorNombre"></p>
+        </div>
+        <div class="mb-3">
+          <label for="apellido" class="form-label">Apellido</label>
+          <input type="text" class="form-control" id="apellido" name="apellido"  >
+          <p class="error" id="errorApellido"></p>
+        </div>
+        <div class="mb-3">
+          <label for="correo" class="form-label">Correo Electrónico</label>
+          <input type="email" class="form-control" id="correo" name="correo"  >
+          <p class="error" id="errorCorreo"></p>
+        </div>
+        <div class="mb-3">
+          <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+          <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" aria-busy="">
+          <p class="error" id="errorFecha"></p>
+        </div>
+        <div class="mb-3">
+          <label for="clave">Nueva contraseña (opcional):</label>
+          <input type="password" id="clave" name="clave" class="form-control">
+          <small id="contraseñaHelp" class="form-text">
+              ¡Atención! Si no deseas cambiar la contraseña, déjala en blanco.
+          </small>
+          <p class="error" id="errorRegistroClave"></p>
+        </div>
+        <div class="mb-3">
+          <label for="claveConfirmacion">Confirmar nueva contraseña:</label>
+          <input type="password" id="claveConfirmacion" name="claveConfirmacion" class="form-control">
+          <p class="error" id="errorClave"></p>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+      </form>
+      <br>
+    </section>
 
 
 

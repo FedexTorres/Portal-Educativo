@@ -105,6 +105,7 @@ $(document).ready(function () { // Espera a que el DOM esté completamente carga
 
 // Función para cargar mensajes recibidos mediante AJAX
 async function cargarMensajesRecibidos() {
+    console.log("Se cargan mensajes recibidos");
     try {
         const response = await fetch(`Modulos/obtenerMensajes.php`);
 
@@ -137,6 +138,7 @@ async function cargarMensajesRecibidos() {
 
 //Funcion para pedir medienta AJAX los mensajes enviados en el bbdd.
 async function cargarMensajesEnviados() {
+    console.log("Se cargan mensajes enviados");
     try {
         const response = await fetch('Modulos/consultarMensajesEnviados.php');
         const data = await response.json();
@@ -182,7 +184,6 @@ function inicio() {
     cargarMensajesEnviados();
 }
 
-window.onload = inicio;
+document.addEventListener('DOMContentLoaded', inicio);
 
 
-/* ?destinatario_id=${destinatarioId} */

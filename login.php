@@ -46,8 +46,8 @@ session_start();
 <!-- ############################### Formulario de Recuperación de Contraseña ######################################### -->
 
         <div id="olvidoClave" class="card shadow p-4 text-center d-none" style="width: 22rem;">
-            <img src="image/logo.jpg" alt="Logo de la plataforma" class="logo mb-3"><!-- Logo -->
-            <img src="logo.jpg" alt="Logo de la plataforma" class="logo mb-3">
+            <img src="image/logo.png" alt="Logo de la plataforma" class="logo mb-3">
+            <img src="logo.png" alt="Logo de la plataforma" class="logo mb-3">
             <h1 class="mb-4">PORTAL EDUCATIVO</h1>
 
 <!-- ######################################## Formulario de Recuperación ####################################################### -->
