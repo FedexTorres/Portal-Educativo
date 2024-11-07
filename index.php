@@ -22,7 +22,7 @@ session_start();
     <script defer src="scripts/estudiante-menus.js"></script>
     <script defer src="scripts/editarPerfil.js"></script>
     <script defer src="scripts/mensajes.js"></script>
-  
+    <script defer src="scripts/cargarCursos.js"></script>  
 </head>
 
 <!-- ############################################# MENU LATERAL IZQUIERDO ############################################# -->
@@ -85,41 +85,9 @@ session_start();
     </div>
     <!-- Cards de cursos -->
     <div class="row" id="courses-section">
-      <div class="col-md-4 mb-4">
-        <div class="card bg-secondary text-light border-0">
-          <img src="image/curso1.jpg" class="card-img-top card-image" alt="Curso 1">
-          <div class="card-body">
-            <h5 class="card-title">Electricidad</h5>
-            <p class="card-text"><b>Descripción:</b> <hr>
-              Este curso brinda los conocimientos esenciales para trabajar en instalaciones eléctricas tanto en el ámbito residencial como comercial. 
-              Se tratan temas sobre circuitos eléctricos, instalación de sistemas, y manejo de herramientas específicas, enfatizando en la seguridad eléctrica.</p>
-            <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalCurso1">Ver Detalles</button>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4">
-        <div class="card bg-secondary text-light border-0">
-          <img src="image/curso2.jpg" class="card-img-top card-image" alt="Curso 2">
-          <div class="card-body">
-            <h5 class="card-title">Cocinero</h5>
-            <p class="card-text">El curso de cocinero está diseñado para formar profesionales en el arte culinario, brindando conocimientos sobre técnicas de cocina, manejo de alimentos, y elaboración de diferentes tipos de platos. 
-              Se enfoca en desarrollar habilidades prácticas y la creatividad en la cocina.</p>
-            <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalCurso2">Ver Detalles</button>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4">
-        <div class="card bg-secondary text-light border-0">
-          <img src="image/curso3.jpg" class="card-img-top card-image" alt="Curso 3">
-          <div class="card-body">
-            <h5 class="card-title">Refrigeración</h5>
-            <p class="card-text"><b>Descripción:</b> <hr>
-              Este curso está dirigido a aquellas personas interesadas en adquirir conocimientos teóricos y prácticos en el mantenimiento y reparación de sistemas de refrigeración y aire acondicionado. 
-              Se abordan conceptos sobre los tipos de refrigerantes, el funcionamiento de los sistemas, y técnicas para diagnosticar y solucionar problemas.</p>
-            <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalCurso3">Ver Detalles</button>
-          </div>
-        </div>
-      </div>
+
+        <!-- Aqui se cargan automaticamete lasCards de cursos desde la bbdd -->
+
     </div>
   </section>
 
@@ -338,113 +306,9 @@ session_start();
 
 <!-- ############################################# Modales de los cursos ############################################# -->
 
-    <div class="modal fade" id="modalCurso1" tabindex="-1" aria-labelledby="modalCurso1Label" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalCurso1Label">Electricidad - Detalles</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <b>Programa de Estudios:</b><br><br> 
+        <!-- Aqui se cargan automaticamete los modales de cursos desde la bbdd -->
 
-              1- Conceptos Básicos de Electricidad:<br> 
 
-              Corriente eléctrica, voltaje y resistencia.
-              Ley de Ohm y su aplicación.
-              Tipos de circuitos: serie y paralelo.<br><br>
-
-              2- Instalaciones Eléctricas Residenciales:<br>  
-              Tipos de cables y conductores.
-              Instalación de interruptores, tomacorrientes y luminarias.
-              Cálculo de carga y distribución de circuitos.<br><br>
-
-              3- Seguridad Eléctrica:<br> 
-              Identificación de riesgos eléctricos.
-              Uso de equipos de protección personal (EPP).
-              Procedimientos para trabajos en altura y espacios confinados.<br><br> 
-              <b>Dias y Horarios:</b><br> 
-              Lunes, miercoles y viernes de 12:00 a 16:00hs.
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary">Inscribirse</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="modalCurso2" tabindex="-1" aria-labelledby="modalCurso2Label" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalCurso2Label">Cocinero - Detalles</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <b>Programa de Estudios:</b><br><br> 
-
-              1- Técnicas Culinarias Básicas:<br> 
-
-              Cortes de vegetales y manejo de cuchillos.
-              Métodos de cocción: asado, hervido, salteado, entre otros.
-              Elaboración de salsas y fondos.<br><br>
-
-              2- Cocina Internacional y Nacional:<br>  
-              Preparación de platos típicos de diferentes regiones.
-              Cocina gourmet y presentación de platos.
-              Repostería básica y avanzada.<br><br>
-
-              3- Manipulación y Seguridad Alimentaria:<br> 
-              Normativas de higiene en la cocina.
-              Conservación y almacenamiento de alimentos.
-              Prevención de contaminación cruzada y uso de utensilios adecuados.<br><br> 
-              <b>Dias y Horarios:</b><br> 
-              Martes y jueves de 13:00 a 17:00hs.
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary">Inscribirse</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="modalCurso3" tabindex="-1" aria-labelledby="modalCurso3Label" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalCurso3Label">Refrigeración - Detalles</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <b>Programa de Estudios:</b><br><br> 
-
-              1- Fundamentos de la Refrigeración:<br> 
-
-              Principios de termodinámica.
-              Tipos de refrigerantes y sus características.
-              Componentes básicos: compresores, condensadores, evaporadores.<br><br>
-              2- Mantenimiento y Reparación:<br>  
-
-              Diagnóstico de fallas comunes en sistemas de refrigeración.
-              Reemplazo de componentes y carga de refrigerante.
-              Limpieza y mantenimiento preventivo.<br><br>
-
-              3- Refrigeración Comercial y Doméstica:<br> 
-
-              Instalación y ajuste de equipos comerciales.
-              Manejo de equipos de medición y diagnóstico.
-              Normativas y seguridad en la manipulación de refrigerantes.<br><br> 
-              <b>Dias y Horarios:</b><br> 
-              Lunes, miercoles y viernes de 08:00 a 12:00hs.
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary">Inscribirse</button>
-          </div>
-        </div>
-      </div>
     </div>
   </body>
 </html>
