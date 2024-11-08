@@ -15,3 +15,17 @@ body {
 .imgadmin {
     width: 300px;
 }
+
+.ocultar {
+    display: none;
+}
+
+.mostrar {
+    display: block;
+}
+
+.navbar-brand .logo-navbar {
+    height: 120px;
+    /* mantiene la proporcion de la imagen */
+    width: auto;
+}
