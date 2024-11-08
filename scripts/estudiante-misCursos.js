@@ -1,88 +1,193 @@
 function manejarSubSecciones() {
-    // Botones para mostrar sub-secciones
-    const btnConsultarAsistencia = document.querySelector('.btn-consultar-asistencia');
-    const btnConsultarCalificacion = document.querySelector('.btn-consultar-calificacion');
-    const btnRealizarExamen = document.querySelector('.btn-realizar-examen');
-    const btnSubirTrabajo = document.querySelector('.btn-subir-trabajo');
-    const btnFiltrarAsistencia = document.querySelector('.btn-filtrar-asistencia');
+    const todasLasCards = document.querySelectorAll('.card');  // Obtén todas las cards
 
-    const btnVolver = document.querySelectorAll('.btn-volver');
+    todasLasCards.forEach(cursoCard => {
+        const cursoId = cursoCard.dataset.id;
+        if (!cursoId) return;
 
-    const subSeccionAsistencia = document.getElementById('sub-seccion-asistencia');
-    const subSeccionCalificacion = document.getElementById('sub-seccion-calificacion');
-    const subSeccionExamen = document.getElementById('sub-seccion-examen');
-    const subSeccionSubirTrabajo = document.getElementById('sub-seccion-subir-trabajo');
-    const subSeccionFiltrarAsistencia = document.getElementById('sub-seccion-filtrar-asistencia');
-    const seccionMisCursos = document.getElementById('seccion-mis-cursos');
+        // Función para ocultar todas las sub-secciones visibles
+        function ocultarSubSecciones() {
+            todasLasCards.forEach(card => {
+                // Oculta todas las sub-secciones de cada card
+                card.querySelectorAll('.sub-seccion').forEach(sub => {
+                    sub.classList.add('d-none');
+                });
+            });
+        }
 
-    // Mostrar sub-sección de Asistencia
-    btnConsultarAsistencia.addEventListener('click', function () {
-        subSeccionAsistencia.classList.remove('d-none');
-        seccionMisCursos.querySelector('.card').classList.add('d-none'); // Ocultar card de curso
-    });
+        // Función para ocultar las cards de los cursos no seleccionados
+        function ocultarOtrasCards() {
+            todasLasCards.forEach(card => {
+                if (card !== cursoCard) {
+                    card.classList.add('d-none'); // Oculta todas las cards que no son la actual
+                }
+            });
+        }
 
-    // Mostrar sub-sección de Calificación
-    btnConsultarCalificacion.addEventListener('click', function () {
-        subSeccionCalificacion.classList.remove('d-none');
-        seccionMisCursos.querySelector('.card').classList.add('d-none'); // Ocultar card de curso
-    });
+        // Función para mostrar la sub-sección correspondiente
+        function mostrarSubSeccion(subSeccion) {
+            // Primero oculta todas las sub-secciones visibles
+            ocultarSubSecciones();
 
-    // Mostrar sub-sección de Examen
-    btnRealizarExamen.addEventListener('click', function () {
-        subSeccionExamen.classList.remove('d-none');
-        seccionMisCursos.querySelector('.card').classList.add('d-none'); // Ocultar card de curso
-    });
+            // Luego muestra solo la sub-sección que fue seleccionada
+            subSeccion.classList.remove('d-none');
+        }
 
-    // Mostrar sub-sección para Subir Trabajo Práctico
-    btnSubirTrabajo.addEventListener('click', function () {
-        subSeccionSubirTrabajo.classList.remove('d-none');
-        seccionMisCursos.querySelector('.card').classList.add('d-none'); // Ocultar card de curso
-    });
+        // Event listeners para los botones de sub-secciones
+        cursoCard.querySelector('.btn-consultar-asistencia').addEventListener('click', () => {
+            const asistencia = cursoCard.querySelector(`#asistencia-${cursoId}`);
+            if (asistencia) {
+                ocultarOtrasCards(); // Oculta las cards de los demás cursos
+                mostrarSubSeccion(asistencia); // Muestra la sub-sección de asistencia
+            }
+        });
 
-    // Mostrar sub-sección para Filtrar Asistencia
-    btnFiltrarAsistencia.addEventListener('click', function () {
-        subSeccionFiltrarAsistencia.classList.remove('d-none');
-        seccionMisCursos.querySelector('.card').classList.add('d-none'); // Ocultar card de curso
-    });
+        cursoCard.querySelector('.btn-consultar-calificacion').addEventListener('click', () => {
+            const calificacion = cursoCard.querySelector(`#calificacion-${cursoId}`);
+            if (calificacion) {
+                ocultarOtrasCards(); // Oculta las cards de los demás cursos
+                mostrarSubSeccion(calificacion); // Muestra la sub-sección de calificación
+            }
+        });
 
-    // Volver a la vista principal de "Mis Cursos"
-    btnVolver.forEach(boton => {
-        boton.addEventListener('click', function () {
-            subSeccionAsistencia.classList.add('d-none');
-            subSeccionCalificacion.classList.add('d-none');
-            subSeccionExamen.classList.add('d-none');
-            subSeccionSubirTrabajo.classList.add('d-none');
-            subSeccionFiltrarAsistencia.classList.add('d-none');
-            seccionMisCursos.querySelector('.card').classList.remove('d-none'); // Mostrar card de curso
+        cursoCard.querySelector('.btn-subir-trabajo').addEventListener('click', () => {
+            const subirTrabajo = cursoCard.querySelector(`#subir-trabajo-${cursoId}`);
+            if (subirTrabajo) {
+                ocultarOtrasCards(); // Oculta las cards de los demás cursos
+                mostrarSubSeccion(subirTrabajo); // Muestra la sub-sección de subir trabajo
+            }
+        });
+
+        cursoCard.querySelector('.btn-filtrar-asistencia').addEventListener('click', () => {
+            const filtrarAsistencia = cursoCard.querySelector(`#filtrar-asistencia-${cursoId}`);
+            if (filtrarAsistencia) {
+                ocultarOtrasCards(); // Oculta las cards de los demás cursos
+                mostrarSubSeccion(filtrarAsistencia); // Muestra la sub-sección de filtrar asistencia
+            }
+        });
+
+        // Manejar botón "volver" para restaurar la vista original de la card
+        cursoCard.querySelectorAll('.btn-volver').forEach(boton => {
+            boton.addEventListener('click', () => {
+                // Muestra todas las cards nuevamente
+                todasLasCards.forEach(card => card.classList.remove('d-none'));
+
+                // Oculta todas las sub-secciones de la card actual
+                cursoCard.querySelectorAll('.sub-seccion').forEach(sub => {
+                    sub.classList.add('d-none');
+                });
+            });
         });
     });
+}
 
-    // Manejar el envío del examen (solo un ejemplo)
-    const formExamen = document.getElementById('form-realizar-examen');
-    formExamen.addEventListener('submit', function (event) {
-        event.preventDefault();
-        alert('Respuesta enviada!'); // Aquí podria tambien mostrar un modal, que opinan profes?
-        subSeccionExamen.classList.add('d-none');
-        seccionMisCursos.querySelector('.card').classList.remove('d-none'); // Volver a la card
+async function cargarMisCursos() {
+    try {
+        const response = await fetch('Modulos/cargarMisCursos.php');  // Llamada a cargarMisCursos.php
+        const cursos = await response.json();
+
+        if (cursos.status === 'success') {
+            renderizarCursos(cursos.data);// Función para mostrar los cursos en el DOM
+        } else if (cursos.status === 'info') {
+            mostrarMensajeInfo(cursos.message); // Si no hay cursos
+        } else {
+            mostrarErrGlobal(cursos.message); // Si hubo un error en el backend
+        }
+    } catch (error) {
+        mostrarErrGlobal('No se pudo cargar la lista de cursos. Intenta nuevamente.');
+    }
+}
+
+
+function renderizarCursos(cursos) {
+    const seccionMisCursos = document.getElementById('seccion-mis-cursos');
+
+    // Limpiar cursos anteriores si es necesario
+    seccionMisCursos.innerHTML = `
+        <h1 class="my-4 titulo">Mis Cursos</h1>
+        <hr>
+        <h3 class="my-4 titulo">Lista de cursos en los que estás inscripto</h3>
+    `;
+
+    cursos.forEach(curso => {
+        const cursoCard = document.createElement('div');
+        cursoCard.classList.add('card', 'mb-4');
+        cursoCard.dataset.id = curso.id; // Asignar ID al dataset de la card
+
+        cursoCard.innerHTML = `
+            <div class="card-body">
+                <h5 class="card-title">${curso.nombre}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Fecha: ${curso.fecha_inicio} - ${curso.fecha_fin}</h6>
+                <p class="card-text">${curso.descripcion}</p>
+                
+                <!-- Botones de opciones para cada curso -->
+                <button class="btn btn-primary btn-consultar-asistencia">Consultar Asistencia</button>
+                <button class="btn btn-secondary btn-consultar-calificacion">Consultar Calificación</button>
+                <button class="btn btn-success btn-subir-trabajo">Subir Trabajo Práctico</button>
+                <button class="btn btn-warning btn-filtrar-asistencia">Filtrar Asistencia</button>
+
+                <!-- Sub-secciones dinámicas dentro de la card de cada curso -->
+                <div class="sub-seccion d-none" id="asistencia-${curso.id}">
+                    <h4>Asistencia del Curso</h4>
+                    <ul>
+                        <li>Clase 1: Presente</li>
+                        <li>Clase 2: Ausente</li>
+                        <li>Clase 3: Presente</li>
+                    </ul>
+                    <button class="btn btn-secondary btn-volver">Volver</button>
+                </div>
+                
+                <div class="sub-seccion d-none" id="calificacion-${curso.id}">
+                    <h4>Calificaciones del Curso</h4>
+                    <ul>
+                        <li>Examen Parcial 1: 8</li>
+                        <li>Examen Parcial 2: 7</li>
+                        <li>Examen Final: 9</li>
+                    </ul>
+                    <button class="btn btn-secondary btn-volver">Volver</button>
+                </div>
+                
+                <div class="sub-seccion d-none" id="subir-trabajo-${curso.id}">
+                    <h4>Subir Trabajo Práctico</h4>
+                    <form id="form-subir-trabajo-${curso.id}">
+                        <input type="file" class="form-control mb-3" required>
+                        <button type="submit" class="btn btn-primary">Subir Trabajo</button>
+                    </form>
+                    <button class="btn btn-secondary btn-volver">Volver</button>
+                </div>
+                
+                <div class="sub-seccion d-none" id="filtrar-asistencia-${curso.id}">
+                    <h4>Filtrar Asistencia</h4>
+                    <select class="form-select mb-3">
+                        <option value="todos">Todos</option>
+                        <option value="presente">Presentes</option>
+                        <option value="ausente">Ausentes</option>
+                    </select>
+                    <button class="btn btn-primary">Filtrar</button>
+                    <button class="btn btn-secondary btn-volver">Volver</button>
+                </div>
+            </div>
+        `;
+
+        seccionMisCursos.appendChild(cursoCard);
     });
 
-    // Manejar el envío del trabajo práctico (solo un ejemplo)
-    const formSubirTrabajo = document.getElementById('form-subir-trabajo');
-    formSubirTrabajo.addEventListener('submit', function (event) {
-        event.preventDefault();
-        alert('Trabajo práctico subido exitosamente!'); // Aquí lo mismo, pongo un modal profe?
-        subSeccionSubirTrabajo.classList.add('d-none');
-        seccionMisCursos.querySelector('.card').classList.remove('d-none'); // Volver a la card
-    });
+    manejarSubSecciones();
+}
+
+// Funciones para mostrar mensajes de error o información
+function mostrarErrGlobal(mensaje) {
+    alert(`Error: ${mensaje}`);
+}
+
+function mostrarMensajeInfo(mensaje) {
+    alert(`Info: ${mensaje}`);
 }
 
 function inicio() {
 
-    const sections = document.querySelectorAll('section');
-    document.getElementById('seccion-inicio').classList.remove('d-none');// Mostrar solo la sección de Inicio al cargar la página
-    mostrarMenus(sections);
-    manejarSubSecciones();
-
+    document.getElementById('seccion-inicio').classList.remove('d-none'); // Mostrar solo la sección de Inicio al cargar la página
+    cargarMisCursos();  // Llamar a cargarCursos al inicio
 }
 
-window.onload = inicio;
+document.addEventListener('DOMContentLoaded', inicio);

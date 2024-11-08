@@ -15,7 +15,6 @@ function mostrarErrorGlobal(mensaje) {
 function mostrarCursos(cursos) {
     const contenedorCursos = document.getElementById('courses-section');
     contenedorCursos.innerHTML = ''; // Limpiar el contenedor antes de agregar las cards
-    console.log(cursos);
     cursos.forEach(curso => {
         // Generar el HTML para cada card
         const cardHTML = `
@@ -51,8 +50,10 @@ function mostrarCursos(cursos) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary">Inscribirse</button>
+                        <button type="button" class="btn btn-primary" data-id="${curso.id}">Inscribirse</button>
                     </div>
+                    <div id="errorModal${curso.id}" class="alert alert-danger d-none"></div>
+                    <div id="mjsExito${curso.id}" class="alert alert-success d-none"></div>
                 </div>
             </div>
         </div>

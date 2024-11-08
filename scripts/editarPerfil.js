@@ -35,11 +35,9 @@ function mostrarMensajeExito(mensaje) {
 
 // Función para cargar los datos del perfil en el formulario
 async function cargarPerfil() {
-    console.log("Cargar perfil está siendo llamada");
     try {
         const response = await fetch('Modulos/obtenerPerfil.php');
         const data = await response.json();
-        console.log(data);
 
         if (data.status === 'success') {
             // Rellenar los campos con los datos obtenidos
@@ -155,7 +153,7 @@ async function actualizarPerfil(e) {
                 mostrarMensajeExito("Perfil actualizado exitosamente.");
                 setTimeout(() => {
                     window.location.reload();
-                }, 2500);
+                }, 3000);
             } else {
                 mostrarErrorGlobal(resultado.message);
             }
@@ -167,7 +165,6 @@ async function actualizarPerfil(e) {
 
 // Inicializar la carga de perfil y la validación
 function inicio() {
-    console.log("Cargar perfil está siendo llamada");
     document.getElementById('perfilForm').addEventListener('submit', actualizarPerfil);
     cargarPerfil();
 }

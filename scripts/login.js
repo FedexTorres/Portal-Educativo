@@ -104,4 +104,4 @@ function manejarEventosLogin() {
 }
 
 // Inicializar eventos al cargar la página
-window.onload = manejarEventosLogin;
+document.addEventListener('DOMContentLoaded', manejarEventosLogin);

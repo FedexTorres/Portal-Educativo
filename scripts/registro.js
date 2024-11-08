@@ -157,5 +157,5 @@ function inicio() {
     document.getElementById('registroForm').addEventListener('submit', validarFormularioRegistro);
 }
 
-window.onload = inicio;
+document.addEventListener('DOMContentLoaded', inicio);
 

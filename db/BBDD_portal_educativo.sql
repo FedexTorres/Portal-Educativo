@@ -69,7 +69,6 @@ CREATE TABLE inscripciones (
     id_usuario INT(11) NOT NULL,
     id_curso INT(11) NOT NULL,
     fecha_inscripcion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    estado VARCHAR(20) DEFAULT 'pendiente',
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (id_curso) REFERENCES cursos(id) ON DELETE CASCADE,
     UNIQUE (id_usuario, id_curso)

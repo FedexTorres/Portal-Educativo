@@ -22,7 +22,8 @@ session_start();
     <script defer src="scripts/estudiante-menus.js"></script>
     <script defer src="scripts/editarPerfil.js"></script>
     <script defer src="scripts/mensajes.js"></script>
-    <script defer src="scripts/cargarCursos.js"></script>  
+    <script defer src="scripts/cargarCursos.js"></script>
+    <script defer src="scripts/inscripcionCurso.js"></script>  
 </head>
 
 <!-- ############################################# MENU LATERAL IZQUIERDO ############################################# -->
@@ -99,20 +100,6 @@ session_start();
       <p>Lista de cursos en los que estás inscrito.</p>
 
       <!-- Card del Curso Refrigeración a modo de ejemplo-->
-      <div class="card mb-4">
-        <div class="card-body">
-          <h5 class="card-title">Refrigeración</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Profesor: Ing. Carlos López | Período: 2023-2024</h6>
-          <p class="card-text">Cantidad de clases: 16 | Cantidad de exámenes: 3</p>
-
-          <!-- Botones de opciones para el curso -->
-          <button class="btn btn-primary btn-consultar-asistencia">Consultar Asistencia</button>
-          <button class="btn btn-secondary btn-consultar-calificacion">Consultar Calificación</button>
-          <button class="btn btn-info btn-realizar-examen">Realizar Examen</button>
-          <button class="btn btn-success btn-subir-trabajo">Subir Trabajo Práctico</button>
-          <button class="btn btn-warning btn-filtrar-asistencia">Filtrar Asistencia</button>
-        </div>
-      </div>
 
       <!-- Sub-secciones dentro de la vista de Mis Cursos -->
       <div id="sub-seccion-asistencia" class="d-none">
@@ -135,32 +122,6 @@ session_start();
         </ul>
         <button class="btn btn-secondary btn-volver">Volver</button>
       </div>
-
-      <!-- Sub-sección para Realizar Examen -->
-
-      <div id="sub-seccion-examen" class="d-none">
-        <h4>Realizar Examen de Refrigeración</h4>
-        <p>Examen: ¿Cuál es la función de un compresor?</p>
-        <form action="" method="POST" id="form-realizar-examen">
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="respuesta" id="respuesta1" value="a">
-            <label class="form-check-label" for="respuesta1">A) Refrigerar el aire</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="respuesta" id="respuesta2" value="b">
-            <label class="form-check-label" for="respuesta2">B) Calentar el aire</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="respuesta" id="respuesta3" value="c">
-            <label class="form-check-label" for="respuesta3">C) Regular la presión</label>
-          </div>
-          <br>
-          <button type="submit" class="btn btn-primary">Enviar Respuesta</button>
-        </form>
-        <br>
-        <button class="btn btn-secondary btn-volver">Volver</button>
-      </div>
-      <br>
 
       <!-- Sub-sección para Subir Trabajo Práctico -->
 
@@ -241,7 +202,7 @@ session_start();
 <!-- ############################################# SECCION DEL PERFIL ############################################# -->
 
     <section id="seccion-perfil" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
-      <h1 class="my-4 titulo">Perfil del Estudiante</h1>
+      <h1 class="my-4 titulo">Editar Perfil</h1>
       <hr>
       
       <!-- Contenedor de Errores Globales -->
