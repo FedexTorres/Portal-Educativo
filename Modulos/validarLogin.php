@@ -7,8 +7,21 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Si la solicitud no es POST, significa que estamos verificando si el usuario está logueado
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    //echo json_encode(['success' => false, 'message' => 'Método de solicitud no permitido']);
+    if (isset($_SESSION['usuario']['id'])) {
+        // Si la sesión está activa, devolvemos los datos del usuario
+        echo json_encode([
+            'status' => 'success',
+            'usuario' => $_SESSION['usuario']
+        ]);
+    } else {
+        // Si no está logueado, devolvemos un estado de error o información
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Usuario no logueado'
+        ]);
+    }
     exit();
 }
 
@@ -43,9 +56,9 @@ if (isset($_POST["correo"], $_POST["clave"]) && !empty($_POST["correo"]) && !emp
         // Establecemos la URL de redirección según el tipo de usuario
         $redireccion = "";
         if ($_SESSION['usuario']['rol'] == 'administrador') {
-            $redireccion = "administrador.html";
+            $redireccion = "administrador.php";
         } elseif ($_SESSION['usuario']['rol'] == 'profesor') {
-            $redireccion = "vista-profesor.html";
+            $redireccion = "profesor.php";
         } elseif ($_SESSION['usuario']['rol'] == 'estudiante') {
             $redireccion = "index.php";
         }

@@ -125,19 +125,6 @@ session_start();
 
       <!-- Sub-sección para Subir Trabajo Práctico -->
 
-      <div id="sub-seccion-subir-trabajo" class="d-none">
-        <h4>Subir Trabajo Práctico</h4>
-        <form action="" method="POST" id="form-subir-trabajo">
-          <div class="mb-3">
-            <label for="archivo" class="form-label">Selecciona el archivo</label>
-            <input type="file" class="form-control" id="archivo" required>
-          </div>
-          <br>
-          <button type="submit" class="btn btn-primary">Subir Trabajo</button>
-        </form>
-        <br>
-        <button class="btn btn-secondary btn-volver">Volver</button>
-      </div>
       <br>
 
       <!-- Sub-sección para Filtrar Asistencia -->

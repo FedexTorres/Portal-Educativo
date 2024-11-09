@@ -109,7 +109,7 @@ CREATE TABLE entregas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
     id_actividad INT NOT NULL,
-    numero_entrega INT NOT NULL,
+    numero_entrega INT NOT NULL AUTO_INCREMENT,
     fecha_entrega TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ruta_archivo VARCHAR(255),
     CONSTRAINT entrega_usuario_fk FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,

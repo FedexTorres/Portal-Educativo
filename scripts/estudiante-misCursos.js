@@ -50,11 +50,11 @@ function manejarSubSecciones() {
             }
         });
 
-        cursoCard.querySelector('.btn-subir-trabajo').addEventListener('click', () => {
-            const subirTrabajo = cursoCard.querySelector(`#subir-trabajo-${cursoId}`);
-            if (subirTrabajo) {
+        cursoCard.querySelector('.btn-subir-actividad').addEventListener('click', () => {
+            const subirActividad = cursoCard.querySelector(`#actividad-${cursoId}`);
+            if (subirActividad) {
                 ocultarOtrasCards(); // Oculta las cards de los demás cursos
-                mostrarSubSeccion(subirTrabajo); // Muestra la sub-sección de subir trabajo
+                mostrarSubSeccion(subirActividad); // Muestra la sub-sección de subir trabajo
             }
         });
 
@@ -81,7 +81,31 @@ function manejarSubSecciones() {
     });
 }
 
+async function checkSiEstaLogueado() {
+    try {
+        const response = await fetch('Modulos/validarLogin.php');  // Hacemos la petición al backend
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            // El usuario está logueado, devolvemos true
+            return true;
+        } else {
+            // El usuario no está logueado
+            return false;
+        }
+    } catch (error) {
+        console.error("Error al verificar el estado de sesión: ", error);
+        return false;  // Si ocurre un error, asumimos que no está logueado
+    }
+}
+
 async function cargarMisCursos() {
+    const estaLogueado = await checkSiEstaLogueado();  // Verificamos si está logueado
+
+    if (!estaLogueado) {
+        console.log("Usuario no logueado, no se cargan los cursos.");
+        return;  // No hacemos la llamada AJAX si no está logueado
+    }
     try {
         const response = await fetch('Modulos/cargarMisCursos.php');  // Llamada a cargarMisCursos.php
         const cursos = await response.json();
@@ -97,9 +121,7 @@ async function cargarMisCursos() {
         mostrarErrGlobal('No se pudo cargar la lista de cursos. Intenta nuevamente.');
     }
 }
-
-
-function renderizarCursos(cursos) {
+async function renderizarCursos(cursos) {
     const seccionMisCursos = document.getElementById('seccion-mis-cursos');
 
     // Limpiar cursos anteriores si es necesario
@@ -123,7 +145,7 @@ function renderizarCursos(cursos) {
                 <!-- Botones de opciones para cada curso -->
                 <button class="btn btn-primary btn-consultar-asistencia">Consultar Asistencia</button>
                 <button class="btn btn-secondary btn-consultar-calificacion">Consultar Calificación</button>
-                <button class="btn btn-success btn-subir-trabajo">Subir Trabajo Práctico</button>
+                <button class="btn btn-success btn-subir-actividad">Actividades</button>
                 <button class="btn btn-warning btn-filtrar-asistencia">Filtrar Asistencia</button>
 
                 <!-- Sub-secciones dinámicas dentro de la card de cada curso -->
@@ -147,11 +169,16 @@ function renderizarCursos(cursos) {
                     <button class="btn btn-secondary btn-volver">Volver</button>
                 </div>
                 
-                <div class="sub-seccion d-none" id="subir-trabajo-${curso.id}">
-                    <h4>Subir Trabajo Práctico</h4>
-                    <form id="form-subir-trabajo-${curso.id}">
+                <div class="sub-seccion d-none" id="actividad-${curso.id}">
+                    <hr>
+                    <h4>Actividades del Cursos ${curso.nombre}</h4>
+                    <div id="contenedor-actividades-${curso.id}"></div> <!-- Aquí se cargarán las actividades -->
+                        <button class="btn btn-secondary btn-volver">Volver</button>
+                    <hr>
+                    <h4>Subir Actividad</h4>
+                    <form id="form-subir-actividad-${curso.id}">
                         <input type="file" class="form-control mb-3" required>
-                        <button type="submit" class="btn btn-primary">Subir Trabajo</button>
+                        <button type="submit" class="btn btn-primary">Subir Actividad</button>
                     </form>
                     <button class="btn btn-secondary btn-volver">Volver</button>
                 </div>
@@ -170,10 +197,85 @@ function renderizarCursos(cursos) {
         `;
 
         seccionMisCursos.appendChild(cursoCard);
+
+        // Cargar actividades para cada curso
+        cargarActividades(curso.id);
     });
 
     manejarSubSecciones();
 }
+
+// Función para cargar las actividades de un curso específico
+async function cargarActividades(cursoId) {
+    const contenedorActividades = document.getElementById(`contenedor-actividades-${cursoId}`);
+    try {
+        const response = await fetch(`Modulos/obtenerActividades.php?cursoId=${cursoId}`);
+        const actividades = await response.json();
+
+        if (actividades.status === 'success' && actividades.data.length > 0) {
+            renderizarActividades(cursoId, actividades.data, contenedorActividades);
+        } else {
+            contenedorActividades.innerHTML = '<p>No hay actividades disponibles.</p>';
+        }
+    } catch (error) {
+        contenedorActividades.innerHTML = '<p>Error al cargar las actividades. Intenta nuevamente.</p>';
+    }
+}
+
+// Función para renderizar las actividades en el DOM
+function renderizarActividades(cursoId, actividades, contenedor) {
+    const header = document.createElement('h4');
+    contenedor.appendChild(header);
+
+    actividades.forEach(actividad => {
+        const actividadDiv = document.createElement('div');
+        actividadDiv.classList.add('actividad');
+        actividadDiv.innerHTML = `
+            <h5>Consigna: ${actividad.consigna}</h5>
+            <p>Fecha límite: ${actividad.fecha_limite}</p>
+        `;
+        contenedor.appendChild(actividadDiv);
+    });
+}
+
+// Función para manejar el envío de la actividad por parte del estudiante
+async function subirActividad(event) {
+    event.preventDefault(); // Evitar el comportamiento predeterminado del formulario
+
+    const form = event.target;
+    const cursoId = form.dataset.cursoId;
+    const actividadId = form.dataset.actividadId;
+    const fileInput = form.querySelector('input[type="file"]');
+
+    const formData = new FormData();
+    formData.append('actividad', fileInput.files[0]);
+    formData.append('cursoId', cursoId);
+    formData.append('actividadId', actividadId);
+
+    try {
+        const response = await fetch('Modulos/subirActividad.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            alert('Actividad subida correctamente');
+        } else {
+            alert('Hubo un problema al subir la actividad');
+        }
+    } catch (error) {
+        alert('Error al subir la actividad');
+    }
+}
+
+// Añadir la lógica para manejar el formulario de subida
+document.addEventListener('submit', (event) => {
+    if (event.target.matches('form[id^="form-subir-actividad"]')) {
+        subirActividad(event);
+    }
+});
 
 // Funciones para mostrar mensajes de error o información
 function mostrarErrGlobal(mensaje) {

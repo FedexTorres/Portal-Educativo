@@ -1,3 +1,10 @@
+<?php
+session_start();
+
+  // Incluimos el navbar-base que cargará el navbar-logueado o navbar-visitante según la sesión
+  include 'navbar-base.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
