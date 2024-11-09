@@ -1,9 +1,4 @@
 <?php
-include "modulos/conexionDB.php";
-$query= "select * from roles";
-$resultado = $conn->prepare($query);
-$resultado->execute();
-$roles = $resultado->fetchAll(PDO::FETCH_ASSOC);
 
 session_start();
 
@@ -29,6 +24,7 @@ session_start();
     
     <link rel="stylesheet" href="css/estilo_administrador.css">
     <script src="scripts/administrador.js" defer></script>
+    <script src="scripts/administradorGestorDeUsuarios.js" defer></script>
     <script defer src="scripts/mensajes.js"></script>
     <script defer src="scripts/editarPerfil.js"></script>
 
@@ -88,8 +84,10 @@ session_start();
 
       <div class="row" id="courses-section">
       <!--Aca se agregan los cursos-->
-      No hay ningun curso agregado de momento...
       </div>
+      <br>
+      <div id="errorGlobal" class="alert alert-danger d-none"></div>
+
 
     </section>
     
@@ -174,7 +172,7 @@ session_start();
       <hr>
       
       <!-- Contenedor de Errores Globales -->
-      <div id="errorGlobal" class="alert alert-danger d-none"></div>
+      
         <!-- Mensaje de éxito -->
         <div id="mensajeExito" class="alert alert-success d-none"></div>
 
@@ -344,7 +342,7 @@ session_start();
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Crear Usuario</h4>
+        <h4 class="modal-title" id="tituloFormUsuarios">Crear Usuario</h4>
       </div>
 
       <!-- Modal body -->
@@ -384,11 +382,7 @@ session_start();
           <label for="UserNewTipo">Tipo usuario:</label>
           <select id="UserNewTipo" name="UserNewTipo" class="form-select">
             <option></option>
-            <?php
-            foreach ($roles as $role) {
-              echo"<option value=".$role["id"].">".$role["nombre"]."</option>";
-            }
-            ?>
+            
           </select>
           <div id="errorTipo" class="invalid-feedback text-danger"></div> <!-- Div para mostrar el error -->
           </div>
