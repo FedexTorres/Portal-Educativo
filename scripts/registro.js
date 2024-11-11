@@ -124,7 +124,6 @@ async function validarFormularioRegistro(e) {
     }
     // Si es válido, enviar datos al servidor
     if (esValido) {
-        //alert("Registro exitoso. Bienvenido a la plataforma educativa!");
         try {
             const datos = new FormData(e.target);
             const response = await fetch('Modulos/registro_Estudiante.php', {

@@ -171,17 +171,12 @@ async function renderizarCursos(cursos) {
                 
                 <div class="sub-seccion d-none" id="actividad-${curso.id}">
                     <hr>
-                    <h4>Actividades del Cursos ${curso.nombre}</h4>
+                    <h4>Actividades del Curso ${curso.nombre}</h4>
                     <div id="contenedor-actividades-${curso.id}"></div> <!-- Aquí se cargarán las actividades -->
-                        <button class="btn btn-secondary btn-volver">Volver</button>
-                    <hr>
-                    <h4>Subir Actividad</h4>
-                    <form id="form-subir-actividad-${curso.id}">
-                        <input type="file" class="form-control mb-3" required>
-                        <button type="submit" class="btn btn-primary">Subir Actividad</button>
-                    </form>
                     <button class="btn btn-secondary btn-volver">Volver</button>
+                    <hr>
                 </div>
+
                 
                 <div class="sub-seccion d-none" id="filtrar-asistencia-${curso.id}">
                     <h4>Filtrar Asistencia</h4>
@@ -233,6 +228,12 @@ function renderizarActividades(cursoId, actividades, contenedor) {
         actividadDiv.innerHTML = `
             <h5>Consigna: ${actividad.consigna}</h5>
             <p>Fecha límite: ${actividad.fecha_limite}</p>
+            <!-- Formulario de subida de actividad -->
+            <form id="form-subir-actividad-${cursoId}-${actividad.id}" data-curso-id="${cursoId}" data-actividad-id="${actividad.id}">
+                <input type="file" class="form-control mb-3" required>
+                <button type="submit" class="btn btn-primary">Subir Actividad</button>
+            </form>
+            <div id="alert-subActividad-${actividad.id}"></div>
         `;
         contenedor.appendChild(actividadDiv);
     });
@@ -245,7 +246,17 @@ async function subirActividad(event) {
     const form = event.target;
     const cursoId = form.dataset.cursoId;
     const actividadId = form.dataset.actividadId;
+    // Verificamos que los datos estén presentes antes de proceder
+    if (!cursoId || !actividadId) {
+        alert('Curso o actividad no especificados.');
+        return;
+    }
     const fileInput = form.querySelector('input[type="file"]');
+    // Verifica si un archivo fue seleccionado
+    if (!fileInput.files.length) {
+        alert('Por favor, selecciona un archivo.');
+        return;
+    }
 
     const formData = new FormData();
     formData.append('actividad', fileInput.files[0]);
@@ -261,12 +272,13 @@ async function subirActividad(event) {
         const result = await response.json();
 
         if (result.status === 'success') {
-            alert('Actividad subida correctamente');
+            mostrarMjeExito(result.message, form); // Usamos el mensaje del JSON
         } else {
-            alert('Hubo un problema al subir la actividad');
+            mostrarErrGlobal(result.message, form);
         }
     } catch (error) {
-        alert('Error al subir la actividad');
+        mostrarErrGlobal('Error al subir la actividad', form);
+        console.log(error);
     }
 }
 
@@ -277,14 +289,38 @@ document.addEventListener('submit', (event) => {
     }
 });
 
-// Funciones para mostrar mensajes de error o información
-function mostrarErrGlobal(mensaje) {
-    alert(`Error: ${mensaje}`);
+function mostrarErrGlobal(mensaje, form) {
+    const actividadId = form.dataset.actividadId; // Obtén el ID de la actividad desde el formulario
+    const alertContainer = document.getElementById(`alert-subActividad-${actividadId}`); // Selecciona el contenedor específico
+    if (alertContainer) {
+        alertContainer.classList.remove('alert-success'); // Elimina clase de éxito si existe
+        alertContainer.classList.add('alert', 'alert-danger'); // Añade las clases de error
+        alertContainer.innerHTML = mensaje; // Muestra el mensaje de error
+        // Elimina el mensaje después de 3 segundos
+        setTimeout(() => {
+            alertContainer.innerHTML = '';
+            alertContainer.classList.remove('alert-danger');
+        }, 3000);
+    }
 }
 
-function mostrarMensajeInfo(mensaje) {
-    alert(`Info: ${mensaje}`);
+// Función de éxito
+function mostrarMjeExito(mensaje, form) {
+    const actividadId = form.dataset.actividadId;
+    const alertContainer = document.getElementById(`alert-subActividad-${actividadId}`); // Selecciona el contenedor específico
+
+    if (alertContainer) {
+        alertContainer.classList.remove('alert-danger'); // Elimina cualquier clase de error
+        alertContainer.classList.add('alert', 'alert-success'); // Añade clases de éxito
+        alertContainer.innerHTML = mensaje; // Muestra el mensaje
+        // Elimina el mensaje después de 3 segundos
+        setTimeout(() => {
+            alertContainer.innerHTML = '';
+            alertContainer.classList.remove('alert-success');
+        }, 3000);
+    }
 }
+
 
 function inicio() {
 
