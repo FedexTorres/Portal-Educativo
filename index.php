@@ -102,45 +102,11 @@ session_start();
       <!-- Card del Curso Refrigeración a modo de ejemplo-->
 
       <!-- Sub-secciones dentro de la vista de Mis Cursos -->
-      <div id="sub-seccion-asistencia" class="d-none">
-        <h4>Asistencia del Curso de Refrigeración</h4>
-        <ul>
-          <li>Clase 1: Presente</li>
-          <li>Clase 2: Ausente</li>
-          <li>Clase 3: Presente</li>
-          <li>Clase 4: Presente</li>
-        </ul>
-        <button class="btn btn-secondary btn-volver">Volver</button>
-      </div>
-
-      <div id="sub-seccion-calificacion" class="d-none">
-        <h4>Calificaciones del Curso de Refrigeración</h4> <!-- Aqui se debera consultar la BBDD -->
-        <ul>
-          <li>Examen Parcial 1: 8</li>
-          <li>Examen Parcial 2: 7</li>
-          <li>Examen Final: 9</li>
-        </ul>
-        <button class="btn btn-secondary btn-volver">Volver</button>
-      </div>
 
       <!-- Sub-sección para Subir Trabajo Práctico -->
 
-      <br>
-
       <!-- Sub-sección para Filtrar Asistencia -->
 
-      <div id="sub-seccion-filtrar-asistencia" class="d-none"> <!-- Aqui se debera consultar la BBDD -->
-          <h4>Filtrar Asistencia</h4>
-          <label for="estado-asistencia">Selecciona el estado:</label>
-          <select id="estado-asistencia" class="form-select mb-3">
-              <option value="todos">Todos</option>
-              <option value="presente">Presentes</option>
-              <option value="ausente">Ausentes</option>
-          </select>
-          <button class="btn btn-primary">Filtrar</button>
-          <button class="btn btn-secondary btn-volver">Volver</button>
-      </div>
-      <br>
     </section>
 
   <!-- ############################################# SECCION DE MENSAJES ############################################# -->

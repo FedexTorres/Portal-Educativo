@@ -99,6 +99,7 @@ CREATE TABLE materiales_de_estudio (
 CREATE TABLE actividades (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_curso INT NOT NULL,
+    nombre VARCHAR(255) NOT NULL,
     consigna TEXT NOT NULL,
     fecha_limite DATE,
     CONSTRAINT actividad_ibfk_1 FOREIGN KEY (id_curso) REFERENCES cursos(id) ON DELETE CASCADE

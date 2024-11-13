@@ -7,7 +7,7 @@ if (!isset($_SESSION['usuario']['id'])) {
     exit;
 }
 
-$id_curso = $_GET['cursoId'] ?? null;  // Obtiene el id del curso desde la solicitud GET
+$id_curso = $_GET['cursoId'] ?? null;
 
 if (!$id_curso) {
     echo json_encode(['status' => 'error', 'message' => 'ID de curso no proporcionado']);
@@ -15,8 +15,8 @@ if (!$id_curso) {
 }
 
 try {
-    // Consulta para obtener las actividades del curso específico
-    $query = "SELECT id, consigna, fecha_limite 
+    // Consulta actualizada para incluir el campo "nombre"
+    $query = "SELECT id, nombre, consigna, fecha_limite 
               FROM actividades 
               WHERE id_curso = :id_curso";
     

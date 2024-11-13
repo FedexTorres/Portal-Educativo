@@ -14,7 +14,6 @@ function manejarSubSecciones() {
                 });
             });
         }
-
         // Función para ocultar las cards de los cursos no seleccionados
         function ocultarOtrasCards() {
             todasLasCards.forEach(card => {
@@ -23,7 +22,6 @@ function manejarSubSecciones() {
                 }
             });
         }
-
         // Función para mostrar la sub-sección correspondiente
         function mostrarSubSeccion(subSeccion) {
             // Primero oculta todas las sub-secciones visibles
@@ -32,24 +30,25 @@ function manejarSubSecciones() {
             // Luego muestra solo la sub-sección que fue seleccionada
             subSeccion.classList.remove('d-none');
         }
-
         // Event listeners para los botones de sub-secciones
         cursoCard.querySelector('.btn-consultar-asistencia').addEventListener('click', () => {
             const asistencia = cursoCard.querySelector(`#asistencia-${cursoId}`);
+            consultarAsistencia(cursoId); // Llama a la función pasando el ID del curso
             if (asistencia) {
                 ocultarOtrasCards(); // Oculta las cards de los demás cursos
+                console.log(asistencia);
                 mostrarSubSeccion(asistencia); // Muestra la sub-sección de asistencia
             }
         });
 
         cursoCard.querySelector('.btn-consultar-calificacion').addEventListener('click', () => {
             const calificacion = cursoCard.querySelector(`#calificacion-${cursoId}`);
+            consultarCalificacion(cursoId);
             if (calificacion) {
                 ocultarOtrasCards(); // Oculta las cards de los demás cursos
                 mostrarSubSeccion(calificacion); // Muestra la sub-sección de calificación
             }
         });
-
         cursoCard.querySelector('.btn-subir-actividad').addEventListener('click', () => {
             const subirActividad = cursoCard.querySelector(`#actividad-${cursoId}`);
             if (subirActividad) {
@@ -57,15 +56,6 @@ function manejarSubSecciones() {
                 mostrarSubSeccion(subirActividad); // Muestra la sub-sección de subir trabajo
             }
         });
-
-        cursoCard.querySelector('.btn-filtrar-asistencia').addEventListener('click', () => {
-            const filtrarAsistencia = cursoCard.querySelector(`#filtrar-asistencia-${cursoId}`);
-            if (filtrarAsistencia) {
-                ocultarOtrasCards(); // Oculta las cards de los demás cursos
-                mostrarSubSeccion(filtrarAsistencia); // Muestra la sub-sección de filtrar asistencia
-            }
-        });
-
         // Manejar botón "volver" para restaurar la vista original de la card
         cursoCard.querySelectorAll('.btn-volver').forEach(boton => {
             boton.addEventListener('click', () => {
@@ -143,61 +133,216 @@ async function renderizarCursos(cursos) {
                 <p class="card-text">${curso.descripcion}</p>
                 
                 <!-- Botones de opciones para cada curso -->
-                <button class="btn btn-primary btn-consultar-asistencia">Consultar Asistencia</button>
                 <button class="btn btn-secondary btn-consultar-calificacion">Consultar Calificación</button>
                 <button class="btn btn-success btn-subir-actividad">Actividades</button>
-                <button class="btn btn-warning btn-filtrar-asistencia">Filtrar Asistencia</button>
-
-                <!-- Sub-secciones dinámicas dentro de la card de cada curso -->
-                <div class="sub-seccion d-none" id="asistencia-${curso.id}">
-                    <h4>Asistencia del Curso</h4>
-                    <ul>
-                        <li>Clase 1: Presente</li>
-                        <li>Clase 2: Ausente</li>
-                        <li>Clase 3: Presente</li>
-                    </ul>
-                    <button class="btn btn-secondary btn-volver">Volver</button>
-                </div>
+                <button class="btn btn-primary btn-consultar-asistencia">Consultar Asistencia</button>
                 
+                <!-- Sub-secciones dinámicas dentro de la card de cada curso -->
+                                
                 <div class="sub-seccion d-none" id="calificacion-${curso.id}">
-                    <h4>Calificaciones del Curso</h4>
-                    <ul>
-                        <li>Examen Parcial 1: 8</li>
-                        <li>Examen Parcial 2: 7</li>
-                        <li>Examen Final: 9</li>
-                    </ul>
-                    <button class="btn btn-secondary btn-volver">Volver</button>
+                    <h4>Calificaciones del Curso: ${curso.nombre}</h4>
+                        <div id="contenedor-calificaciones-${curso.id}"></div> <!-- Aquí se cargarán las calificaciones -->
+                        <div id="errorCalificacion-${curso.id}" class="d-none"></div>
+                        <button class="btn btn-secondary btn-volver">Volver</button>
+                </div>
+
+                <div class="sub-seccion d-none" id="asistencia-${curso.id}">
+                <button class="btn btn-secondary btn-volver">Volver</button>
+                <hr>
                 </div>
                 
                 <div class="sub-seccion d-none" id="actividad-${curso.id}">
                     <hr>
-                    <h4>Actividades del Curso ${curso.nombre}</h4>
-                    <div id="contenedor-actividades-${curso.id}"></div> <!-- Aquí se cargarán las actividades -->
-                    <button class="btn btn-secondary btn-volver">Volver</button>
+                        <h4>Actividades del Curso: ${curso.nombre}</h4>
+                        <div id="contenedor-actividades-${curso.id}"></div> <!-- Aquí se cargarán las actividades -->
+                        <button class="btn btn-secondary btn-volver">Volver</button>
                     <hr>
-                </div>
-
-                
-                <div class="sub-seccion d-none" id="filtrar-asistencia-${curso.id}">
-                    <h4>Filtrar Asistencia</h4>
-                    <select class="form-select mb-3">
-                        <option value="todos">Todos</option>
-                        <option value="presente">Presentes</option>
-                        <option value="ausente">Ausentes</option>
-                    </select>
-                    <button class="btn btn-primary">Filtrar</button>
-                    <button class="btn btn-secondary btn-volver">Volver</button>
                 </div>
             </div>
         `;
-
         seccionMisCursos.appendChild(cursoCard);
-
         // Cargar actividades para cada curso
         cargarActividades(curso.id);
+        //consultarAsistencia(curso.id);
     });
-
     manejarSubSecciones();
+}
+
+// Función para consultar la asistencia de un curso
+async function consultarAsistencia(cursoId, filtro = 'todos') {
+
+    const asistenciaContenedor = document.getElementById(`asistencia-${cursoId}`);
+    asistenciaContenedor.innerHTML = ""; // Limpiar contenido previo
+
+    if (!asistenciaContenedor) {
+        console.error(`No se encontró el contenedor para la asistencia del curso con ID ${cursoId}`);
+        return;
+    }
+
+    try {
+        const url = `Modulos/consultarAsistencia.php?cursoId=${cursoId}&filtro=${filtro}`;
+        const response = await fetch(url);
+        const result = await response.json();
+
+        if (result.error) {
+            console.error('Error:', result.error);
+            return;
+        }
+
+        if (result.length === 0) {
+            asistenciaContenedor.innerHTML = '<p>No se encontraron registros de asistencia.</p>';
+            return;
+        }
+        // Renderizamos la tabla con los datos
+        renderizarAsistencia(result, asistenciaContenedor, cursoId); // Llamamos a renderizarAsistencia pasando los datos y el filtro
+
+    } catch (error) {
+        console.error('Error al consultar la asistencia:', error);
+    }
+}
+
+// Función para renderizar la tabla de asistencia
+function renderizarAsistencia(asistencias, contenedor, cursoId) {
+    // Crear el contenedor para el filtro
+    const filtroContainer = document.createElement('div');
+    filtroContainer.innerHTML = `
+        <h4>Filtrar Asistencia</h4>
+        <select id="filtro-asistencia-${cursoId}" class="form-select mb-3">
+            <option value="todos">Todos</option>
+            <option value="presente">Presentes</option>
+            <option value="ausente">Ausentes</option>
+        </select>
+        <button class="btn btn-primary btn-filtrar" data-id="${cursoId}">Filtrar</button>
+    `;
+
+    // Añadir el filtro al contenedor
+    contenedor.appendChild(filtroContainer);
+
+    // Crear la tabla
+    const tabla = document.createElement('table');
+    tabla.classList.add('table', 'table-striped');
+
+    // Crear los encabezados de la tabla
+    const encabezado = document.createElement('thead');
+    encabezado.innerHTML = `
+        <tr>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Estudiante</th>
+        </tr>
+    `;
+    tabla.appendChild(encabezado);
+
+    // Crear el cuerpo de la tabla
+    const cuerpo = document.createElement('tbody');
+
+    // Función que renderiza los datos de la tabla
+    function renderizarDatos(asistenciasFiltradas) {
+        cuerpo.innerHTML = ''; // Limpiar tabla antes de renderizar los nuevos datos
+
+        asistenciasFiltradas.forEach(asistencia => {
+            const fila = document.createElement('tr');
+            fila.innerHTML = `
+                <td>${asistencia.fecha}</td>
+                <td>${asistencia.estado}</td>
+                <td>${asistencia.estudiante_nombre} ${asistencia.estudiante_apellido}</td>
+            `;
+            cuerpo.appendChild(fila);
+        });
+    }
+    // Llamada inicial para mostrar todos los datos
+    renderizarDatos(asistencias);
+
+    // Añadir el cuerpo de la tabla
+    tabla.appendChild(cuerpo);
+    contenedor.appendChild(tabla);
+
+    // Manejar el filtrado
+    const btnFiltrar = document.querySelector(`.btn-filtrar[data-id="${cursoId}"]`);
+    btnFiltrar.addEventListener('click', function () {
+        const filtroSeleccionado = document.getElementById(`filtro-asistencia-${cursoId}`).value;
+
+        let asistenciasFiltradas = [...asistencias]; // Copiar los datos originales
+
+        if (filtroSeleccionado !== 'todos') {
+            // Filtrar los datos por el estado
+            asistenciasFiltradas = asistencias.filter(asistencia => asistencia.estado.toLowerCase() === filtroSeleccionado.toLowerCase());
+        }
+        // Renderizar los datos filtrados
+        renderizarDatos(asistenciasFiltradas);
+    });
+}
+
+// Función para consultar las calificaciones de un curso específico
+async function consultarCalificacion(cursoId) {
+    // Se obtiene el contenedor de calificaciones del curso
+    const contenedorCalificaciones = document.getElementById(`contenedor-calificaciones-${cursoId}`);
+    contenedorCalificaciones.innerHTML = ""; // Limpia el contenido previo
+
+    if (!contenedorCalificaciones) {
+        console.error(`No se encontró el contenedor para calificaciones del curso con ID ${cursoId}`);
+        return;
+    }
+
+    try {
+        const response = await fetch(`Modulos/obtenerCalificacion.php?cursoId=${cursoId}`);
+        const result = await response.json();
+
+        if (result.status === 'success' && result.data.length > 0) {
+            // Renderizar las calificaciones si hay datos disponibles
+            renderizarCalificaciones(cursoId, result.data, contenedorCalificaciones);
+        } else if (result.status === 'info') {
+            errorCalificaciones(result.message, cursoId);
+        } else if (result.status === 'error') {
+            errorCalificaciones(result.message, cursoId);
+        }
+    } catch (error) {
+        errorCalificaciones('Error al cargar las calificaciones. Intenta nuevamente.');
+    }
+}
+function renderizarCalificaciones(cursoId, calificaciones, contenedor) {
+    contenedor.innerHTML = ''; // Limpiamos el contenedor para evitar duplicados
+
+    const header = document.createElement('h4');
+    contenedor.appendChild(header);
+
+    const calificacionDiv = document.createElement('div');
+    calificacionDiv.classList.add('calificacion');
+    calificacionDiv.innerHTML = `
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Actividad</th>
+                        <th>Nro de Entrega</th>
+                        <th>Calificación</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-calificaciones-${cursoId}">
+                    ${calificaciones.map(calificacion => `
+                        <tr>
+                            <td>${calificacion.nombre_actividad}</td>
+                            <td>${calificacion.numero_entrega}</td>
+                            <td>${calificacion.calificacion}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
+
+    `;
+    contenedor.appendChild(calificacionDiv);
+}
+
+function errorCalificaciones(message, cursoId) {
+    const errorDiv = document.getElementById(`errorCalificacion-${cursoId}`);
+    if (errorDiv) {
+        errorDiv.textContent = message; // Asigna el mensaje de error
+        errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+        errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+    } else {
+        console.error("Error div no encontrado para el curso:", cursoId);
+    }
 }
 
 // Función para cargar las actividades de un curso específico
@@ -217,6 +362,7 @@ async function cargarActividades(cursoId) {
     }
 }
 
+
 // Función para renderizar las actividades en el DOM
 function renderizarActividades(cursoId, actividades, contenedor) {
     const header = document.createElement('h4');
@@ -226,7 +372,8 @@ function renderizarActividades(cursoId, actividades, contenedor) {
         const actividadDiv = document.createElement('div');
         actividadDiv.classList.add('actividad');
         actividadDiv.innerHTML = `
-            <h5>Consigna: ${actividad.consigna}</h5>
+            <h5>Actividad: ${actividad.nombre}</h5>
+            <p>Consigna: ${actividad.consigna}</p>
             <p>Fecha límite: ${actividad.fecha_limite}</p>
             <!-- Formulario de subida de actividad -->
             <form id="form-subir-actividad-${cursoId}-${actividad.id}" data-curso-id="${cursoId}" data-actividad-id="${actividad.id}">
@@ -282,7 +429,7 @@ async function subirActividad(event) {
     }
 }
 
-// Añadir la lógica para manejar el formulario de subida
+// Escuchar el formulario de subida
 document.addEventListener('submit', (event) => {
     if (event.target.matches('form[id^="form-subir-actividad"]')) {
         subirActividad(event);
