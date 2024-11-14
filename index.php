@@ -59,7 +59,7 @@ session_start();
         </nav>
 <!-- ############################################# AREA PRINCIPAL ############################################# -->
 
-  <section id="seccion-inicio"  class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light">
+  <section id="seccion-inicio"  class="col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
     <h1 class="my-4 titulo">Cursos Disponibles</h1>
     <hr>
     <!-- Carrusel -->
@@ -94,24 +94,16 @@ session_start();
 
 <!-- ############################################# SECCION MIS CURSOS #############################################-->
 
-    <section id="seccion-mis-cursos" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
+    <section id="seccion-mis-cursos" class="col-md-10 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
       <h1 class="my-4 titulo">Mis Cursos</h1>
       <hr>
       <p>Lista de cursos en los que estás inscrito.</p>
-
-      <!-- Card del Curso Refrigeración a modo de ejemplo-->
-
-      <!-- Sub-secciones dentro de la vista de Mis Cursos -->
-
-      <!-- Sub-sección para Subir Trabajo Práctico -->
-
-      <!-- Sub-sección para Filtrar Asistencia -->
 
     </section>
 
   <!-- ############################################# SECCION DE MENSAJES ############################################# -->
 
-  <section id="seccion-mensajes" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
+  <section id="seccion-mensajes" class="col-md-10 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
   <h1 class="my-4 titulo">Mensajes</h1>
   <hr>
   <div id="alerta" class="alert alert-danger d-none" role="alert"></div>
@@ -154,7 +146,7 @@ session_start();
 
 <!-- ############################################# SECCION DEL PERFIL ############################################# -->
 
-    <section id="seccion-perfil" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
+    <section id="seccion-perfil" class="col-md-10 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
       <h1 class="my-4 titulo">Editar Perfil</h1>
       <hr>
       
@@ -205,8 +197,7 @@ session_start();
 
 
 
-    </div>
-  </div>
+
 <br>
 <hr>
 <br>

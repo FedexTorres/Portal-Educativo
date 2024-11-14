@@ -33,10 +33,10 @@ function manejarSubSecciones() {
         // Event listeners para los botones de sub-secciones
         cursoCard.querySelector('.btn-consultar-asistencia').addEventListener('click', () => {
             const asistencia = cursoCard.querySelector(`#asistencia-${cursoId}`);
-            consultarAsistencia(cursoId); // Llama a la función pasando el ID del curso
+
+            consultarAsistencia(cursoId, filtro = 'todos'); // Llama a la función pasando el ID del curso
             if (asistencia) {
                 ocultarOtrasCards(); // Oculta las cards de los demás cursos
-                console.log(asistencia);
                 mostrarSubSeccion(asistencia); // Muestra la sub-sección de asistencia
             }
         });
@@ -163,14 +163,12 @@ async function renderizarCursos(cursos) {
         seccionMisCursos.appendChild(cursoCard);
         // Cargar actividades para cada curso
         cargarActividades(curso.id);
-        //consultarAsistencia(curso.id);
     });
     manejarSubSecciones();
 }
 
 // Función para consultar la asistencia de un curso
 async function consultarAsistencia(cursoId, filtro = 'todos') {
-
     const asistenciaContenedor = document.getElementById(`asistencia-${cursoId}`);
     asistenciaContenedor.innerHTML = ""; // Limpiar contenido previo
 
@@ -270,7 +268,9 @@ function renderizarAsistencia(asistencias, contenedor, cursoId) {
         }
         // Renderizar los datos filtrados
         renderizarDatos(asistenciasFiltradas);
+
     });
+
 }
 
 // Función para consultar las calificaciones de un curso específico
@@ -468,11 +468,11 @@ function mostrarMjeExito(mensaje, form) {
     }
 }
 
-
 function inicio() {
 
     document.getElementById('seccion-inicio').classList.remove('d-none'); // Mostrar solo la sección de Inicio al cargar la página
     cargarMisCursos();  // Llamar a cargarCursos al inicio
+    //consultarAsistencia(cursoId, filtro = 'todos'); // Llama a la función pasando el ID del curso
 }
 
 document.addEventListener('DOMContentLoaded', inicio);

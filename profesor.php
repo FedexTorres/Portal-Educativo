@@ -9,42 +9,42 @@ session_start();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Profesor</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="scripts/profesor2.js"></script>
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.css' rel='stylesheet' />
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.js'></script>
-    <link rel="stylesheet" href="css/estilo_administrador.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/estilos_profesor.css">
+    <script defer src="scripts/profesor.js"></script>
+    <script defer src="scripts/actividades.js"></script>
 
 </head>
-<body class="text-dark">
-    
+<body class="text-dark">   
     <div class="container-fluid">
         <div class="row">
           <!-- Menú lateral -->
-          <nav class="col-md-2 d-none d-md-block bg-light">
+          <nav class="col-md-2 d d-none d-md-block bg-light">
             <div class="card-body bg-light text-dark border-0">
               <div class="card-body">
-                <br>
-                <h4 class="card-title">Menú</h4>
-                <br>
+
                 <ul class="nav flex-column">
-                  <li class="nav-item mb-2 row">
-                    <button id="btn-espacio" class="btn btn-menu">Inicio</button>
+                  <li class="nav-item mb-2 ">
+                    <button id="btn-inicio" class="btn btn-menu">Inicio</button>
                   </li>
-                  <li class="nav-item mb-2 row">
-                    <button id="btn-calendario" class="btn btn-menu">Calendario</button>
+                  <li class="nav-item mb-2 ">
+                    <button id="btn-actividades" class="btn btn-menu">Actividades</button>
                   </li>
-                  <li class="nav-item mb-2 row">
-                    <button id="btn-cursos" class="btn btn-menu">Cursos</button>
+                  <li class="nav-item mb-2 ">
+                    <button id="btn-asistencia" class="btn btn-menu">Asistencia</button>
                   </li>
-                  <li class="nav-item mb-2 row">
-                    <button id="mensaje-btn" class="btn btn-menu">Mensajes</button>
+                  <li class="nav-item mb-2 ">
+                    <button id="btn-calificaciones" class="btn btn-menu">Calificaciones</button>
                   </li>
-                  <li class="nav-item mb-2 row">
-                    <button id="perfil-btn" class="btn btn-menu">Editar Perfil</button>
+                  <li class="nav-item mb-2 ">
+                    <button id="btn-mensaje" class="btn btn-menu">Mensajes</button>
+                  </li>
+                  <li class="nav-item mb-2 ">
+                    <button id="btn-perfil" class="btn btn-menu">Editar Perfil</button>
                   </li>
                 </ul>
               </div>
@@ -53,62 +53,94 @@ session_start();
     
     <!--  AREA PRINCIPAL  -->
     
-      <section id="mi-espacio"  class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light">
+    <section id="seccion-inicio"  class=" col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
         <h1 class="my-4 titulo">Inicio</h1>
         <hr>
-        <p>hay que pensar que poner aca.</p>
-      </section>
-    
-    <!--  SECCION CALENDARIO -->
-    
-    <section id="calendar" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light d-none">
-
-      
-      
-
-
+        <p>Cards de cursos a cargo.</p>
     </section>
     
-    <!--  SECCION DE CURSOS  -->
-    
-    <section id="filtros-cursos" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light d-none">
-      <h1 class="my-4 titulo">Gestion de Cursos</h1>
-      <hr>
-      <div class="mb-3">
-        <input type="text" id="filtro-curso" class="form-control" placeholder="Filtrar por nombre de curso">
-      </div>
-      <div class="mb-3">
-        <input type="text" id="filtro-nivel" class="form-control" placeholder="Filtrar por nivel">
-      </div>
-      <div class="mb-3">
-        <input type="text" id="filtro-tipo" class="form-control" placeholder="Filtrar por tipo">
-      </div>
-      <!-- Tabla similar a Excel -->
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Nombre del Curso</th>
-            <th>Nivel</th>
-            <th>Tipo</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="tabla-cursos">
-          <!-- Aquí se agregarán dinámicamente los cursos -->
-        </tbody>
-      </table>
+    <!--  SECCION ACTIVIDADES -->
+    <section id="seccion-actividades"  class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
+          <h1 class="my-4 titulo">Actividades</h1>
+          <hr>
+          <div id="actividades-container">
+      <!-- Tabla de Actividades -->
+              <h2>Lista de Actividades</h2>
+              <table id="tabla-actividades" class="table table-bordered">
+                  <thead>
+                      <tr>
+                          <th>Nombre de Actividad</th>
+                          <th>Consigna</th>
+                          <th>Fecha Límite</th>
+                          <th>Curso</th>
+                          <th>Acciones</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <!-- Aquí se insertarán las filas de actividades dinámicamente -->
+                  </tbody>
+              </table>
+
+              <!-- Formulario para Crear Actividad -->
+              <div id="alert-container"></div>
+              <h3>Crear Nueva Actividad</h3>
+              <form id="form-crear-actividad">
+                  <div class="form-group">
+                      <label for="nombre-actividad">Nombre de la Actividad</label>
+                      <input type="text" id="nombre-actividad" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="consigna-actividad">Consigna</label>
+                      <textarea id="consigna-actividad" class="form-control" rows="3" required></textarea>
+                  </div>
+                  <div class="form-group">
+                      <label for="fecha-limite">Fecha Límite</label>
+                      <input type="date" id="fecha-limite" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="curso-select">Curso</label>
+                      <select id="curso-select" class="form-control" required>
+                          <!-- Opciones de cursos cargadas dinámicamente -->
+                      </select>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Crear Actividad</button>
+              </form>
+
+          </div>
     </section>
-    
+ 
+    <!--  SECCION DE ASISTENCIAS  -->
+    <section id="seccion-asistencias"  class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
+        <h1 class="my-4 titulo">Asistencias</h1>
+        <hr>
+        <p>Asistencias de cursos a cargo.</p>
+    <!--  Aca se deberia tomar asistencia a los Estdiantes. Se me ocurre traer de la bbdd la lista de
+      cursos a cargo del prefesor segun id de la session, luego elegir un curso, que se elija desde un 
+      input la fecha para registrar la asistencia y que se despliege una tabla 
+      con la lista de los estudiantes en una columna, en otras 2 columnas un checkbutton para "presente" 
+      y otro para "ausente" y un boton "registrar asistencia", quizas se te ocurre algo mas a ti para agregar-->
+    </section>
+
+        <!--  SECCION DE CALIFICACIONES  -->
+        <section id="seccion-calificaciones"  class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
+        <h1 class="my-4 titulo">Calificaciones</h1>
+        <hr>
+        <p>calificaciones de cursos a cargo.</p>
+    <!--  Aca se deberan traer las actividades entregadas por los Estudiantes desde la bbdd, segun
+      id del curso, y luego un input para insertar la calificacion numerica, y por ultimo un boton "calificar",
+      que opinas aqui? -->
+    </section>
+
     <!--  SECCION DEL Mensajes  -->
     
-    <section id="seccion-mensajes" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light d-none">
+    <section id="seccion-mensajes" class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light d-none">
         <h1 class="my-4 titulo">Mensajes</h1>
 <hr>
 
   <div class="row">   
     <div class="col-md-6">
       <h2>Mensajes Recibidos</h2>
-      <div id="lista-mensajes" class="list-group">
+      <div id="lista-mensajes" class="d-none list-group">
         <a href="#" class="list-group-item list-group-item-action">
           <strong>Remitente:</strong> Juan Pérez <br>
           <strong>Mensaje:</strong> Hola, ¿cómo estás? <br>
@@ -142,7 +174,7 @@ session_start();
     
     <!--  SECCION DEL PERFIL  -->
 
-<section id="seccion-perfil" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light d-none">
+<section id="seccion-perfil" class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light d-none">
     <h1 class="my-4 titulo">Perfil del Estudiante</h1>
     <hr>
     <form action="" method="POST" id="form-perfil">
@@ -182,8 +214,5 @@ session_start();
     
     </div>
     </div>
-
-
-
 </body>
 </html>

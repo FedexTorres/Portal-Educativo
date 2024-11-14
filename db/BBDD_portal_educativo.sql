@@ -74,7 +74,7 @@ CREATE TABLE inscripciones (
     UNIQUE (id_usuario, id_curso)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Tabla de Cursos_Usuarios (confirmación de inscripción de estudiantes en cursos)
+-- Tabla de Cursos_Usuarios 
 CREATE TABLE cursos_usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
