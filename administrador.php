@@ -25,6 +25,7 @@ session_start();
     <link rel="stylesheet" href="css/estilo_administrador.css">
     <script src="scripts/administrador.js" defer></script>
     <script src="scripts/administradorGestorDeUsuarios.js" defer></script>
+    <script src="scripts/administradorGestorDeCursos.js" defer></script>
     <script defer src="scripts/mensajes.js"></script>
     <script defer src="scripts/editarPerfil.js"></script>
 
@@ -90,6 +91,41 @@ session_start();
 
 
     </section>
+
+    <!-- modal de ajustes de cursos -->
+    <div class="modal fade" id="modalCursoAjuste" tabindex="-1" aria-labelledby="modalCursoAjusteLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCursoAjusteLabel"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+
+                    <form action="" method="POST" id="form-guardar-ajuste">
+
+                    <div class="modal-body">                   
+                          <div class="mb-3 autocompletar">
+                          <label for="profesor" class="form-label">Asignar Profesor al curso</label>
+                          <input type="text" class="form-control" id="profesor" name="profesor" placeholder="Ingrese el nombre del profesor" >
+                          </div>
+
+                          <div class="mb-3">
+                          <label for="vacante" class="form-label">Ingrese cantidad de vacantes disponibles</label>
+                          <input type="number" class="form-control" id="vacante" name="vacante" placeholder="0" >
+                          </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal" id="guardarAjustes">Guardar</button>
+                    </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
     
     <!--  SECCION DE Usuarios  -->
     

@@ -83,8 +83,7 @@ const procesarInformacion = function(data) {
         asignarbotones();
 
 
-
-    }
+    };
 }
 
 //Funciones para crear usuarios nuevos
@@ -287,7 +286,6 @@ function asignarbotones(){
     document.querySelectorAll('.btn-Eliminar-Usuario').forEach(boton => {
         boton.addEventListener('click', function () {
             const userAeliminar = this.value;
-    
             modaleliminar.classList.add("mostrar");
             document.getElementById("eluserchau").innerHTML = this.id;
             document.getElementById("AdiosUser").value = userAeliminar;
