@@ -7,12 +7,10 @@ header('Content-Type: application/json');
 // Verificar si la solicitud es POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtener los datos del formulario
-    $nombre = isset($_POST["nombrecrear"]) ? trim($_POST["nombrecrear"]) : null;
-    $descripcion = isset($_POST["textCrearCurso"]) ? trim($_POST["textCrearCurso"]) : null;
-    $programa = isset($_POST["programaCrearCurso"]) ? trim($_POST["programaCrearCurso"]) : null;
-    $fechainicio = isset($_POST["fechaInicioCrearCurso"]) ? trim($_POST["fechaInicioCrearCurso"]) : null;
-    $fechafin = isset($_POST["fechaFinCrearCurso"]) ? trim($_POST["fechaFinCrearCurso"]) : null;
-    $imagen = $_FILES["archivoCrear"];
+    $nombre = isset($_POST["title"]) ? trim($_POST["title"]) : null;
+    $descripcion = isset($_POST["description"]) ? trim($_POST["description"]) : null;
+    $idcurso = isset($_POST["idcurso"]) ? trim($_POST["idcurso"]) : null;
+    $imagen = $_FILES["file"];
 
     // Variables para almacenar errores
     $errores = [];
@@ -29,29 +27,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
 
     // Verificar que no esté vacío
-    if (empty($programa)) {
+    if (empty($idcurso)) {
         $errores[] = "El programa no puede estar vacío.";
     } 
 
-    // Verificar que no esté vacía, sea válida
-    if (empty($fechainicio)) {
-        $errores[] = "La fecha de inicio no puede estar vacía.";
-    } 
-
-    if (empty($fechafin)) {
-        $errores[] = "La fecha de fin no puede estar vacía.";
-    } 
-
-    if ($fechainicio > $fechafin) {
-        $errores[] = "La fecha de inicio no puede ser posterio a la fecha de fin.";
-    } 
 
     if ($imagen['error'] != 0) {
         $errores[] = "La imagen no puede estar vacia.";
     }
 
-    $uploadDir = 'image/';
-    $uploadDir2 = '../image/';
+    $uploadDir = 'material/';
+    $uploadDir2 = '../material/';
     if (!is_dir($uploadDir2)) {
         mkdir($uploadDir2, 0777, true);
     }
@@ -76,17 +62,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Guardar la URL en la base de datos
         $imageUrl = $imagePath;
 
+        $hoy = new DateTime();
+        $ahora = $hoy->format('Y-m-d H:i:s');
         // Si no hay errores, proceder a registrar
 
         // Prepara la consulta para insertar el nuevo estudiante
-        $stmt = $conn->prepare("INSERT INTO cursos(nombre, descripcion, programa_estudios, imagen_url, fecha_inicio, fecha_fin) VALUES (
-        :nombre, :descripcion, :programa, :imagen, :inicio, :fin)");
+        $stmt = $conn->prepare("INSERT INTO materiales_de_estudio(titulo, descripcion, id_curso, fecha_subida, ruta_archivo) VALUES (
+        :nombre, :descripcion, :idcurso, :fecha, :archivo)");
         $stmt->bindParam(':nombre', $nombre); 
         $stmt->bindParam(':descripcion', $descripcion);
-        $stmt->bindParam(':programa', $programa);
-        $stmt->bindParam(':imagen', $imageUrl); // Cambiado para usar la variable correcta
-        $stmt->bindParam(':inicio', $fechainicio);
-        $stmt->bindParam(':fin', $fechafin);
+        $stmt->bindParam(':idcurso', $idcurso);
+        $stmt->bindParam(':fecha', $ahora); // Cambiado para usar la variable correcta
+        $stmt->bindParam(':archivo', $imageUrl);
 
         $resultado = $stmt->execute();
 
@@ -97,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo json_encode(['status' => 'success', 'message' => 'Registro exitoso.']);
         } else {
             header('Content-Type: application/json');
-            echo json_encode(['status' => 'error', 'message' => 'Error al registrar el usuario.']);
+            echo json_encode(['status' => 'error', 'message' => 'Error al registrar el material.']);
         }
 
     } else {

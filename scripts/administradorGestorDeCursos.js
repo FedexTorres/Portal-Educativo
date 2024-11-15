@@ -17,15 +17,13 @@ function mostrarCursos(cursos) {
           <h5 class="card-title">${curso.nombre}</h5>
         </div>
         <div class="card-body">
-          <img src="Portal-Educativo/${curso.imagen_url}" alt="${curso.nombre}" class="card-img imgadmin">
+          <img src="${curso.imagen_url}" alt="${curso.nombre}" class="card-img imgadmin">
           <p class="card-text">Descripcion</p>
           <p class="card-text">${curso.descripcion}</p>
           <h6 class="card-subtitle mb-2 text-muted" id="profe${curso.id}"></h6>
           <h6 class="card-subtitle mb-2 text-muted">Vacantes disponibles: ${curso.vacantes}</h6>
           <h6 class="card-subtitle mb-2 text-muted">Fecha de Inicio: ${curso.fecha_inicio}| Fecha de Fin: ${curso.fecha_fin}</h6>
           
-            
-
 
         </div>
         <div class="card-footer">
@@ -70,20 +68,12 @@ function mostrarCursos(cursos) {
 }
 
 function moverNOmbre(data) {
-    //document.getElementById(elid).innerHTML=await lista;
-    //let profe = document.createElement("div");
-    //profe.innerHTML=
-    //console.log(elid);
-    //console.log(await lista);
-
     data.forEach(curso => {
-        jose(curso.id);
-    }
-
-    )
+        profeActivo(curso.id);
+    })
 }
 
-async function jose(params) {
+async function profeActivo(params) {
     document.getElementById("profe" + params).innerHTML = "Profesor: " + await tieneProfesor(params);
 }
 
@@ -98,9 +88,7 @@ async function tieneProfesor(id) {
         const data = await response.json();
 
         if (data.status === 'success') {
-
             return await data.cursos[0].nombre;
-
         } else {
             return await data.message;
         }
@@ -118,7 +106,6 @@ async function cargarCursos() {
 
         if (data.status === 'success') {
 
-
             mostrarCursos(data.cursos);
             const errorGlobal = document.getElementById('errorGlobal');
             limpiarErrores(errorGlobal, errorGlobal);
@@ -128,7 +115,6 @@ async function cargarCursos() {
 
             moverNOmbre(data.cursos);
 
-
         } else {
             mostrarErrorGlobal(data.message || 'No se encontraron cursos disponibles');
 
@@ -137,8 +123,6 @@ async function cargarCursos() {
         mostrarErrorGlobal(`Error en la conexión: ${error.message}`);
     }
 }
-
-
 
 
 ///////codigo para la creacion de los cursos
@@ -316,7 +300,6 @@ function autocompletar() {
         divList.setAttribute('class', 'lista-autocompletar-items');
         this.parentNode.appendChild(divList);
 
-
         try {
             const datos = new FormData();
             datos.append("id", tipoMascota);
@@ -359,10 +342,6 @@ function autocompletar() {
         } catch (error) {
             console.error("Fallo:", error);
         }
-
-
-
-
     });
 
     inputMascota.addEventListener('keydown', function (e) {
@@ -476,7 +455,6 @@ async function ajustesCurso(e) {
 }
 
 
-
 //codigo para la eliminacion de los cursos
 
 
@@ -487,7 +465,6 @@ function asignarbotones2() {
             procesarEliminacion(id);
         })
     });
-
 }
 
 async function procesarEliminacion(curso) {
@@ -516,8 +493,6 @@ async function procesarEliminacion(curso) {
         console.error("Fallo:", error);
     }
 }
-
-
 
 
 window.onload = function () {
