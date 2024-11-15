@@ -6,10 +6,6 @@ require 'conexion_bbdd.php';
 try {
 
 
-
-
-
-
     // Preparar la consulta para obtener todos los cursos
     $query = "SELECT id, nombre, descripcion, programa_estudios, vacantes, imagen_url, fecha_inicio, fecha_fin FROM cursos";
     

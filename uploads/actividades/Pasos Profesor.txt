@@ -1,0 +1,85 @@
+A continuación, te haré una breve descripción de los pasos generales para desarrollar cada una de las secciones en base a los requerimientos y el esquema que mencionaste:
+
+1. Inicio (Dashboard):
+Objetivo: Mostrar los cursos a cargo del profesor en cards, con información relevante como la cantidad de estudiantes inscritos.
+Backend: Crear una consulta en PHP que devuelva los cursos a cargo del profesor (según el id de sesión) en formato JSON. Esta consulta deberá unirse con la tabla inscripciones para contar la cantidad de estudiantes inscritos.
+Frontend: Utilizar AJAX para obtener esta información y renderizarla dinámicamente en el HTML, probablemente con un loop para crear las cards de manera automatizada.
+
+
+2. Actividades:
+Objetivo: Permitir subir nuevas actividades, editar las existentes y eliminarlas.
+Backend: Crear endpoints en PHP para manejar las operaciones de creación, actualización y eliminación de actividades, todas utilizando PDO y enviando JSON de vuelta para confirmar el éxito o error de la operación.
+Frontend: Formularios para cargar nuevas actividades, editar y eliminar. Usar AJAX para enviar los datos al servidor y recibir la respuesta para actualizar el DOM.
+
+
+3. Asistencias:
+Objetivo: Registrar la asistencia de los estudiantes en los cursos a cargo, permitiendo marcar como presente o ausente.
+Backend: Crear un endpoint que devuelva la lista de estudiantes inscritos en el curso seleccionado por el profesor. También, un endpoint para registrar la asistencia.
+Frontend: Usar un select o un botón para que el profesor seleccione un curso, luego un campo de fecha para seleccionar la fecha de la asistencia. Mostrar una tabla con los estudiantes y dos columnas con botones de "presente" y "ausente". Finalmente, un botón para registrar la asistencia de todos los estudiantes seleccionados.
+
+
+4. Calificaciones:
+Objetivo: Calificar las actividades entregadas por los estudiantes, permitiendo insertar una calificación.
+Backend: Crear un endpoint en PHP para obtener las entregas de actividades de los estudiantes. Otro para registrar las calificaciones.
+Frontend: Mostrar una lista de actividades entregadas por los estudiantes. Para cada actividad, mostrar un campo para ingresar la calificación y un botón para registrar la calificación.
+
+
+5. Mensajes:
+Objetivo: Mostrar los mensajes recibidos y permitir al profesor enviar nuevos mensajes a los estudiantes.
+Backend: Crear endpoints para obtener los mensajes recibidos (en base a la sesión del profesor) y para enviar mensajes a los estudiantes.
+Frontend: Usar AJAX para cargar los mensajes recibidos y mostrarlos en un formato adecuado. También, crear un formulario para enviar mensajes a otros usuarios.
+
+
+6. Perfil:
+Objetivo: Permitir al profesor editar su perfil (nombre, correo, contraseña, etc.).
+Backend: Crear un endpoint en PHP para obtener los datos del perfil del profesor y otro para guardar los cambios.
+Frontend: Crear un formulario para editar los datos del perfil, con validación de los campos. Al hacer el submit, usar AJAX para enviar los datos al backend.
+
+
+
+
+2- PASOS: Estructura y Archivos
+Los archivos que propones son lógicos y ayudan a mantener el código limpio y separado por responsabilidades. La estructura quedaría más o menos así:
+
+actividades.js: manejará las peticiones AJAX para cargar, crear, editar y eliminar actividades.
+crearActividades.php: recibirá los datos del formulario para crear una nueva actividad y los guardará en la base de datos.
+buscarActividades.php: devolverá las actividades ya cargadas para el profesor actual en forma de JSON para que actividades.js pueda dibujarlas en la tabla.
+selectCursos.php: traerá los cursos asignados al profesor actual para llenar el select en el formulario de creación de actividad.
+Proceso y Organización en la Sección de Actividades
+Para la interfaz que quieres construir, propongo este flujo de interacción:
+
+Mostrar la tabla con actividades existentes:
+
+Al hacer clic en "Actividades", actividades.js enviará una petición a buscarActividades.php para traer las actividades asociadas a los cursos del profesor.
+Cada actividad se mostrará en una fila de la tabla, con los botones "Editar" y "Eliminar".
+Formulario de creación de actividad debajo de la tabla:
+
+Debajo de la tabla, el formulario permitirá crear nuevas actividades. Los campos serían:
+Nombre: para identificar la actividad.
+Consigna: un textarea para que el profesor pueda detallar la tarea.
+Fecha Límite: un input de tipo fecha para establecer el plazo de entrega.
+Select de Cursos: desplegable que se cargará dinámicamente con los cursos a cargo del profesor. Este select se llenará al cargar la sección, llamando a selectCursos.php para traer los cursos en JSON.
+Botón de "Crear Actividad":
+
+Al hacer clic, actividades.js enviará los datos del formulario a crearActividades.php para agregar la actividad a la base de datos.
+Una vez creada, la tabla se actualiza automáticamente para reflejar la nueva actividad.
+Aspectos Técnicos y Detalles a Implementar
+Carga dinámica de actividades y cursos:
+
+buscarActividades.php debe filtrar las actividades por el profesor actual, asegurándose de que solo ve las suyas. Esto implica obtener el id_profesor de la sesión.
+selectCursos.php también usará este id_profesor para traer solo los cursos a cargo del profesor.
+Funciones CRUD para Actividades:
+
+Crear: crearActividades.php procesará los datos del formulario y creará una actividad en la tabla actividades, incluyendo el curso asociado.
+Editar y Eliminar: Cada fila en la tabla tendrá opciones de edición y eliminación. Esto implica que actividades.js necesitará hacer peticiones adicionales para actualizar o borrar una actividad, y es probable que necesitemos archivos como editarActividad.php y eliminarActividad.php.
+Validaciones y Manejo de Errores:
+
+Valida los campos del formulario en el frontend (JavaScript) y en el backend (crearActividades.php). Verifica que el nombre, consigna y fecha límite tengan datos válidos antes de enviar la solicitud.
+Al hacer CRUD en la base de datos, es importante manejar los errores para saber si la operación fue exitosa o si ocurrió algún problema (como datos faltantes o duplicados).
+Pasos a Seguir para Implementar
+Si estás de acuerdo con la estructura y el flujo, podemos empezar por el siguiente orden:
+
+Crear buscarActividades.php y selectCursos.php: para que actividades.js pueda llenar la tabla de actividades y el select de cursos.
+Implementar el formulario en HTML con actividades.js: dibujar la tabla y el formulario con sus inputs.
+Desarrollar crearActividades.php: para que se guarde una actividad en la base de datos al enviar el formulario.
+Agregar funcionalidades de edición y eliminación: opcionalmente, se puede agregar una opción de edición en otro paso, o podemos implementarla si ya está clara la funcionalidad básica.

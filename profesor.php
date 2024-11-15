@@ -14,9 +14,16 @@ session_start();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="css/estilos_profesor.css">
+    <script defer src="scripts/mensajes.js"></script>
     <script defer src="scripts/profesor.js"></script>
     <script defer src="scripts/actividades.js"></script>
+    <script defer src="scripts/mensajes.js"></script>
+    <script defer src="scripts/editarPerfil.js"></script>
+    <script defer src="scripts/calificaciones.js"></script>
 
 </head>
 <body class="text-dark">   
@@ -26,6 +33,7 @@ session_start();
           <nav class="col-md-2 d d-none d-md-block bg-light">
             <div class="card-body bg-light text-dark border-0">
               <div class="card-body">
+              <?php if (isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'profesor') { ?>
 
                 <ul class="nav flex-column">
                   <li class="nav-item mb-2 ">
@@ -47,6 +55,8 @@ session_start();
                     <button id="btn-perfil" class="btn btn-menu">Editar Perfil</button>
                   </li>
                 </ul>
+                <?php } ?>
+
               </div>
             </div>
           </nav>
@@ -113,6 +123,7 @@ session_start();
     <section id="seccion-asistencias"  class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
         <h1 class="my-4 titulo">Asistencias</h1>
         <hr>
+        
         <p>Asistencias de cursos a cargo.</p>
     <!--  Aca se deberia tomar asistencia a los Estdiantes. Se me ocurre traer de la bbdd la lista de
       cursos a cargo del prefesor segun id de la session, luego elegir un curso, que se elija desde un 
@@ -122,97 +133,155 @@ session_start();
     </section>
 
         <!--  SECCION DE CALIFICACIONES  -->
-        <section id="seccion-calificaciones"  class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
-        <h1 class="my-4 titulo">Calificaciones</h1>
+    <section id="seccion-calificaciones"  class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
+        <h1 class="my-4 titulo">Calificaciones de Entregas</h1>
+        <div id="calificaciones-container" class="container mt-4">       
+        <!-- Filtros de curso y profesor  -->
+        <div id="form-container"></div>
+
+        <!-- Tabla de entregas -->
+            <table class="table table-striped" id="tabla-entregas">
+                <thead>
+                    <tr>
+                        <th>ID Entrega</th>
+                        <th>Actividad</th>
+                        <th>Fecha de Entrega</th>
+                        <th>Descargar</th>
+                        <th>Calificar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aquí se van a renderizar las filas de las entregas con calificaciones.js -->
+                </tbody>
+            </table>
+    </div>
+
+    <!-- Modal para calificar actividad -->
+          <div class="modal fade" id="modalCalificar" tabindex="-1" aria-labelledby="modalCalificarLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="modalCalificarLabel">Calificar Actividad</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form id="form-calificacion">
+                              <div class="mb-3">
+                                  <label for="inputCalificacion" class="form-label">Calificación:</label>
+                                  <input type="number" id="inputCalificacion" class="form-control" min="1" max="10" required>
+                              </div>
+                          </form>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                          <button type="button" class="btn btn-primary" onclick="guardarCalificacionModal()">Guardar</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
         <hr>
-        <p>calificaciones de cursos a cargo.</p>
     <!--  Aca se deberan traer las actividades entregadas por los Estudiantes desde la bbdd, segun
       id del curso, y luego un input para insertar la calificacion numerica, y por ultimo un boton "calificar",
       que opinas aqui? -->
     </section>
 
-    <!--  SECCION DEL Mensajes  -->
+  <!-- ############################################# SECCION DE MENSAJES ############################################# -->
     
-    <section id="seccion-mensajes" class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light d-none">
-        <h1 class="my-4 titulo">Mensajes</h1>
-<hr>
+  <section id="seccion-mensajes" class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
+  <h1 class="my-4 titulo">Mensajes</h1>
+  <hr>
+  <div id="alerta" class="alert alert-danger d-none" role="alert"></div>
+  <div id="exito" class="alert alert-success d-none"></div>
 
-  <div class="row">   
-    <div class="col-md-6">
-      <h2>Mensajes Recibidos</h2>
-      <div id="lista-mensajes" class="d-none list-group">
-        <a href="#" class="list-group-item list-group-item-action">
-          <strong>Remitente:</strong> Juan Pérez <br>
-          <strong>Mensaje:</strong> Hola, ¿cómo estás? <br>
-          <small>Fecha: 26/09/2024</small>
-        </a>
-        <a href="#" class="list-group-item list-group-item-action">
-          <strong>Remitente:</strong> Dani García <br>
-          <strong>Mensaje:</strong> Recuerda la reunión mañana. <br>
-          <small>Fecha: 25/09/2024</small>
-        </a>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <h2>Enviar Mensaje</h2>
-      <form action="" method="POST" id="form-enviar-mensaje">
-        <div class="mb-3">
-          <label for="destinatario" class="form-label">Destinatario</label>
-          <input type="text" class="form-control" id="destinatario" placeholder="Nombre del destinatario" required>
-        </div>
-        <div class="mb-3">
-          <label for="mensaje" class="form-label">Mensaje</label>
-          <textarea class="form-control" id="mensaje" rows="3" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Enviar</button>
+  
+  <div class="row">
+      <!-- Panel para Enviar Mensajes -->
+      <div class="col-md-12">
+        <h2>Enviar Mensaje</h2>
+        <form action="" method="POST" id="form-enviar-mensaje">
+          <div class="mb-3">
+              <label for="destinatario" class="form-label">Destinatario</label>
+              <input type="text" class="form-control" id="destinatario" name="destinatario" placeholder="Ingrese el nombre del destinatario" >
+              <!-- Aquí se agrega la lista de destinatarios sugeridos con jquery -->
+          </div>
+          <div class="mb-3">
+              <label for="mensaje" class="form-label">Mensaje</label>
+              <textarea class="form-control" name="mensaje" id="mensaje" rows="4" ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Enviar</button>
       </form>
+        <br>
+        <hr>
+      </div>
       <br>
-    </div>
-  </div>
-    </section>
+      <div class="col-md-6">
+        <h2>Mensajes Recibidos</h2>
+        <div id="lista-mensajes" class="list-group"></div>
+      </div>
+
+      <!-- Nueva sección para los mensajes enviados -->
+      <div class="col-md-6">
+      <h2>Mensajes Enviados</h2>
+      <div id="mensajes-enviados" class="list-group"></div>
+          <!-- Aquí se agregarán los mensajes enviados dinámicamente -->       
+      </div>
+    </div>  
+  </section>
     
     <!--  SECCION DEL PERFIL  -->
 
-<section id="seccion-perfil" class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light d-none">
-    <h1 class="my-4 titulo">Perfil del Estudiante</h1>
-    <hr>
-    <form action="" method="POST" id="form-perfil">
-      <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre</label>
-        <input type="text" class="form-control" id="nombre" value="Juan" required>
-        <p class="error" id="errorNombre" > </p>
+        <section id="seccion-perfil" class="col-md-10 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
+          <h1 class="my-4 titulo">Editar Perfil</h1>
+          <hr>
+          
+          <!-- Contenedor de Errores Globales -->
+          <div id="errorGlobal" class="alert alert-danger d-none"></div>
+            <!-- Mensaje de éxito -->
+            <div id="mensajeExito" class="alert alert-success d-none"></div>
+
+          <form action="" method="POST" id="perfilForm">
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombre" name="nombre"  >
+              <p class="error" id="errorNombre"></p>
+            </div>
+            <div class="mb-3">
+              <label for="apellido" class="form-label">Apellido</label>
+              <input type="text" class="form-control" id="apellido" name="apellido"  >
+              <p class="error" id="errorApellido"></p>
+            </div>
+            <div class="mb-3">
+              <label for="correo" class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" id="correo" name="correo"  >
+              <p class="error" id="errorCorreo"></p>
+            </div>
+            <div class="mb-3">
+              <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+              <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" aria-busy="">
+              <p class="error" id="errorFecha"></p>
+            </div>
+            <div class="mb-3">
+              <label for="clave">Nueva contraseña (opcional):</label>
+              <input type="password" id="clave" name="clave" class="form-control">
+              <small id="contraseñaHelp" class="form-text">
+                  ¡Atención! Si no deseas cambiar la contraseña, déjala en blanco.
+              </small>
+              <p class="error" id="errorRegistroClave"></p>
+            </div>
+            <div class="mb-3">
+              <label for="claveConfirmacion">Confirmar nueva contraseña:</label>
+              <input type="password" id="claveConfirmacion" name="claveConfirmacion" class="form-control">
+              <p class="error" id="errorClave"></p>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+          </form>
+          <br>
+        </section>
+      <br>
+      <hr>
+      <br>    
       </div>
-      <div class="mb-3">
-        <label for="apellido" class="form-label">Apellido</label>
-        <input type="text" class="form-control" id="apellido" value="Pérez" required>
-        <p class="error" id="errorApellido" > </p>
-      </div>
-      <div class="mb-3">
-        <label for="correo" class="form-label">Correo Electrónico</label>
-        <input type="email" class="form-control" id="correo" value="juan.perez@example.com" required>
-        <p class="error" id="errorCorreo"> </p>
-      </div>
-      <div class="mb-3">
-        <label for="fecha-nacimiento" class="form-label">Fecha de Nacimiento</label>
-        <input type="date" class="form-control" id="fecha-nacimiento" value="2000-01-01" required>
-        <p class="error" id="errorFecha"> </p>
-      </div>
-      <div class="mb-3">
-        <label for="clave" class="form-label">Contraseña</label>
-        <input type="password" class="form-control" id="clave" required>
-      </div>
-      <div class="mb-3">
-        <label for="claveConfirmacion" class="form-label">Repetir Contraseña</label>
-        <input type="password" class="form-control" id="claveConfirmacion" required>
-        <p class="error" id="errorClave"> </p>
-    </div>
-      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-    </form>
-    <br>
-  </section>
-    
-    </div>
     </div>
 </body>
 </html>
