@@ -298,7 +298,7 @@ session_start();
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="submit" class="btn btn-success">Crear</button>
+        <button type="submit" class="btn btn-success">Guardar</button>
         <button type="button" class="btn btn-danger" id="cancelarCreacionCurso">Cancelar</button>
       </div>
       </form>

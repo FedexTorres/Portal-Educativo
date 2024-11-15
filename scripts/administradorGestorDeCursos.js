@@ -6,10 +6,6 @@ function mostrarCursos(cursos) {
     cursos.forEach(curso => {
         // Generar el HTML para cada card
 
-        //let asignar = tieneProfesor(curso.id);
-        
-        //console.log("profe"+curso.id);
-
         const cardHTML = `
         <div class="col-lg-6 col-md-12">
         <div class="card mt-4">
@@ -17,15 +13,13 @@ function mostrarCursos(cursos) {
           <h5 class="card-title">${curso.nombre}</h5>
         </div>
         <div class="card-body">
-          <img src="Portal-Educativo/${curso.imagen_url}" alt="${curso.nombre}" class="card-img imgadmin">
+          <img src="${curso.imagen_url}" alt="${curso.nombre}" class="card-img imgadmin">
           <p class="card-text">Descripcion</p>
           <p class="card-text">${curso.descripcion}</p>
           <h6 class="card-subtitle mb-2 text-muted" id="profe${curso.id}"></h6>
           <h6 class="card-subtitle mb-2 text-muted">Vacantes disponibles: ${curso.vacantes}</h6>
           <h6 class="card-subtitle mb-2 text-muted">Fecha de Inicio: ${curso.fecha_inicio}| Fecha de Fin: ${curso.fecha_fin}</h6>
           
-            
-
 
         </div>
         <div class="card-footer">
@@ -38,8 +32,7 @@ function mostrarCursos(cursos) {
     `;
         contenedorCursos.innerHTML += cardHTML;
 
-        //moverNOmbre("profe"+curso.id,tieneProfesor(curso.id));
-        //console.log(tieneProfesor(curso.id));
+        
         // Generar el HTML para cada modal
         const modalHTML = `
         <div class="modal fade" id="modalCursoEliminar${curso.id}" tabindex="-1" aria-labelledby="modalCursoEliminar${curso.id}Label" aria-hidden="true">
@@ -70,20 +63,12 @@ function mostrarCursos(cursos) {
 }
 
 function moverNOmbre(data){
-    //document.getElementById(elid).innerHTML=await lista;
-    //let profe = document.createElement("div");
-    //profe.innerHTML=
-    //console.log(elid);
-    //console.log(await lista);
-
     data.forEach(curso=>{
-        jose(curso.id);
-    }
-
-    )
+        profeActivo(curso.id);
+    })
 }
 
-async function jose(params) {
+async function profeActivo(params) {
     document.getElementById("profe"+params).innerHTML="Profesor: "+ await tieneProfesor(params);
 }
 
@@ -98,9 +83,7 @@ async function tieneProfesor(id){
         const data = await response.json();
 
         if (data.status === 'success') {
-
             return await data.cursos[0].nombre;
-
         } else {
             return await data.message;
         }
@@ -118,7 +101,6 @@ async function cargarCursos() {
 
         if (data.status === 'success') {
 
-
             mostrarCursos(data.cursos);
             const errorGlobal = document.getElementById('errorGlobal');
             limpiarErrores(errorGlobal, errorGlobal);
@@ -128,17 +110,13 @@ async function cargarCursos() {
 
             moverNOmbre(data.cursos);
 
-
         } else {
-            mostrarErrorGlobal(data.message || 'No se encontraron cursos disponibles');
-            
+            mostrarErrorGlobal(data.message || 'No se encontraron cursos disponibles');        
         }
     } catch (error) {
         mostrarErrorGlobal(`Error en la conexión: ${error.message}`);
     }
 }
-
-
 
 
 ///////codigo para la creacion de los cursos
@@ -277,10 +255,7 @@ async function getCursoAhEditar(id){
         const resultado = await response.json();
 
         if (resultado.status === 'success') {
-            
-            ajustarModal(resultado.data);
-            
-
+            ajustarModal(resultado.data); 
         } else if (resultado.status === 'error') {
             console.log(resultado.message);
         }
@@ -298,8 +273,6 @@ function ajustarModal(data){
 }
 
 
-
-
 function autocompletar(){
     const inputMascota = document.querySelector('#profesor');
     let indexFocus = -1;
@@ -315,7 +288,6 @@ function autocompletar(){
         divList.setAttribute('id', this.id + '-lista-autocompletar');
         divList.setAttribute('class', 'lista-autocompletar-items');
         this.parentNode.appendChild(divList);
-
 
         try {
             const datos = new FormData();
@@ -343,15 +315,12 @@ function autocompletar(){
 
                         elementoLista.addEventListener('click', function(){
                             inputMascota.value = this.innerText;
-                            //console.log(elementoLista.value);
-                            //$("#profesor").data("destinatario-id", this.value);
+                        
                             cerrarLista();
                             return false;
                         });
-                        divList.appendChild(elementoLista);
-                        
-                });
-                  
+                        divList.appendChild(elementoLista);                 
+                });              
     
             } else if (resultado.status === 'error') {
                 console.log(resultado.message);
@@ -359,10 +328,6 @@ function autocompletar(){
         } catch (error) {
             console.error("Fallo:", error);
         }
-
-
-
- 
     });
 
     inputMascota.addEventListener('keydown', function(e){
@@ -416,7 +381,6 @@ function cerrarLista(){
     });
     indexFocus = -1;
 }
-
 
 async function ajustesCurso(e){
     e.preventDefault();
@@ -476,7 +440,6 @@ async function ajustesCurso(e){
 }
 
 
-
 //codigo para la eliminacion de los cursos
 
 
@@ -487,7 +450,6 @@ function asignarbotones2(){
             procesarEliminacion(id);     
         })
     });
-
 }
 
 async function procesarEliminacion(curso) {
@@ -516,8 +478,6 @@ async function procesarEliminacion(curso) {
         console.error("Fallo:", error);
     }
 }
-
-
 
 
 window.onload = function() {
