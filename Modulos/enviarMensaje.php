@@ -1,6 +1,5 @@
 <?php
-require './conexion_bbdd.php'; // Asegúrate de que este archivo exista
-
+require './conexion_bbdd.php'; 
 session_start();
 if (!isset($_SESSION['usuario']['id'])) {
     header('Location: login.php');  // redirige al login si no hay sesión

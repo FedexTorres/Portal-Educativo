@@ -15,13 +15,6 @@ if (isset($_GET['idActividad'])) {
 // }
 //$idActividad = $_GET['idActividad']; // Captura el ID de la actividad desde el frontend
 try {
-    // $query = "SELECT a.id, a.nombre AS actividad_nombre, a.consigna, a.fecha_limite, 
-    //                 c.id AS curso_id, c.nombre AS curso_nombre
-    //                 FROM actividades a
-    //                 INNER JOIN cursos c ON a.id_curso = c.id
-    //                 INNER JOIN cursos_usuarios cu ON cu.id_curso = c.id
-    //                 INNER JOIN usuarios u ON cu.id_usuario = u.id
-    //                 WHERE u.id = :id_profesor AND a.id = :idActividad";
 
     $query = "SELECT * FROM actividades WHERE id = :idActividad";
 

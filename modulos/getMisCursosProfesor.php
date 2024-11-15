@@ -1,7 +1,7 @@
 <?php
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
-require 'conexion_bbdd.php';
+require_once 'conexion_bbdd.php';
 
 try {
 

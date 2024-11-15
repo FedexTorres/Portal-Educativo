@@ -1,17 +1,17 @@
 
-function errorTipo(donde,mensaje){
+function errorTipo(donde, mensaje) {
     const divInicio = document.getElementById(donde);
     let erroralert = document.createElement("div");
-    erroralert.setAttribute("class","alert alert-danger");
-    erroralert.innerHTML=mensaje;
+    erroralert.setAttribute("class", "alert alert-danger");
+    erroralert.innerHTML = mensaje;
     divInicio.append(erroralert);
 }
 
-function limpiarErrorProfe(campo){
-    document.getElementById(campo).innerHTML="";
+function limpiarErrorProfe(campo) {
+    document.getElementById(campo).innerHTML = "";
 }
 
-function AcomodarmisCursosProfesor(info){
+function AcomodarmisCursosProfesor(info) {
     const divInicio = document.getElementById("misCursosTraidos");
     divInicio.innerHTML = '';
 
@@ -51,24 +51,24 @@ function AcomodarmisCursosProfesor(info){
     acordeon();
 }
 
-let idCursoActual ="";
+let idCursoActual = "";
 
-function acordeon(){
+function acordeon() {
     document.querySelectorAll('.collapsible').forEach(element => {
-        element.addEventListener("click",function(){
+        element.addEventListener("click", function () {
             this.classList.toggle("active");
             var content = this.nextElementSibling;
-            if (content.style.maxHeight){
+            if (content.style.maxHeight) {
                 content.style.maxHeight = null;
-              } else {
+            } else {
                 content.style.maxHeight = content.scrollHeight + "px";
-              }
+            }
         })
     })
 
-    document.querySelectorAll('.btn-materiales').forEach(boton =>{
-        boton.addEventListener("click",function(){
-            idCursoActual=this.value;
+    document.querySelectorAll('.btn-materiales').forEach(boton => {
+        boton.addEventListener("click", function () {
+            idCursoActual = this.value;
         })
     })
 }
@@ -80,28 +80,29 @@ async function misCursosProfesor() {
         const data = await response.json();
 
         if (data.status === 'success') {
-            AcomodarmisCursosProfesor(data.cursos);      
+            AcomodarmisCursosProfesor(data.cursos);
             tieneMaterial(data.cursos);
 
-        } else {       
-            errorTipo("misCursosTraidos",data.message);     
+        } else {
+            errorTipo("misCursosTraidos", data.message);
         }
     } catch (error) {
-        errorTipo("misCursosTraidos",error.message);
+        errorTipo("misCursosTraidos", error.message);
     }
 }
 
 function tieneMaterial(cursos) {
-    cursos.forEach(curso=>{
+    cursos.forEach(curso => {
         traerMateriales(curso.id);
-    })}
+    })
+}
 
 
 async function traerMateriales(params) {
-    limpiarErrorProfe("card"+params);
+    limpiarErrorProfe("card" + params);
     try {
         const data = new FormData();
-        data.append("id",params);
+        data.append("id", params);
         const response = await fetch('Modulos/getMateriales.php', {
             method: "POST",
             body: data,
@@ -110,21 +111,21 @@ async function traerMateriales(params) {
 
         if (resultado.status === 'success') {
 
-            acomodarMateriales("card"+params,resultado.cursos);
+            acomodarMateriales("card" + params, resultado.cursos);
 
-        } else {       
-            errorTipo("card"+params,resultado.message);     
+        } else {
+            errorTipo("card" + params, resultado.message);
         }
     } catch (error) {
-        errorTipo("card"+params,error.message);
+        errorTipo("card" + params, error.message);
     }
 }
 
-function acomodarMateriales(id,datos){
+function acomodarMateriales(id, datos) {
     let destino = document.getElementById(id);
 
-    datos.forEach(materia =>{
-      
+    datos.forEach(materia => {
+
         let listamate = `<ul>
             <li>${materia.titulo}</li>
             <li>${materia.descripcion}</li>
@@ -137,7 +138,7 @@ function acomodarMateriales(id,datos){
 }
 
 
-async function subirmaterial(e){
+async function subirmaterial(e) {
     e.preventDefault();
 
     let nombre = document.getElementById("title");
@@ -169,7 +170,7 @@ async function subirmaterial(e){
             //data.append("nombre",nombre.value);
             //data.append("descripcion",descripcion.value);
             //data.append("archivo",archivo);
-            data.append("idcurso",idCursoActual);
+            data.append("idcurso", idCursoActual);
 
             const response = await fetch('Modulos/InsertMaterial.php', {
                 method: "POST",
@@ -182,18 +183,18 @@ async function subirmaterial(e){
                 //muestro los materiles
                 traerMateriales(idCursoActual);
 
-            } else {       
-                errorTipo('errorGlobalProfesor',resultado.message);     
+            } else {
+                errorTipo('errorGlobalProfesor', resultado.message);
             }
         } catch (error) {
-            errorTipo('errorGlobalProfesor',error.message); 
+            errorTipo('errorGlobalProfesor', error.message);
         }
     }
 }
 
 
-window.onload = function() {
+window.onload = function () {
 
     misCursosProfesor();
-    document.getElementById("form1").addEventListener("submit",subirmaterial);
+    document.getElementById("form1").addEventListener("submit", subirmaterial);
 }

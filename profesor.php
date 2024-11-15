@@ -26,6 +26,7 @@ session_start();
     <script defer src="scripts/editarPerfil.js"></script>
     <script defer src="scripts/calificaciones.js"></script>
     <script defer src="scripts/profesor-inicio.js"></script>
+    <script defer src="scripts/regAsistencia.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -80,8 +81,10 @@ session_start();
     </section>
 
     
-    <!--  SECCION ACTIVIDADES -->
-    <section id="seccion-actividades"  class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
+  <!-- ############################################# SECCION DE ACTIVIDADES ############################################# -->
+  
+  
+  <section id="seccion-actividades"  class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
           <h1 class="my-4 titulo">Actividades</h1>
           <hr>
           <div id="actividades-container">
@@ -130,21 +133,59 @@ session_start();
           </div>
     </section>
  
-    <!--  SECCION DE ASISTENCIAS  -->
+  <!-- ############################################# SECCION DE ASISTENCIAS ############################################# -->
+    
     <section id="seccion-asistencias"  class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
         <h1 class="my-4 titulo">Asistencias</h1>
         <hr>
-        
-        <p>Asistencias de cursos a cargo.</p>
-    <!--  Aca se deberia tomar asistencia a los Estdiantes. Se me ocurre traer de la bbdd la lista de
-      cursos a cargo del prefesor segun id de la session, luego elegir un curso, que se elija desde un 
-      input la fecha para registrar la asistencia y que se despliege una tabla 
-      con la lista de los estudiantes en una columna, en otras 2 columnas un checkbutton para "presente" 
-      y otro para "ausente" y un boton "registrar asistencia", quizas se te ocurre algo mas a ti para agregar-->
-    </section>
+        <!-- Parte para mostrar los cursos -->
+          <table id="tablaCursos" class="table table-bordered">
+              <thead>
+                  <tr>
+                      <th>Curso</th>
+                      <th>Descripción</th>
+                      <th>Acciones</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <!-- Aquí se insertarán dinámicamente los cursos -->
+              </tbody>
+          </table>
 
-        <!--  SECCION DE CALIFICACIONES  -->
-    <section id="seccion-calificaciones"  class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
+          <!-- Modal para tomar asistencia -->
+          <div class="modal fade" id="modalAsistencia" tabindex="-1" aria-labelledby="modalAsistenciaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAsistenciaLabel">Tomar Asistencia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formAsistencia">
+                    <!-- Input para la fecha de asistencia -->
+                    <div class="form-group">
+                        <label for="fechaAsistencia">Fecha de Asistencia:</label>
+                        <input type="date" id="fechaAsistencia" class="form-control">
+                    </div>
+
+                    <!-- Lista de alumnos -->
+                    <div id="listaAlumnos" class="list-group">
+                        <!-- Aquí se mostrarán los alumnos -->
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Registrar Asistencia</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>    </section>
+
+  <!-- ############################################# SECCION DE CALIFICACIONES ############################################# -->
+  
+  
+  <section id="seccion-calificaciones"  class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
         <h1 class="my-4 titulo">Calificaciones de Entregas</h1>
         <div id="calificaciones-container" class="container mt-4">       
         <!-- Filtros de curso y profesor  -->
@@ -239,7 +280,7 @@ session_start();
     </div>  
   </section>
     
-    <!--  SECCION DEL PERFIL  -->
+  <!-- ############################################# SECCION PERFIL ############################################# -->
 
         <section id="seccion-perfil" class="col-md-10 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
           <h1 class="my-4 titulo">Editar Perfil</h1>

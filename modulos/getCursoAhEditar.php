@@ -1,6 +1,6 @@
 <?php
 
-require('../modulos/conexion_bbdd.php');
+require('./conexion_bbdd.php');
 
 if (isset($_POST["id"])) {
     
