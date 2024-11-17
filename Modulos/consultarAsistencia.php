@@ -4,6 +4,14 @@ session_start();
 // Incluimos el archivo de conexión a la base de datos
 require './conexion_bbdd.php';
 
+// Validamos que el usuario esté logueado
+if (!isset($_SESSION['usuario']['id'])) {
+    echo json_encode(['error' => 'Usuario no logueado']);
+    exit;
+}
+
+$idUsuario = $_SESSION['usuario']['id'];
+
 // Validamos que se haya enviado el ID del curso
 if (!isset($_GET['cursoId'])) {
     echo json_encode(['error' => 'ID del curso no especificado']);
@@ -21,7 +29,7 @@ $query = "
     FROM asistencias_fechas af
     JOIN asistencias_usuarios au ON af.id = au.id_asistencia_fecha
     JOIN usuarios u ON au.id_usuario = u.id
-    WHERE af.id_curso = :cursoId
+    WHERE af.id_curso = :cursoId AND au.id_usuario = :idUsuario
 ";
 
 // Ajustamos la consulta si el filtro es distinto de "todos"
@@ -32,7 +40,10 @@ if ($filtro === 'Presente' || $filtro === 'Ausente') {
 try {
     // Preparamos y ejecutamos la consulta
     $stmt = $conn->prepare($query);
+
+    // Vinculamos los parámetros
     $stmt->bindParam(':cursoId', $idCurso, PDO::PARAM_INT);
+    $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
 
     // Si el filtro es específico, lo vinculamos
     if ($filtro === 'Presente' || $filtro === 'Ausente') {
@@ -40,7 +51,7 @@ try {
     }
 
     $stmt->execute();
-    
+
     // Obtenemos los resultados
     $asistencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
