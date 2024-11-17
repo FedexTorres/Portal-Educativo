@@ -62,7 +62,6 @@ session_start();
                   </li>
                 </ul>
                 <?php } ?>
-
               </div>
             </div>
           </nav>
@@ -85,9 +84,10 @@ session_start();
   
   
   <section id="seccion-actividades"  class="d-none col-md-10 ms-sm-auto col-lg-10 px-4 bg-light">
-          <h1 class="my-4 titulo">Actividades</h1>
-          <hr>
-          <div id="actividades-container">
+  <h1 class="my-4 titulo">Actividades</h1>
+  <hr>
+    <div class="row">
+          <div class="col-md-7" id="actividades-container">
       <!-- Tabla de Actividades -->
               <h2>Lista de Actividades</h2>
               <table id="tabla-actividades" class="table table-bordered">
@@ -104,10 +104,11 @@ session_start();
                       <!-- Aquí se insertarán las filas de actividades dinámicamente -->
                   </tbody>
               </table>
-
+          </div>
               <!-- Formulario para Crear Actividad -->
-              <div id="alert-container"></div>
-              <h3>Crear Nueva Actividad</h3>
+          <div class="col-md-5" >
+            <h3>Crear Nueva Actividad</h3>
+            <div id="alert-container"></div>
               <form id="form-crear-actividad">
                   <div class="form-group">
                       <label for="nombre-actividad">Nombre de la Actividad</label>
@@ -127,10 +128,11 @@ session_start();
                           <!-- Opciones de cursos cargadas dinámicamente -->
                       </select>
                   </div>
+                  <br>
                   <button type="submit" class="btn btn-primary">Crear Actividad</button>
               </form>
-
-          </div>
+        </div>
+      </div>
     </section>
  
   <!-- ############################################# SECCION DE ASISTENCIAS ############################################# -->
@@ -152,35 +154,72 @@ session_start();
               </tbody>
           </table>
 
-          <!-- Modal para tomar asistencia -->
-          <div class="modal fade" id="modalAsistencia" tabindex="-1" aria-labelledby="modalAsistenciaLabel" aria-hidden="true">
+<!-- Modal para tomar o editar asistencia -->
+<div class="modal fade" id="modalAsistencia" tabindex="-1" aria-labelledby="modalAsistenciaLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalAsistenciaLabel">Tomar Asistencia</h5>
+                <h5 class="modal-title" id="modalAsistenciaLabel">Tomar Asistencias</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="formAsistencia">
+                    <!-- Campo oculto para ID de asistencia -->
+                    <input type="hidden" id="idAsistencia" value="">
+
                     <!-- Input para la fecha de asistencia -->
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label for="fechaAsistencia">Fecha de Asistencia:</label>
                         <input type="date" id="fechaAsistencia" class="form-control">
                     </div>
 
-                    <!-- Lista de alumnos -->
-                    <div id="listaAlumnos" class="list-group">
-                        <!-- Aquí se mostrarán los alumnos -->
-                    </div>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Registrar Asistencia</button>
+                    <!-- Tabla de alumnos -->
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Alumno</th>
+                                <th>Presente</th>
+                                <th>Ausente</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaAlumnos">
+                            <!-- Filas generadas dinámicamente -->
+                        </tbody>
+                    </table>
                 </form>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="guardarAsistenciaBtn">Guardar Asistencia</button>
             </div>
         </div>
     </div>
-</div>    </section>
+</div>
+
+
+<!-- Modal para Modificar Asistencia -->
+<div class="modal fade" id="modalModificarAsistencia" tabindex="-1" aria-labelledby="modalModificarAsistenciaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalModificarAsistenciaLabel">Modificar Asistencias</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="listaAsistencias" class="list-group">
+                    <!-- Aquí se cargarán dinámicamente las asistencias -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</section>
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Registrar Asistencia</button> -->
 
   <!-- ############################################# SECCION DE CALIFICACIONES ############################################# -->
   

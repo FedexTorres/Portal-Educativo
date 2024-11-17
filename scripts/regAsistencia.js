@@ -1,6 +1,5 @@
 // Función para cargar los cursos
 async function cargarCursos() {
-    console.log("Llamando a cargarCursos()");
     try {
         const response = await fetch('Modulos/getMisCursosProfesor.php');
         const data = await response.json();
@@ -29,15 +28,15 @@ function mostrarCursos(cursos) {
         row.innerHTML = `
             <td>${curso.nombre}</td>
             <td>${curso.descripcion}</td>
-            <td><button class="btn btn-primary" onclick="mostrarAlumnos(${curso.id})">Tomar asistencia</button></td>
+            <td><button class="mb-2 btn btn-primary" onclick="mostrarAlumnos(${curso.id})">Tomar asistencia</button>
+            <button class="mb-2 btn btn-warning" onclick="abrirModalModificarAsistencia(${curso.id})">Modificar Asistencia</button><br></td>
+            
         `;
     });
 }
 
 // Función para cargar los alumnos de un curso
-
 function mostrarAlumnos(idCurso) {
-    console.log(idCurso);
     fetch('Modulos/cargarAlumnosPorCurso.php', {
         method: 'POST',
         body: JSON.stringify({ id_curso: idCurso }),  // Enviar JSON
@@ -56,68 +55,235 @@ function mostrarAlumnos(idCurso) {
         .catch(error => console.error('Error al cargar los alumnos:', error));
 }
 
-// Mostrar el formulario de asistencia
-function mostrarFormularioAsistencia(alumnos, idCurso) {
-    const listaAlumnos = document.getElementById('listaAlumnos');
-    listaAlumnos.innerHTML = '';  // Limpiar lista de alumnos
+// Cargar todas las asistencias de un curso y mostrarlas en el modal
+async function cargarAsistencias(idCurso) {
+    try {
+        const response = await fetch(`Modulos/obtenerAsistencias.php?idCurso=${idCurso}`);
+        const data = await response.json();
 
-    // Mostrar el curso en el modal (opcional)
-    const fechaAsistencia = document.getElementById('fechaAsistencia');
-    fechaAsistencia.dataset.idCurso = idCurso;  // Guardamos el idCurso en el input de la fecha como un dato adicional
+        if (data.status === 'error') {
+            alert(data.message);
+            return;
+        }
 
-    // Mostrar los alumnos con botones de asistencia
-    alumnos.forEach(alumno => {
-        const listItem = document.createElement('div');
-        listItem.classList.add('list-group-item');
-        listItem.innerHTML = `
-            ${alumno.nombre} ${alumno.apellido} 
-            <input type="radio" name="asistencia-${alumno.id}" value="Presente"> Presente
-            <input type="radio" name="asistencia-${alumno.id}" value="Ausente"> Ausente
-        `;
-        listaAlumnos.appendChild(listItem);
-    });
-
-    // Limpiar el campo de fecha de asistencia para la nueva sesión
-    document.getElementById('fechaAsistencia').value = '';
-}
-
-
-// Función para registrar la asistencia
-async function registrarAsistencia() {
-    const fecha = document.getElementById('fechaAsistencia').value;
-    const alumnos = document.querySelectorAll('#listaAlumnos input[type="radio"]:checked');
-    const asistencias = [];
-    const idCurso = document.getElementById('fechaAsistencia').dataset.idCurso; // Obtener el idCurso
-
-    alumnos.forEach(alumno => {
-        asistencias.push({
-            id_alumno: alumno.name.split('-')[1], // Obtener id del alumno
-            estado: alumno.value
-        });
-    });
-
-    const response = await fetch('Modulos/registrarAsistencia.php', {
-        method: 'POST',
-        body: JSON.stringify({ idCurso, fecha, asistencias }),
-        headers: { 'Content-Type': 'application/json' }
-    });
-    const data = await response.json();
-
-    if (data.status === 'success') {
-        alert('Asistencia registrada con éxito');
-    } else {
-        alert('Error al registrar la asistencia');
+        // Mostrar las asistencias en el modal
+        mostrarAsistencias(data.data); // Pasar la lista de asistencias desde la clave `data`
+    } catch (error) {
+        console.error('Error al cargar las asistencias:', error);
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    const formAsistencia = document.getElementById('formAsistencia');
+// Mostrar la lista de asistencias en el modal
+function mostrarAsistencias(asistencias) {
+    const listaAsistencias = document.getElementById('listaAsistencias');
+    listaAsistencias.innerHTML = ''; // Limpiar la lista antes de agregar nuevas asistencias
 
-    // Escuchar el evento de submit del formulario
-    formAsistencia.addEventListener('submit', function (e) {
-        e.preventDefault();  // Prevenir que el formulario se envíe de manera tradicional
-        registrarAsistencia();  // Llamar a la función para registrar asistencia
+    asistencias.forEach(asistencia => {
+        const item = document.createElement('div');
+        item.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+        item.innerHTML = `
+            <span>
+                <strong>Fecha:</strong> ${asistencia.fecha} <br>
+                <strong>Curso:</strong> ${asistencia.nombre_curso}
+            </span>
+            <button class="btn btn-secondary btn-sm" onclick="editarAsistencia(${asistencia.id_asistencia})">Modificar</button>
+        `;
+        listaAsistencias.appendChild(item);
+    });
+}
+
+// Abrir el modal para listar asistencias
+function abrirModalModificarAsistencia(idCurso) {
+    cargarAsistencias(idCurso); // Cargar datos del curso
+    $('#modalModificarAsistencia').modal('show'); // Mostrar el modal
+}
+
+// Editar una asistencia específica
+async function editarAsistencia(idAsistencia) {
+    try {
+        // Obtener los datos de la asistencia desde el backend
+        const response = await fetch(`Modulos/obtenerAsistenciaPorId.php?idAsistencia=${idAsistencia}`);
+        const data = await response.json();
+
+        if (data.status === 'error') {
+            alert(data.message);
+            return;
+        }
+
+        // Precargar los datos en el modal
+        const fechaAsistencia = document.getElementById('fechaAsistencia');
+        fechaAsistencia.value = data.data.fecha; // Asignar fecha de asistencia
+        fechaAsistencia.dataset.idCurso = data.data.id_curso; // Asignar ID del curso al dataset
+        console.log('ID del curso al editar:', data.data.id_curso);
+        document.getElementById('idAsistencia').value = data.data.id_asistencia; // Asignar ID de asistencia
+
+        // Precargar lista de alumnos con su estado
+        const listaAlumnos = document.getElementById('listaAlumnos');
+        listaAlumnos.innerHTML = ''; // Limpiar antes de rellenar
+
+        // Resetear el estado de los radios para asegurarse de que no quede ninguno seleccionado
+        listaAlumnos.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.checked = false; // Resetear el estado de los radios
+        });
+
+        data.data.alumnos.forEach(alumno => {
+            const row = crearFilaEditar(alumno, alumno.estado); // Pasar estado para preseleccionar
+            listaAlumnos.appendChild(row);
+        });
+
+        // Cambiar el texto del botón
+        const btnGuardar = document.getElementById('guardarAsistenciaBtn');
+        btnGuardar.innerText = 'Guardar Cambios';
+
+        // Cerrar modal de modificación y abrir el modal de registro
+        $('#modalModificarAsistencia').modal('hide');
+        $('#modalAsistencia').modal('show');
+    } catch (error) {
+        console.error('Error al cargar la asistencia para edición:', error);
+    }
+}
+
+// Mostrar el formulario de asistencia
+function mostrarFormularioAsistencia(alumnos, idCurso) {
+    const listaAlumnos = document.getElementById('listaAlumnos');
+    listaAlumnos.innerHTML = ''; // Limpiar lista de alumnos
+
+    // Guardar el id del curso en el campo de fecha
+    const fechaAsistencia = document.getElementById('fechaAsistencia');
+    fechaAsistencia.dataset.idCurso = idCurso;
+
+    // Agregar cada alumno a la tabla usando la función auxiliar
+    alumnos.forEach(alumno => {
+        const row = crearFilaRegistrar(alumno, null); // Pasar null como estado
+        listaAlumnos.appendChild(row);
+    });
+
+    // Limpiar el campo de fecha para la nueva sesión
+    fechaAsistencia.value = '';
+}
+
+function crearFilaEditar(alumno, estado = null) {
+    const row = document.createElement('tr');
+    const estadoPresente = estado === 'Presente' ? 'checked' : '';
+    const estadoAusente = estado === 'Ausente' ? 'checked' : '';
+
+    row.innerHTML = `
+        <td>${alumno.nombre} ${alumno.apellido || ''}</td>
+        <td>
+            <input type="radio" name="asistencia-${alumno.id_alumno}" value="Presente" ${estadoPresente}> Presente
+        </td>
+        <td>
+            <input type="radio" name="asistencia-${alumno.id_alumno}" value="Ausente" ${estadoAusente}> Ausente
+        </td>
+    `;
+    return row;
+}
+
+function crearFilaRegistrar(alumno, estado = null) {
+    const row = document.createElement('tr');
+    const estadoPresente = estado === 'Presente' ? 'checked' : '';
+    const estadoAusente = estado === 'Ausente' ? 'checked' : '';
+
+    row.innerHTML = `
+        <td>${alumno.nombre} ${alumno.apellido || ''}</td>
+        <td>
+            <input type="radio" name="asistencia-${alumno.id}" value="Presente" ${estadoPresente}> Presente
+        </td>
+        <td>
+            <input type="radio" name="asistencia-${alumno.id}" value="Ausente" ${estadoAusente}> Ausente
+        </td>
+    `;
+    return row;
+}
+
+// Función para registrar o actualizar asistencia
+async function guardarAsistencia() {
+    const idAsistencia = document.getElementById('idAsistencia').value;
+    const fecha = document.getElementById('fechaAsistencia').value;
+    const idCurso = document.getElementById('fechaAsistencia').dataset.idCurso;
+    console.log('al principio ID del curso al guardar cambios:', idCurso); // Verificar el valor de idCurso
+
+    // Validar fecha
+    if (!fecha) {
+        alert('Por favor, selecciona una fecha válida.');
+        return;
+    }
+
+    // Validar que idCurso esté presente
+    if (!idCurso) {
+        alert('No se ha seleccionado un curso válido.');
+        return;
+    }
+
+    // Recolectar datos de asistencia de los alumnos
+    const asistencias = [];
+    const listaAlumnos = document.querySelectorAll('#listaAlumnos tr');
+    let valid = true;
+
+    listaAlumnos.forEach(row => {
+        const radios = row.querySelectorAll('input[type="radio"]');
+        const idAlumno = row.querySelector('input[type="radio"]').name.split('-')[1];
+        const seleccionado = Array.from(radios).some(radio => radio.checked);
+
+        if (!seleccionado) {
+            valid = false;
+            row.classList.add('error-highlight');
+        } else {
+            row.classList.remove('error-highlight');
+            const estado = Array.from(radios).find(radio => radio.checked).value;
+            asistencias.push({ id: idAlumno, estado });
+        }
+    });
+
+    if (!valid) {
+        alert('Por favor, marca "Presente" o "Ausente" para todos los alumnos.');
+        return;
+    }
+
+    try {
+        console.log('ID Curso:', idCurso);
+        const endpoint = idAsistencia ? 'Modulos/actualizarAsistencia.php' : 'Modulos/registrarAsistencia.php';
+        const payload = { idCurso, fecha, asistencias };
+        console.log('Payload:', payload);
+        if (idAsistencia) {
+            payload.idAsistencia = idAsistencia; // Solo añadir si existe
+        }
+
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+        if (data.status === 'success') {
+            alert('Asistencia guardada exitosamente');
+            $('#modalAsistencia').modal('hide');
+        } else {
+            alert(data.message || 'Error al guardar la asistencia');
+        }
+    } catch (error) {
+        console.error('Error al guardar la asistencia:', error);
+        alert('Ocurrió un problema al guardar la asistencia. Inténtalo más tarde.');
+    }
+}
+
+// Limpiar valores residuales cuando el modal se cierra
+$('#modalAsistencia').on('hidden.bs.modal', function () {
+    document.getElementById('fechaAsistencia').dataset.idCurso = ''; // Limpia el dataset.idCurso
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const guardarBtn = document.getElementById('guardarAsistenciaBtn');
+
+    // Escuchar el evento de click del botón de guardar (registro o edición)
+    guardarBtn.removeEventListener('click', guardarAsistencia); // Elimina cualquier evento previo
+    guardarBtn.addEventListener('click', function (e) {
+        e.preventDefault();  // Prevenir comportamiento predeterminado
+        guardarAsistencia(); // Llamar a la función correcta
     });
 
     cargarCursos(); // Cargar los cursos al cargar la página
 });
+

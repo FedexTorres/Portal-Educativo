@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     cargarActividades();
-    cargarCursos();
+    cargarCurso();
     // Llamamos a la función adecuada según el caso
     const formCrearActividad = document.getElementById("form-crear-actividad");
     formCrearActividad.addEventListener("submit", (event) => {
@@ -146,7 +146,7 @@ function renderizarActividades(actividades) {
 }
 
 // Cargar cursos en el select del formulario
-async function cargarCursos() {
+async function cargarCurso() {
     try {
         const response = await fetch("Modulos/selectCursos.php");
         const data = await response.json();
