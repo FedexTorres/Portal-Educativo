@@ -97,7 +97,7 @@ session_start();
     <section id="seccion-mis-cursos" class="col-md-10 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
       <h1 class="my-4 titulo">Mis Cursos</h1>
       <hr>
-      <p>Lista de cursos en los que estás inscrito.</p>
+      <!-- <p>Lista de cursos en los que estás inscrito.</p> -->
 
     </section>
 

@@ -33,7 +33,6 @@ function manejarSubSecciones() {
         // Event listeners para los botones de sub-secciones
         cursoCard.querySelector('.btn-consultar-asistencia').addEventListener('click', () => {
             const asistencia = cursoCard.querySelector(`#asistencia-${cursoId}`);
-
             consultarAsistencia(cursoId, filtro = 'todos'); // Llama a la función pasando el ID del curso
             if (asistencia) {
                 ocultarOtrasCards(); // Oculta las cards de los demás cursos
@@ -54,6 +53,15 @@ function manejarSubSecciones() {
             if (subirActividad) {
                 ocultarOtrasCards(); // Oculta las cards de los demás cursos
                 mostrarSubSeccion(subirActividad); // Muestra la sub-sección de subir trabajo
+            }
+        });
+
+        cursoCard.querySelector('.btn-consultar-material').addEventListener('click', () => {
+            const verMaterial = cursoCard.querySelector(`#material-${cursoId}`);
+            cargarMaterialEstudio(cursoId);
+            if (verMaterial) {
+                ocultarOtrasCards(); // Oculta las cards de los demás cursos
+                mostrarSubSeccion(verMaterial); // Muestra la sub-sección de subir trabajo
             }
         });
         // Manejar botón "volver" para restaurar la vista original de la card
@@ -111,6 +119,7 @@ async function cargarMisCursos() {
         mostrarErrGlobal('No se pudo cargar la lista de cursos. Intenta nuevamente.');
     }
 }
+
 async function renderizarCursos(cursos) {
     const seccionMisCursos = document.getElementById('seccion-mis-cursos');
 
@@ -133,30 +142,43 @@ async function renderizarCursos(cursos) {
                 <p class="card-text">${curso.descripcion}</p>
                 
                 <!-- Botones de opciones para cada curso -->
-                <button class="btn btn-secondary btn-consultar-calificacion">Consultar Calificación</button>
+                <div class="opciones">
+                <button class="btn btn-danger btn-consultar-calificacion">Consultar Calificación</button>
                 <button class="btn btn-success btn-subir-actividad">Actividades</button>
                 <button class="btn btn-primary btn-consultar-asistencia">Consultar Asistencia</button>
-                
+                <button class="btn btn-info btn-consultar-material">Material de Estudio</button>
+                </div>
                 <!-- Sub-secciones dinámicas dentro de la card de cada curso -->
                                 
                 <div class="sub-seccion d-none" id="calificacion-${curso.id}">
-                    <h4>Calificaciones del Curso: ${curso.nombre}</h4>
+                <hr>
+                    <h3>Calificaciones del Curso: ${curso.nombre}</h3>
                         <div id="contenedor-calificaciones-${curso.id}"></div> <!-- Aquí se cargarán las calificaciones -->
                         <div id="errorCalificacion-${curso.id}" class="d-none"></div>
                         <button class="btn btn-secondary btn-volver">Volver</button>
                 </div>
-
-                <div class="sub-seccion d-none" id="asistencia-${curso.id}">
-                <button class="btn btn-secondary btn-volver">Volver</button>
-                <hr>
-                </div>
                 
                 <div class="sub-seccion d-none" id="actividad-${curso.id}">
-                    <hr>
-                        <h4>Actividades del Curso: ${curso.nombre}</h4>
+                    <br>
+                        <h3>Actividades del Curso: ${curso.nombre}</h3>
+                        <hr>
                         <div id="contenedor-actividades-${curso.id}"></div> <!-- Aquí se cargarán las actividades -->
                         <button class="btn btn-secondary btn-volver">Volver</button>
                     <hr>
+                </div>
+             
+                <div class="sub-seccion d-none" id="asistencia-${curso.id}">
+                <br>
+                    <h3>Asistencias del Curso: ${curso.nombre}</h3>
+                    <div id="contenedor-asistencias-${curso.id}"></div>
+                    <button class="btn btn-secondary btn-volver">Volver</button>
+                </div>              
+
+                <div class="sub-seccion d-none" id="material-${curso.id}">
+                    <hr>
+                        <h3>Material de Estudio del Curso: ${curso.nombre}</h3>
+                        <div id="contenedor-material-${curso.id}"></div> <!-- Aquí se cargará el material de estudio -->
+                        <button class="btn btn-secondary btn-volver">Volver</button>
                 </div>
             </div>
         `;
@@ -170,7 +192,7 @@ async function renderizarCursos(cursos) {
 // Función para consultar la asistencia de un curso
 async function consultarAsistencia(cursoId, filtro = 'todos') {
     const asistenciaContenedor = document.getElementById(`asistencia-${cursoId}`);
-    asistenciaContenedor.innerHTML = ""; // Limpiar contenido previo
+    //asistenciaContenedor.innerHTML = ""; // Limpiar contenido previo
 
     if (!asistenciaContenedor) {
         console.error(`No se encontró el contenedor para la asistencia del curso con ID ${cursoId}`);
@@ -188,7 +210,7 @@ async function consultarAsistencia(cursoId, filtro = 'todos') {
         }
 
         if (result.length === 0) {
-            asistenciaContenedor.innerHTML = '<p>No se encontraron registros de asistencia.</p>';
+            asistenciaContenedor.innerHTML = '<hr><p>No se encontraron registros de asistencia.</p>';
             return;
         }
         // Renderizamos la tabla con los datos
@@ -199,78 +221,69 @@ async function consultarAsistencia(cursoId, filtro = 'todos') {
     }
 }
 
-// Función para renderizar la tabla de asistencia
-function renderizarAsistencia(asistencias, contenedor, cursoId) {
-    // Crear el contenedor para el filtro
-    const filtroContainer = document.createElement('div');
-    filtroContainer.innerHTML = `
-        <h4>Filtrar Asistencia</h4>
-        <select id="filtro-asistencia-${cursoId}" class="form-select mb-3">
-            <option value="todos">Todos</option>
-            <option value="presente">Presentes</option>
-            <option value="ausente">Ausentes</option>
-        </select>
-        <button class="btn btn-primary btn-filtrar" data-id="${cursoId}">Filtrar</button>
-    `;
-
-    // Añadir el filtro al contenedor
-    contenedor.appendChild(filtroContainer);
-
-    // Crear la tabla
-    const tabla = document.createElement('table');
-    tabla.classList.add('table', 'table-striped');
-
-    // Crear los encabezados de la tabla
-    const encabezado = document.createElement('thead');
-    encabezado.innerHTML = `
-        <tr>
-            <th>Fecha</th>
-            <th>Estado</th>
-            <th>Estudiante</th>
-        </tr>
-    `;
-    tabla.appendChild(encabezado);
-
-    // Crear el cuerpo de la tabla
-    const cuerpo = document.createElement('tbody');
-
-    // Función que renderiza los datos de la tabla
-    function renderizarDatos(asistenciasFiltradas) {
-        cuerpo.innerHTML = ''; // Limpiar tabla antes de renderizar los nuevos datos
-
-        asistenciasFiltradas.forEach(asistencia => {
-            const fila = document.createElement('tr');
-            fila.innerHTML = `
+// Función para renderizar los datos en la tabla
+function renderizarDatos(datos, cuerpo) {
+    cuerpo.innerHTML = datos
+        .map(asistencia => `
+            <tr>
                 <td>${asistencia.fecha}</td>
                 <td>${asistencia.estado}</td>
                 <td>${asistencia.estudiante_nombre} ${asistencia.estudiante_apellido}</td>
-            `;
-            cuerpo.appendChild(fila);
-        });
-    }
+            </tr>
+        `)
+        .join('');
+}
+
+// Función principal para renderizar la asistencia
+function renderizarAsistencia(asistencias, contenedor, cursoId) {
+
+    const calificacionDiv = document.createElement('div');
+    calificacionDiv.classList.add('calificacion');
+
+    // Crear la estructura del filtro y la tabla
+    contenedor.innerHTML = `
+        <div>
+        <hr>
+            <h4>Filtrar Asistencia</h4>
+            <select id="filtro-asistencia-${cursoId}" class="form-select mb-3">
+                <option value="todos">Todos</option>
+                <option value="presente">Presentes</option>
+                <option value="ausente">Ausentes</option>
+            </select>
+            <button class="btn btn-primary btn-filtrar" data-id="${cursoId}">Filtrar</button>
+            <hr>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Estudiante</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-asistencias-${cursoId}"></tbody>
+        </table>
+    `;
+
+    // Seleccionar el cuerpo de la tabla
+    const cuerpo = document.getElementById(`tabla-asistencias-${cursoId}`);
+
     // Llamada inicial para mostrar todos los datos
-    renderizarDatos(asistencias);
+    renderizarDatos(asistencias, cuerpo);
 
-    // Añadir el cuerpo de la tabla
-    tabla.appendChild(cuerpo);
-    contenedor.appendChild(tabla);
-
-    // Manejar el filtrado
-    const btnFiltrar = document.querySelector(`.btn-filtrar[data-id="${cursoId}"]`);
-    btnFiltrar.addEventListener('click', function () {
+    // Manejar el evento de filtrado
+    const btnFiltrar = contenedor.querySelector(`.btn-filtrar`);
+    btnFiltrar.addEventListener('click', () => {
         const filtroSeleccionado = document.getElementById(`filtro-asistencia-${cursoId}`).value;
 
-        let asistenciasFiltradas = [...asistencias]; // Copiar los datos originales
+        // Filtrar los datos según el estado seleccionado
+        const datosFiltrados = filtroSeleccionado === 'todos'
+            ? asistencias
+            : asistencias.filter(asistencia => asistencia.estado.toLowerCase() === filtroSeleccionado.toLowerCase());
 
-        if (filtroSeleccionado !== 'todos') {
-            // Filtrar los datos por el estado
-            asistenciasFiltradas = asistencias.filter(asistencia => asistencia.estado.toLowerCase() === filtroSeleccionado.toLowerCase());
-        }
         // Renderizar los datos filtrados
-        renderizarDatos(asistenciasFiltradas);
-
+        renderizarDatos(datosFiltrados, cuerpo);
     });
-
 }
 
 // Función para consultar las calificaciones de un curso específico
@@ -302,9 +315,6 @@ async function consultarCalificacion(cursoId) {
 }
 function renderizarCalificaciones(cursoId, calificaciones, contenedor) {
     contenedor.innerHTML = ''; // Limpiamos el contenedor para evitar duplicados
-
-    const header = document.createElement('h4');
-    contenedor.appendChild(header);
 
     const calificacionDiv = document.createElement('div');
     calificacionDiv.classList.add('calificacion');
@@ -365,14 +375,12 @@ async function cargarActividades(cursoId) {
 
 // Función para renderizar las actividades en el DOM
 function renderizarActividades(cursoId, actividades, contenedor) {
-    const header = document.createElement('h4');
-    contenedor.appendChild(header);
 
     actividades.forEach(actividad => {
         const actividadDiv = document.createElement('div');
         actividadDiv.classList.add('actividad');
         actividadDiv.innerHTML = `
-            <h5>Actividad: ${actividad.nombre}</h5>
+            <h5> ${actividad.nombre}</h5>
             <p>Consigna: ${actividad.consigna}</p>
             <p>Fecha límite: ${actividad.fecha_limite}</p>
             <!-- Formulario de subida de actividad -->
@@ -451,6 +459,64 @@ function mostrarErrGlobal(mensaje, form) {
     }
 }
 
+// Función para cargar el material de estudio de un curso
+async function cargarMaterialEstudio(cursoId) {
+    try {
+        const response = await fetch(`Modulos/obtenerMaterialEstudio.php?cursoId=${cursoId}`);
+        const data = await response.json();
+
+        if (data.status === "success") {
+            const materiales = data.data;
+            renderizarMaterialEstudio(materiales, cursoId);
+        } else {
+            console.error(data.message);
+            alert("Error: " + data.message);
+        }
+    } catch (error) {
+        console.error("Error al cargar el material de estudio:", error);
+        alert("Hubo un error al intentar cargar el material de estudio.");
+    }
+}
+
+// Función para renderizar el material de estudio en el HTML
+function renderizarMaterialEstudio(materiales, cursoId) {
+    const contenedorMaterial = document.getElementById(`contenedor-material-${cursoId}`);
+
+    if (!contenedorMaterial) {
+        console.error(`No se encontró el contenedor para el material de estudio del curso con ID ${cursoId}`);
+        return;
+    }
+
+    contenedorMaterial.innerHTML = `
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre del Archivo</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${materiales.map(material => `
+                    <tr>
+                        <td>${material.titulo}</td>
+                        <td>${material.descripcion}</td>
+                        <td>
+                            <button class="btn btn-primary" onclick="descargarMaterialEstudio(${material.id_material})">Descargar</button>
+                        </td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+}
+
+// Función para descargar un archivo de material de estudio
+function descargarMaterialEstudio(idMaterial) {
+    window.location.href = `Modulos/descargarMaterialEstudio.php?id_material=${encodeURIComponent(idMaterial)}`;
+}
+
+
 // Función de éxito
 function mostrarMjeExito(mensaje, form) {
     const actividadId = form.dataset.actividadId;
@@ -472,7 +538,7 @@ function inicio() {
 
     document.getElementById('seccion-inicio').classList.remove('d-none'); // Mostrar solo la sección de Inicio al cargar la página
     cargarMisCursos();  // Llamar a cargarCursos al inicio
-    //consultarAsistencia(cursoId, filtro = 'todos'); // Llama a la función pasando el ID del curso
+
 }
 
 document.addEventListener('DOMContentLoaded', inicio);
