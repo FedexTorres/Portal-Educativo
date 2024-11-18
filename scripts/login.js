@@ -50,11 +50,24 @@ async function validarLogin(e) {
 }
 
 // Funciones para mostrar errores globales
-function mostrarErrorGlobal(mensaje) {
-    const errorGlobal = document.getElementById('errorGlobal');
-    errorGlobal.classList.remove('d-none');
-    errorGlobal.innerHTML = mensaje;
+function mostrarMensajeGlobal(tipo, mensaje) {
+    const mensajeGlobal = document.getElementById('mensajeGlobal');
+    mensajeGlobal.classList.remove('d-none', 'alert-danger', 'alert-success');
+    mensajeGlobal.classList.add(`alert-${tipo}`);
+    mensajeGlobal.innerHTML = `
+        <span>${mensaje}</span>
+         <button type="button" class="btn btn-${tipo} d-block mx-auto mt-3" aria-label="Close" onclick="cerrarMensajeGlobal()">
+            <i class="bi bi-x-lg"></i> Cerrar
+        </button>
+    `;
 }
+
+function cerrarMensajeGlobal() {
+    alternarFormulario('resetPassword');
+    const mensajeGlobal = document.getElementById('mensajeGlobal');
+    mensajeGlobal.classList.add('d-none');
+}
+
 
 // Mostrar formulario de recuperación de contraseña
 function mostrarRecuperacionContrasena() {
@@ -81,26 +94,151 @@ function validarRecuperacionContrasena(e) {
         alert(`Se han enviado las instrucciones de recuperación a: ${email}`);
     }
 }
+async function recuperarContrasena(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const emailError = document.getElementById('email-error');
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        emailError.classList.remove('d-none');
+    } else {
+        emailError.classList.add('d-none');
+        try {
+            const response = await fetch('Modulos/recuperarContrasena.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+
+            const result = await response.json();
+            if (result.status === 'success') {
+                mostrarMensajeGlobal('success', `
+                    <strong>Copie este token y cierre el mensaje:</strong><br>
+                    <span class="token">${result.token}</span>
+                `);
+            } else {
+                mostrarMensajeGlobal('danger', result.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            mostrarMensajeGlobal('danger', 'Ocurrió un problema al procesar la solicitud.');
+        }
+    }
+}
+
+async function restablecerContrasena(e) {
+    e.preventDefault();
+
+    const token = document.getElementById('token').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    const tokenError = document.getElementById('token-error');
+    const newPasswordError = document.getElementById('newPassword-error');
+    const confirmPasswordError = document.getElementById('confirmPassword-error');
+
+    let isValid = true;
+
+    // Validar token
+    if (token === '') {
+        tokenError.classList.remove('d-none');
+        isValid = false;
+    } else {
+        tokenError.classList.add('d-none');
+    }
+
+    // Validar nueva contraseña
+    if (newPassword.length < 4) {
+        newPasswordError.classList.remove('d-none');
+        isValid = false;
+    } else {
+        newPasswordError.classList.add('d-none');
+    }
+
+    // Validar confirmación de contraseña
+    if (newPassword !== confirmPassword) {
+        confirmPasswordError.classList.remove('d-none');
+        isValid = false;
+    } else {
+        confirmPasswordError.classList.add('d-none');
+    }
+
+    if (isValid) {
+        try {
+            const response = await fetch('Modulos/restablecerContrasena.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, newPassword, confirmPassword })
+            });
+
+            const result = await response.json();
+            if (result.status === 'success') {
+                mostrarMjeGlobal('success', result.message);
+            } else {
+                mostrarMjeGlobal('danger', result.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            mostrarMensajeGlobal('danger', 'Ocurrió un problema al procesar la solicitud.');
+        }
+    }
+}
+
+function mostrarMjeGlobal(tipo, mensaje) {
+    const mensajeGlobal = document.getElementById('mjeGlobal');
+    mensajeGlobal.classList.remove('d-none', 'alert-danger', 'alert-success');
+    mensajeGlobal.classList.add(`alert-${tipo}`);
+    mensajeGlobal.innerHTML = `
+        <span>${mensaje}</span>
+    `;
+    // Mostrar la leyenda de redirección después del mensaje
+    setTimeout(() => {
+        mensajeGlobal.innerHTML = `
+            <span>Redirigiendo al login...</span>
+        `;
+        setTimeout(() => {
+            // Redirigir al login después de 2 segundos
+            alternarFormulario('login-card');
+        }, 2000); // Este es el tiempo antes de redirigir
+    }, 2000); // Este es el tiempo del mensaje de éxito antes de mostrar la leyenda "redirigiendo"
+}
+
+
+function alternarFormulario(formularioAMostrar) {
+    const formularios = ['login-card', 'olvidoClave', 'resetPassword'];
+    formularios.forEach((formulario) => {
+        const form = document.getElementById(formulario);
+        if (formulario === formularioAMostrar) {
+            form.classList.remove('d-none');
+        } else {
+            form.classList.add('d-none');
+        }
+    });
+}
+
 
 // Manejar eventos de la página
 function manejarEventosLogin() {
-    // Validar login
+    // Eventos para los formularios
+    document.getElementById('olvidoClaveForm').addEventListener('submit', recuperarContrasena);
+    document.getElementById('resetPasswordForm').addEventListener('submit', restablecerContrasena);
     document.getElementById('loginForm').addEventListener('submit', validarLogin);
 
-    // Mostrar formulario de recuperación de contraseña
+    // Navegación entre formularios
     document.getElementById('olvidoClaveLink').addEventListener('click', (e) => {
         e.preventDefault();
-        mostrarRecuperacionContrasena();
+        alternarFormulario('olvidoClave');
     });
 
-    // Volver al login desde la recuperación
     document.getElementById('volverLogin').addEventListener('click', (e) => {
         e.preventDefault();
-        volverALogin();
+        alternarFormulario('login-card');
     });
 
-    // Validar recuperación de contraseña
-    document.getElementById('olvidoClaveForm').addEventListener('submit', validarRecuperacionContrasena);
+    document.getElementById('volverLoginDesdeReset').addEventListener('click', (e) => {
+        e.preventDefault();
+        alternarFormulario('login-card');
+    });
 }
 
 // Inicializar eventos al cargar la página

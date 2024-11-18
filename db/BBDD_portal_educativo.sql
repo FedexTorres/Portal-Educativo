@@ -13,6 +13,14 @@ CREATE TABLE usuarios (
     fecha_registro TIMESTAMP NOT NULL DEFAULT current_timestamp()
 );
 
+CREATE TABLE tokens_recuperacion (
+    id INT AUTO_INCREMENT PRIMARY KEY, -- ID único de cada token
+    id_usuario INT NOT NULL,           -- Relación con la tabla usuarios
+    token VARCHAR(64) NOT NULL,        -- Token generado
+    fecha_expiracion DATETIME NOT NULL, -- Fecha y hora límite para usar el token
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE -- Borra los tokens si se elimina el usuario
+);
+
 -- Estructura de tabla para la tabla `permisos`
 CREATE TABLE `permisos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

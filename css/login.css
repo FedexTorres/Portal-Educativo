@@ -37,3 +37,27 @@ a:hover {
     color: #0056b3;
     text-decoration: underline;
 }
+
+.pepe {
+    width: 32rem;
+
+}
+
+.token {
+    display: block;
+    /* Esto fuerza al token a ocupar un renglón completo */
+    font-family: monospace;
+    /* Esto hace que el token se vea como un código */
+    font-size: 1.2em;
+    /* Aumenta un poco el tamaño de la fuente */
+    margin-top: 5px;
+    /* Espacio encima del token */
+    padding: 5px;
+    /* Padding alrededor del token */
+    background-color: #f8f9fa;
+    /* Color de fondo suave */
+    border: 1px solid #07b836;
+    /* Borde alrededor del token */
+    border-radius: 5px;
+    /* Esquinas redondeadas */
+}
