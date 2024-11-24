@@ -1,8 +1,22 @@
 <?php
-require_once './conexion_bbdd.php';
 session_start();
+require_once './conexion_bbdd.php';
+require_once './permisos.php';
 
 header('Content-Type: application/json');
+
+
+// Validar que el usuario esté logueado
+if (!isset($_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No estás autenticado']);
+    exit;
+}
+
+// Validar el permiso "Ver material estudio estudiante"
+if (!Permisos::tienePermiso('Ver material estudio estudiante',$_SESSION['usuario']['id'] )) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para acceder a los materiales de estudio']);
+    exit;
+}
 
 // Validar el ID del curso recibido
 $cursoId = isset($_GET['cursoId']) ? (int)$_GET['cursoId'] : 0;

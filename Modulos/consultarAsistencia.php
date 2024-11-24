@@ -3,10 +3,17 @@
 session_start();
 // Incluimos el archivo de conexión a la base de datos
 require './conexion_bbdd.php';
+require_once './permisos.php';
 
 // Validamos que el usuario esté logueado
 if (!isset($_SESSION['usuario']['id'])) {
     echo json_encode(['error' => 'Usuario no logueado']);
+    exit;
+}
+
+// Verificar si el usuario tiene el permiso "Ver asistencias"
+if (!Permisos::tienePermiso('Ver asistencias', $_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para ver asistencias']);
     exit;
 }
 
@@ -55,10 +62,13 @@ try {
     // Obtenemos los resultados
     $asistencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Devolvemos los datos en formato JSON
-    echo json_encode($asistencias);
+    if ($asistencias) {
+        echo json_encode(['status' => 'success', 'data' => $asistencias]);
+    } else {
+        echo json_encode(['status' => 'info', 'message' => 'No hay asistencias disponibles para este curso']);
+    }
 
 } catch (PDOException $e) {
     echo json_encode(['error' => 'Error en la consulta de asistencias: ' . $e->getMessage()]);
 }
-?>
+

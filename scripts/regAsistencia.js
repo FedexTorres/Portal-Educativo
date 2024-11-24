@@ -1,14 +1,21 @@
 // Función para cargar los cursos
 async function cargarCursos() {
     try {
-        const response = await fetch('Modulos/getMisCursosProfesor.php');
+        const response = await fetch('Modulos/listaCursosProfesor.php');
         const data = await response.json();
+        const errorDiv = document.getElementById('errorAsistencias');
 
         if (data.status === 'success') {
             mostrarCursos(data.cursos);
-        } else {
-            console.error(data.message || 'No se encontraron cursos');
+        } else if (data.status === 'error') {
+            errorDiv.textContent = data.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
         }
+
+        // else {
+        //     console.error(data.message || 'No se encontraron cursos');
+        // }
     } catch (error) {
         console.error(`Error en la conexión: ${error.message}`);
     }
@@ -37,6 +44,7 @@ function mostrarCursos(cursos) {
 
 // Función para cargar los alumnos de un curso
 function mostrarAlumnos(idCurso) {
+    const errorDiv = document.getElementById('errorTomarAsistencias');
     fetch('Modulos/cargarAlumnosPorCurso.php', {
         method: 'POST',
         body: JSON.stringify({ id_curso: idCurso }),  // Enviar JSON
@@ -48,7 +56,14 @@ function mostrarAlumnos(idCurso) {
                 mostrarFormularioAsistencia(data.data, idCurso);
                 // Abre el modal
                 $('#modalAsistencia').modal('show');
-            } else {
+            } else if (data.status === 'error') {
+                errorDiv.textContent = data.message; // Asigna el mensaje de error
+                errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+                errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+                $('#modalAsistencia').modal('show');
+            }
+
+            else {
                 console.error(data.message);
             }
         })
@@ -60,9 +75,13 @@ async function cargarAsistencias(idCurso) {
     try {
         const response = await fetch(`Modulos/obtenerAsistencias.php?idCurso=${idCurso}`);
         const data = await response.json();
+        const errorDiv = document.getElementById('errorModalAsistencias');
 
         if (data.status === 'error') {
-            alert(data.message);
+            errorDiv.textContent = data.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+            // alert(data.message);
             return;
         }
 
@@ -114,7 +133,6 @@ async function editarAsistencia(idAsistencia) {
         const fechaAsistencia = document.getElementById('fechaAsistencia');
         fechaAsistencia.value = data.data.fecha; // Asignar fecha de asistencia
         fechaAsistencia.dataset.idCurso = data.data.id_curso; // Asignar ID del curso al dataset
-        console.log('ID del curso al editar:', data.data.id_curso);
         document.getElementById('idAsistencia').value = data.data.id_asistencia; // Asignar ID de asistencia
 
         // Precargar lista de alumnos con su estado
@@ -201,7 +219,6 @@ async function guardarAsistencia() {
     const idAsistencia = document.getElementById('idAsistencia').value;
     const fecha = document.getElementById('fechaAsistencia').value;
     const idCurso = document.getElementById('fechaAsistencia').dataset.idCurso;
-    console.log('al principio ID del curso al guardar cambios:', idCurso); // Verificar el valor de idCurso
 
     // Validar fecha
     if (!fecha) {
@@ -241,18 +258,19 @@ async function guardarAsistencia() {
     }
 
     try {
-        console.log('ID Curso:', idCurso);
-        const endpoint = idAsistencia ? 'Modulos/actualizarAsistencia.php' : 'Modulos/registrarAsistencia.php';
-        const payload = { idCurso, fecha, asistencias };
-        console.log('Payload:', payload);
+        // Primero, determino el endpoint en función de si estoy actualizando o registrando asistencia
+        const urlDestino = idAsistencia ? 'Modulos/actualizarAsistencia.php' : 'Modulos/registrarAsistencia.php';
+        // Preparo el objeto 'datos' con los datos necesarios, como el id del curso, fecha y las asistencias
+        const datos = { idCurso, fecha, asistencias };
+        // Si estoy actualizando una asistencia, añado el id de la asistencia al obj datos
         if (idAsistencia) {
-            payload.idAsistencia = idAsistencia; // Solo añadir si existe
+            datos.idAsistencia = idAsistencia; // Solo añadir si existe
         }
 
-        const response = await fetch(endpoint, {
+        const response = await fetch(urlDestino, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
+            body: JSON.stringify(datos),
         });
 
         const data = await response.json();

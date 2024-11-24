@@ -1,11 +1,19 @@
 <?php
 session_start();
 require './conexion_bbdd.php';
+require_once './permisos.php';
 
 if (!isset($_SESSION['usuario']['id'])) {
     echo json_encode(['status' => 'error', 'message' => 'No estás logueado']);
     exit;
 }
+
+// Verificar que el usuario tiene permiso para ver los cursos
+if (!Permisos::tienePermiso('Ver cursos estudiante', $_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para ver los cursos']);
+    exit;
+}
+
 
 $id_usuario = $_SESSION['usuario']['id'];
 

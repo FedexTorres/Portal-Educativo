@@ -1,10 +1,18 @@
 <?php
-require './conexion_bbdd.php';  
 session_start();
+require './conexion_bbdd.php';  
+require_once './permisos.php';
 
 // Verifica si el usuario está logueado
-if (!isset($_SESSION['usuario'])) {
+if (!isset($_SESSION['usuario']['id'])) {
     echo json_encode(['status' => 'error', 'message' => 'No estás autenticado']);
+    exit();
+}
+
+
+// Verificar que el usuario tiene el permiso para subir actividades
+if (!Permisos::tienePermiso('Subir actividad estudiante', $_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para subir actividades']);
     exit();
 }
 
@@ -23,15 +31,9 @@ if (isset($_FILES['actividad']) && isset($_POST['cursoId']) && isset($_POST['act
     // Directorio donde se almacenarán los archivos subidos
     $uploadDir = '../uploads/actividades/';
 
-    // Obtener el nombre del archivo y su extensión
-    $fileName = basename($_FILES['actividad']['name']);
+    // Generar un nombre único para el archivo
+    $fileName = uniqid() . "-" . basename($_FILES['actividad']['name']);
     $filePath = $uploadDir . $fileName;
-
-    // Verificar si el archivo ya existe
-    if (file_exists($filePath)) {
-        echo json_encode(['status' => 'error', 'message' => 'El archivo ya existe']);
-        exit();
-    }
 
     // Mover el archivo al directorio de destino
     if (!move_uploaded_file($_FILES['actividad']['tmp_name'], $filePath)) {
@@ -39,7 +41,7 @@ if (isset($_FILES['actividad']) && isset($_POST['cursoId']) && isset($_POST['act
         exit();
     }
 
-    // Verificar si el usuario y la actividad existen en la base de datos
+    // Verificar si el usuario existe en la base de datos
     $stmt = $conn->prepare('SELECT id FROM usuarios WHERE id = :id_usuario');
     $stmt->bindParam(':id_usuario', $usuarioId, PDO::PARAM_INT);
     $stmt->execute();
@@ -48,6 +50,7 @@ if (isset($_FILES['actividad']) && isset($_POST['cursoId']) && isset($_POST['act
         exit();
     }
 
+    // Verificar si la actividad existe en la base de datos
     $stmt = $conn->prepare('SELECT id FROM actividades WHERE id = :id_actividad');
     $stmt->bindParam(':id_actividad', $actividadId, PDO::PARAM_INT);
     $stmt->execute();
@@ -63,13 +66,8 @@ if (isset($_FILES['actividad']) && isset($_POST['cursoId']) && isset($_POST['act
     $stmt->execute();
     $ultimoNumeroEntrega = $stmt->fetchColumn();
 
-    // Si no hay entregas previas, se usa el número 1
-    if ($ultimoNumeroEntrega === null) {
-        $nuevoNumeroEntrega = 1;
-    } else {
-        // Si hay entregas previas, incrementamos el último número de entrega
-        $nuevoNumeroEntrega = $ultimoNumeroEntrega + 1;
-    }
+    // Calcular el nuevo número de entrega
+    $nuevoNumeroEntrega = ($ultimoNumeroEntrega === null) ? 1 : $ultimoNumeroEntrega + 1;
 
     // Preparar la consulta SQL para insertar la entrega
     $query = 'INSERT INTO entregas (id_usuario, id_actividad, numero_entrega, ruta_archivo, fecha_entrega) 
@@ -89,7 +87,6 @@ if (isset($_FILES['actividad']) && isset($_POST['cursoId']) && isset($_POST['act
         $stmt->execute();
         echo json_encode(['status' => 'success', 'message' => 'Actividad subida correctamente']);
     } catch (PDOException $e) {
-        // Mostrar el error exacto
         echo json_encode(['status' => 'error', 'message' => 'Error al guardar la entrega en la base de datos', 'details' => $e->getMessage()]);
     }
 } else {

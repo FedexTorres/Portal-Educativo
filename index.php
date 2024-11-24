@@ -1,8 +1,8 @@
 <?php
 session_start();
-
-  // Incluimos el navbar-base que cargará el navbar-logueado o navbar-visitante según la sesión
-  include 'navbar-base.php';
+// Incluimos el navbar-base que cargará el navbar-logueado o navbar-visitante según la sesión
+include 'navbar-base.php';
+require_once ('Modulos/permisos.php');
 ?>
 
 <!doctype html>
@@ -37,7 +37,8 @@ session_start();
             <br>
             <br>
             <!-- Menú lateral solo visible si el usuario está logueado como Estudiante -->
-            <?php if (isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] == 'estudiante') { ?>
+            
+            <?php if (isset($_SESSION['usuario']) && Permisos::tienePermiso('Ver menu estudiante', $_SESSION['usuario']['id'])) { ?>
               <!-- Menú lateral solo se muestra si el usuario es Estudiante -->
               <ul class="nav flex-column">
                 <li class="nav-item mb-2">
@@ -108,6 +109,7 @@ session_start();
   <hr>
   <div id="alerta" class="alert alert-danger d-none" role="alert"></div>
   <div id="exito" class="alert alert-success d-none"></div>
+  <div id="errorEnvio" class="d-none"></div> 
 
   
   <div class="row">
@@ -133,13 +135,15 @@ session_start();
       <div class="col-md-6">
         <h2>Mensajes Recibidos</h2>
         <div id="lista-mensajes" class="list-group"></div>
+        <div id="errorMjRecibido" class="d-none"></div> 
       </div>
 
       <!-- Nueva sección para los mensajes enviados -->
       <div class="col-md-6">
       <h2>Mensajes Enviados</h2>
       <div id="mensajes-enviados" class="list-group"></div>
-          <!-- Aquí se agregarán los mensajes enviados dinámicamente -->       
+      <div id="errorMjEnviado" class="d-none"></div>    
+          <!-- Aquí se agregarán los mensajes enviados dinámicamente -->   
       </div>
     </div>  
   </section>
@@ -152,6 +156,7 @@ session_start();
       
       <!-- Contenedor de Errores Globales -->
       <div id="errorGlobal" class="alert alert-danger d-none"></div>
+      <div id="errorPerfil" class="d-none"></div>
         <!-- Mensaje de éxito -->
         <div id="mensajeExito" class="alert alert-success d-none"></div>
 

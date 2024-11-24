@@ -18,6 +18,7 @@ async function validarFormuMensaje(e) {
     // Usamos jQuery para obtener el valor de "data-destinatario-id" del elemento con id "destinatario".
     // Este valor representa el ID del destinatario, asignado dinámicamente en el HTML.
     const destinatarioId = $("#destinatario").data("destinatario-id");
+    const errorDiv = document.getElementById('errorEnvio');
 
     // Limpiar validaciones anteriores
     mensajeInput.classList.remove('is-invalid');
@@ -50,7 +51,6 @@ async function validarFormuMensaje(e) {
         });
 
         const result = await response.json();
-
         // Mostrar mensaje de éxito
         if (result.status === 'success') {
             exito.classList.remove('d-none'); // Mostrar el div de éxito
@@ -63,8 +63,11 @@ async function validarFormuMensaje(e) {
                 exito.classList.add('d-none'); // Ocultar el div de éxito
                 exito.innerHTML = ''; // Limpiar el contenido
             }, 2000);
-        } else {
-            mostrarError(mensajeInput, alerta, result.message);
+        } else if (result.status === 'error') {
+            // Mostrar el mensaje de error
+            errorDiv.textContent = result.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
         }
     } catch (error) {
         console.error('Error en la solicitud:', error);
@@ -115,6 +118,7 @@ async function cargarMensajesRecibidos() {
 
         const data = await response.json();
         const listaMensajes = document.getElementById('lista-mensajes');
+        const errorDiv = document.getElementById('errorMjRecibido');
         listaMensajes.innerHTML = '';
 
         if (data.status === 'success') {
@@ -126,7 +130,12 @@ async function cargarMensajesRecibidos() {
                                          <small>Fecha: ${msg.fecha}</small>`;
                 listaMensajes.appendChild(mensajeItem);
             });
-        } else {
+        } else if (data.status === 'error') {
+            errorDiv.textContent = data.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+        }
+        else {
             console.error("Error: " + data.message);
         }
     } catch (error) {
@@ -140,6 +149,7 @@ async function cargarMensajesEnviados() {
     try {
         const response = await fetch('Modulos/consultarMensajesEnviados.php');
         const data = await response.json();
+        const errorDiv = document.getElementById('errorMjEnviado');
 
         if (data.status === 'success') {
             const listaMensajesEnviados = document.getElementById('mensajes-enviados');
@@ -152,7 +162,13 @@ async function cargarMensajesEnviados() {
             } else {
                 console.warn("No hay mensajes enviados disponibles.");
             }
-        } else {
+        } else if (data.status === 'error') {
+            errorDiv.textContent = data.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+        }
+
+        else {
             console.error(data.message);
         }
     } catch (error) {

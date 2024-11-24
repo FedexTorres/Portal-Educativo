@@ -38,6 +38,7 @@ async function cargarPerfil() {
     try {
         const response = await fetch('Modulos/obtenerPerfil.php');
         const data = await response.json();
+        const errorDiv = document.getElementById('errorPerfil');
 
         if (data.status === 'success') {
             // Rellenar los campos con los datos obtenidos
@@ -45,7 +46,13 @@ async function cargarPerfil() {
             document.getElementById('apellido').value = data.usuario.apellido;
             document.getElementById('correo').value = data.usuario.correo;
             document.getElementById('fechaNacimiento').value = data.usuario.fecha_nacimiento;
-        } else {
+
+        } else if (data.status === 'info') {
+            errorDiv.textContent = data.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+        }
+        else {
             mostrarErrorGlobal(data.message || 'Error al cargar el perfil');
         }
     } catch (error) {

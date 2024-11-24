@@ -1,9 +1,17 @@
 <?php
-require './conexion_bbdd.php'; // Asegúrate de que este archivo exista
-
 session_start();
+require './conexion_bbdd.php';
+require_once './permisos.php';
+
+
 if (!isset($_SESSION['usuario']['id'])) {
     header('Location: index.php');  // redirige al login si no hay sesión
+    exit;
+}
+
+// Validar el permiso "Leer mensajes"
+if (!Permisos::tienePermiso('Leer mensajes', $_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para leer los mensajes']);
     exit;
 }
 
@@ -30,6 +38,6 @@ try {
     echo json_encode(['status' => 'success', 'mensajes' => $mensajes]);
 } catch (PDOException $e) {
     // Error en la base de datos
-    echo json_encode(['status' => 'error', 'message' => 'Error en la base de datos: ' . $e->getMessage()]);
+    echo json_encode(['status' => 'info', 'message' => 'Error en la base de datos: ' . $e->getMessage()]);
 }
 ?>

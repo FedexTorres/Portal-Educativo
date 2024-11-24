@@ -1,10 +1,20 @@
 <?php
 session_start();
-header("Content-Type: application/json; charset=UTF-8");
-require 'conexion_bbdd.php';
+require_once './conexion_bbdd.php';
+require_once './permisos.php';
+
+header('Content-Type: application/json');
+
+
 // Verificar que el usuario esté logueado
 if (!isset($_SESSION['usuario']['id'])) {
     echo json_encode(['status' => 'error', 'message' => 'No estás logueado']);
+    exit;
+}
+
+// Validar el permiso para ver el perfil
+if (!Permisos::tienePermiso('Editar perfil propio',$_SESSION['usuario']['id'] )) {
+    echo json_encode(['status' => 'info', 'message' => 'No tienes permiso para acceder a los datos del perfil']);
     exit;
 }
 

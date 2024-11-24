@@ -1,10 +1,21 @@
 <?php
-require_once './conexion_bbdd.php'; 
-
 session_start();
 
-$idEntrega = isset($_GET['id_entrega']) ? (int)$_GET['id_entrega'] : 0;
+require './conexion_bbdd.php';  
+require_once './permisos.php';
 
+// Verifica si el usuario está logueado
+if (!isset($_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No estás autenticado']);
+    exit();
+}
+// Verificar permisos
+if (!Permisos::tienePermiso('Calificar', $_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para hacer la descarga.']);
+    exit;
+}
+
+$idEntrega = isset($_GET['id_entrega']) ? (int)$_GET['id_entrega'] : 0;
 if ($idEntrega === 0) {
     die("ID de entrega no proporcionado.");
 }
@@ -21,28 +32,41 @@ try {
         die("Archivo no encontrado para esta entrega.");
     }
 
-    //$filePath = $_SERVER['DOCUMENT_ROOT'] . $entrega['ruta_archivo'];
-    // Ruta completa usando el DOCUMENT_ROOT y la ruta relativa de la base de datos
-    $filePath = $_SERVER['DOCUMENT_ROOT'] . '/Portal-Educativo/' . ltrim($entrega['ruta_archivo'], '../');
-    
+    $filePath = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/Portal-Educativo/uploads/actividades/' . basename($entrega['ruta_archivo']);
     // Verificar la ruta construida
     if (!file_exists($filePath)) {
         die("El archivo no existe en el servidor. Ruta buscada: " . $filePath);
     }
 
+    // Determinar el tipo de contenido según la extensión del archivo
+    $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+    switch ($extension) {
+        case 'pdf':
+            $contentType = 'application/pdf';
+            break;
+        case 'png':
+            $contentType = 'image/png';
+            break;
+        case 'txt':
+            $contentType = 'text/plain';
+            break;
+        default:
+            $contentType = 'application/octet-stream';
+    }
+
     // Configurar headers para la descarga
     header('Content-Description: File Transfer');
-    header('Content-Type: application/pdf; charset=iso-8859-1');
+    header('Content-Type: ' . $contentType);
     header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
     header('Expires: 0');
     header('Cache-Control: must-revalidate');
     header('Pragma: public');
     header('Content-Length: ' . filesize($filePath));
 
-       
     // Leer el archivo y enviarlo
     readfile($filePath);
     exit;
+
 } catch (PDOException $e) {
     die("Error al obtener el archivo: " . $e->getMessage());
 }

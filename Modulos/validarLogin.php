@@ -1,5 +1,8 @@
 <?php
-require './conexion_bbdd.php'; 
+require_once './permisos.php';
+require_once './conexion_bbdd.php'; 
+
+
 session_start(); // Iniciar sesión al principio del archivo
 header('Content-Type: application/json');
 // Comprobamos el método de solicitud
@@ -53,14 +56,14 @@ if (isset($_POST["correo"], $_POST["clave"]) && !empty($_POST["correo"]) && !emp
             'rol' => $resultado['tipo_usuario'], // Asumiendo que este es el campo que usas para el rol
         ];
 
-        // Establecemos la URL de redirección según el tipo de usuario
+        // Establecemos la URL de redirección según los permisos del usuario
         $redireccion = "";
-        if ($_SESSION['usuario']['rol'] == 'administrador') {
-            $redireccion = "administrador.php";
-        } elseif ($_SESSION['usuario']['rol'] == 'profesor') {
-            $redireccion = "profesor.php";
-        } elseif ($_SESSION['usuario']['rol'] == 'estudiante') {
-            $redireccion = "index.php";
+        if (Permisos::tienePermiso('Ver pagina estudiante', $_SESSION['usuario']['id'])) {
+            $redireccion = "index.php";  // Página de estudiante
+        } elseif (Permisos::tienePermiso('Ver pagina profesor', $_SESSION['usuario']['id'])) {
+            $redireccion = "profesor.php";  // Página de profesor
+        } elseif (Permisos::tienePermiso('Ver pagina administrador', $_SESSION['usuario']['id'])) {
+            $redireccion = "administrador.php";  // Página de administrador
         }
 
         // Enviamos la respuesta JSON con el rol y la URL de redirección

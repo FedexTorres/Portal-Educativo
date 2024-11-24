@@ -101,7 +101,6 @@ async function cargarMisCursos() {
     const estaLogueado = await checkSiEstaLogueado();  // Verificamos si está logueado
 
     if (!estaLogueado) {
-        console.log("Usuario no logueado, no se cargan los cursos.");
         return;  // No hacemos la llamada AJAX si no está logueado
     }
     try {
@@ -163,21 +162,24 @@ async function renderizarCursos(cursos) {
                         <h3>Actividades del Curso: ${curso.nombre}</h3>
                         <hr>
                         <div id="contenedor-actividades-${curso.id}"></div> <!-- Aquí se cargarán las actividades -->
+                        <div id="errorActividad-${curso.id}" class="d-none"></div>
                         <button class="btn btn-secondary btn-volver">Volver</button>
                     <hr>
                 </div>
              
                 <div class="sub-seccion d-none" id="asistencia-${curso.id}">
-                <br>
-                    <h3>Asistencias del Curso: ${curso.nombre}</h3>
-                    <div id="contenedor-asistencias-${curso.id}"></div>
-                    <button class="btn btn-secondary btn-volver">Volver</button>
+                    <br>
+                        <div id="contenedor-asistencias-${curso.id}"></div>
+                        <h3>Asistencias del Curso: ${curso.nombre}</h3>
+                        <div id="errorAsistencia-${curso.id}" class="d-none"></div>
+                        <button class="btn btn-secondary btn-volver">Volver</button>
                 </div>              
 
                 <div class="sub-seccion d-none" id="material-${curso.id}">
                     <hr>
                         <h3>Material de Estudio del Curso: ${curso.nombre}</h3>
                         <div id="contenedor-material-${curso.id}"></div> <!-- Aquí se cargará el material de estudio -->
+                        <div id="errorMaterial-${curso.id}" class="d-none"></div>
                         <button class="btn btn-secondary btn-volver">Volver</button>
                 </div>
             </div>
@@ -192,7 +194,8 @@ async function renderizarCursos(cursos) {
 // Función para consultar la asistencia de un curso
 async function consultarAsistencia(cursoId, filtro = 'todos') {
     const asistenciaContenedor = document.getElementById(`asistencia-${cursoId}`);
-    //asistenciaContenedor.innerHTML = ""; // Limpiar contenido previo
+    const errorDiv = document.getElementById(`errorAsistencia-${cursoId}`);
+
 
     if (!asistenciaContenedor) {
         console.error(`No se encontró el contenedor para la asistencia del curso con ID ${cursoId}`);
@@ -204,42 +207,31 @@ async function consultarAsistencia(cursoId, filtro = 'todos') {
         const response = await fetch(url);
         const result = await response.json();
 
-        if (result.error) {
-            console.error('Error:', result.error);
-            return;
-        }
+        if (result.status === 'success') {
+            renderizarAsistencia(result.data, asistenciaContenedor, cursoId);
+        } else if (result.status === 'info') {
 
-        if (result.length === 0) {
-            asistenciaContenedor.innerHTML = '<hr><p>No se encontraron registros de asistencia.</p>';
-            return;
-        }
-        // Renderizamos la tabla con los datos
-        renderizarAsistencia(result, asistenciaContenedor, cursoId); // Llamamos a renderizarAsistencia pasando los datos y el filtro
+            errorDiv.textContent = result.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+            const computedStyles = getComputedStyle(errorDiv);
+        } else if (result.status === 'error') {
 
+            errorDiv.textContent = result.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+            const computedStyles = getComputedStyle(errorDiv);
+        }
     } catch (error) {
         console.error('Error al consultar la asistencia:', error);
-    }
-}
 
-// Función para renderizar los datos en la tabla
-function renderizarDatos(datos, cuerpo) {
-    cuerpo.innerHTML = datos
-        .map(asistencia => `
-            <tr>
-                <td>${asistencia.fecha}</td>
-                <td>${asistencia.estado}</td>
-                <td>${asistencia.estudiante_nombre} ${asistencia.estudiante_apellido}</td>
-            </tr>
-        `)
-        .join('');
+    }
 }
 
 // Función principal para renderizar la asistencia
 function renderizarAsistencia(asistencias, contenedor, cursoId) {
-
     const calificacionDiv = document.createElement('div');
     calificacionDiv.classList.add('calificacion');
-
     // Crear la estructura del filtro y la tabla
     contenedor.innerHTML = `
         <div>
@@ -263,11 +255,11 @@ function renderizarAsistencia(asistencias, contenedor, cursoId) {
             </thead>
             <tbody id="tabla-asistencias-${cursoId}"></tbody>
         </table>
+        <button class="btn btn-secondary btn-volver">Volver</button>
     `;
 
     // Seleccionar el cuerpo de la tabla
     const cuerpo = document.getElementById(`tabla-asistencias-${cursoId}`);
-
     // Llamada inicial para mostrar todos los datos
     renderizarDatos(asistencias, cuerpo);
 
@@ -275,15 +267,40 @@ function renderizarAsistencia(asistencias, contenedor, cursoId) {
     const btnFiltrar = contenedor.querySelector(`.btn-filtrar`);
     btnFiltrar.addEventListener('click', () => {
         const filtroSeleccionado = document.getElementById(`filtro-asistencia-${cursoId}`).value;
-
         // Filtrar los datos según el estado seleccionado
         const datosFiltrados = filtroSeleccionado === 'todos'
             ? asistencias
             : asistencias.filter(asistencia => asistencia.estado.toLowerCase() === filtroSeleccionado.toLowerCase());
-
         // Renderizar los datos filtrados
         renderizarDatos(datosFiltrados, cuerpo);
     });
+
+    // Manejar el evento del botón "Volver"
+    const btnVolver = contenedor.querySelector('.btn-volver');
+    btnVolver.addEventListener('click', () => {
+        // Muestra todas las cards nuevamente
+        const todasLasCards = document.querySelectorAll('.card');
+        todasLasCards.forEach(card => card.classList.remove('d-none'));
+
+        // Oculta todas las sub-secciones de la card actual
+        const cursoCard = document.querySelector(`.card[data-id="${cursoId}"]`);
+        cursoCard.querySelectorAll('.sub-seccion').forEach(sub => {
+            sub.classList.add('d-none');
+        });
+    });
+}
+
+// Función para renderizar los datos en la tabla de asistencia
+function renderizarDatos(datos, cuerpo) {
+    cuerpo.innerHTML = datos
+        .map(asistencia => `
+            <tr>
+                <td>${asistencia.fecha}</td>
+                <td>${asistencia.estado}</td>
+                <td>${asistencia.estudiante_nombre} ${asistencia.estudiante_apellido}</td>
+            </tr>
+        `)
+        .join('');
 }
 
 // Función para consultar las calificaciones de un curso específico
@@ -300,17 +317,23 @@ async function consultarCalificacion(cursoId) {
     try {
         const response = await fetch(`Modulos/obtenerCalificacion.php?cursoId=${cursoId}`);
         const result = await response.json();
+        const errorDiv = document.getElementById(`errorCalificacion-${cursoId}`);
 
         if (result.status === 'success' && result.data.length > 0) {
             // Renderizar las calificaciones si hay datos disponibles
             renderizarCalificaciones(cursoId, result.data, contenedorCalificaciones);
         } else if (result.status === 'info') {
-            errorCalificaciones(result.message, cursoId);
-        } else if (result.status === 'error') {
-            errorCalificaciones(result.message, cursoId);
+            errorDiv.textContent = result.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+        }
+        else if (result.status === 'error') {
+            errorDiv.textContent = result.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
         }
     } catch (error) {
-        errorCalificaciones('Error al cargar las calificaciones. Intenta nuevamente.');
+        contenedorCalificaciones.innerHTML = '<p>Error al cargar las Calificaciones. Intenta nuevamente.</p>';
     }
 }
 function renderizarCalificaciones(cursoId, calificaciones, contenedor) {
@@ -344,28 +367,24 @@ function renderizarCalificaciones(cursoId, calificaciones, contenedor) {
     contenedor.appendChild(calificacionDiv);
 }
 
-function errorCalificaciones(message, cursoId) {
-    const errorDiv = document.getElementById(`errorCalificacion-${cursoId}`);
-    if (errorDiv) {
-        errorDiv.textContent = message; // Asigna el mensaje de error
-        errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
-        errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
-    } else {
-        console.error("Error div no encontrado para el curso:", cursoId);
-    }
-}
-
 // Función para cargar las actividades de un curso específico
 async function cargarActividades(cursoId) {
     const contenedorActividades = document.getElementById(`contenedor-actividades-${cursoId}`);
     try {
         const response = await fetch(`Modulos/obtenerActividades.php?cursoId=${cursoId}`);
         const actividades = await response.json();
+        const errorDiv = document.getElementById(`errorActividad-${cursoId}`);
 
         if (actividades.status === 'success' && actividades.data.length > 0) {
             renderizarActividades(cursoId, actividades.data, contenedorActividades);
-        } else {
-            contenedorActividades.innerHTML = '<p>No hay actividades disponibles.</p>';
+        } else if (actividades.status === 'info') {
+            errorDiv.textContent = actividades.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+        } else if (actividades.status === 'error') {
+            errorDiv.textContent = actividades.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
         }
     } catch (error) {
         contenedorActividades.innerHTML = '<p>Error al cargar las actividades. Intenta nuevamente.</p>';
@@ -464,17 +483,18 @@ async function cargarMaterialEstudio(cursoId) {
     try {
         const response = await fetch(`Modulos/obtenerMaterialEstudio.php?cursoId=${cursoId}`);
         const data = await response.json();
+        const errorDiv = document.getElementById(`errorMaterial-${cursoId}`);
 
         if (data.status === "success") {
             const materiales = data.data;
             renderizarMaterialEstudio(materiales, cursoId);
-        } else {
-            console.error(data.message);
-            alert("Error: " + data.message);
+        } else if (data.status === 'error') {
+            errorDiv.textContent = data.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
         }
     } catch (error) {
         console.error("Error al cargar el material de estudio:", error);
-        alert("Hubo un error al intentar cargar el material de estudio.");
     }
 }
 
@@ -514,8 +534,8 @@ function renderizarMaterialEstudio(materiales, cursoId) {
 // Función para descargar un archivo de material de estudio
 function descargarMaterialEstudio(idMaterial) {
     window.location.href = `Modulos/descargarMaterialEstudio.php?id_material=${encodeURIComponent(idMaterial)}`;
-}
 
+}
 
 // Función de éxito
 function mostrarMjeExito(mensaje, form) {

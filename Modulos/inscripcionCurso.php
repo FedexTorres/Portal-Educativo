@@ -1,13 +1,20 @@
 <?php
-require './conexion_bbdd.php'; 
-
 session_start();
+require './conexion_bbdd.php'; 
+require './permisos.php';
 
 // Verificar si el usuario está logueado
 if (!isset($_SESSION['usuario']['id'])) {
     echo json_encode(['status' => 'error', 'message' => 'No estás logueado.']);
     exit;
 }
+
+// Verificar si el usuario tiene el permiso "Inscribirse a curso"
+if (!Permisos::tienePermiso('Inscribirse a curso',$_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para inscribirte en cursos.']);
+    exit;
+} 
+
 
 // Validar que se reciban los parámetros requeridos para la inscripción
 if (isset($_POST['curso_id']) && !empty(trim($_POST['curso_id']))) {

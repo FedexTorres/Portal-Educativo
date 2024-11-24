@@ -1,6 +1,21 @@
 <?php
 session_start();
-require 'conexion_bbdd.php';
+
+require './conexion_bbdd.php';  
+require_once './permisos.php';
+
+// Verifica si el usuario está logueado
+if (!isset($_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No estás autenticado']);
+    exit();
+}
+// Verificar permisos
+if (!Permisos::tienePermiso('Tomar asistencia', $_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para editar asistencias.']);
+    exit;
+}
+
+
 
 $data = json_decode(file_get_contents('php://input'), true);
 //var_dump($data);

@@ -1,6 +1,21 @@
 <?php
 session_start();
 require './conexion_bbdd.php';
+require_once './permisos.php';
+
+header('Content-Type: application/json');
+
+// Validar que el usuario esté logueado
+if (!isset($_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No estás autenticado']);
+    exit;
+}
+
+// Validar el permiso 
+if (!Permisos::tienePermiso('Editar actividad',$_SESSION['usuario']['id'] )) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para editar la actividad']);
+    exit;
+}
 
 // Comprobamos si `idActividad` está presente en la solicitud
 if (isset($_GET['idActividad'])) {
@@ -9,11 +24,6 @@ if (isset($_GET['idActividad'])) {
     echo json_encode(['status' => 'error', 'message' => 'ID de actividad no proporcionado']);
     exit;
 }
-// if (!isset($_SESSION['usuario']['id'])) {
-//     echo json_encode(['status' => 'error', 'message' => 'No estás logueado']);
-//     exit;
-// }
-//$idActividad = $_GET['idActividad']; // Captura el ID de la actividad desde el frontend
 try {
 
     $query = "SELECT * FROM actividades WHERE id = :idActividad";

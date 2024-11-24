@@ -12,19 +12,6 @@
                     <li><a class="dropdown-item" href="logout.php">Cerrar sesión</a></li>
                 </ul>
             </li>
-            <?php if ($_SESSION['usuario']['rol'] == 'administrador'): ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="administrador.html"></a>
-                </li>
-            <?php elseif ($_SESSION['usuario']['rol'] == 'profesor'): ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="vista-profesor.html"></a>
-                </li>
-            <?php elseif ($_SESSION['usuario']['rol'] == 'estudiante'): ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php"></a>
-                </li>
-            <?php endif; ?>
         </ul>
     </div>
 </nav>

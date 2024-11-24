@@ -1,9 +1,16 @@
 <?php
 session_start();
 require './conexion_bbdd.php';
+require_once './permisos.php';
 
+// Verificar que el usuario está logueado
 if (!isset($_SESSION['usuario']['id'])) {
     echo json_encode(['status' => 'error', 'message' => 'No estás logueado']);
+    exit;
+}
+// Verificar que el usuario tiene permiso para consultar calificaciones
+if (!Permisos::tienePermiso('Consultar calificacion estudiante', $_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para consultar calificaciones']);
     exit;
 }
 

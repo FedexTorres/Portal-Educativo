@@ -1,8 +1,20 @@
 <?php
-require_once './conexion_bbdd.php'; 
 session_start();
 
+require './conexion_bbdd.php';  
+require_once './permisos.php';
 header('Content-Type: application/json');
+
+// Verifica si el usuario está logueado
+if (!isset($_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No estás autenticado']);
+    exit();
+}
+// Verificar permisos
+if (!Permisos::tienePermiso('Calificar', $_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para ver las entregas.']);
+    exit;
+}
 
 // Obtener el ID del profesor desde la sesión
 $idProfesor = isset($_SESSION['usuario']['id']) ? (int)$_SESSION['usuario']['id'] : 0;

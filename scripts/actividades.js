@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    let idActividadEditando = null;
     cargarActividades();
     cargarCurso();
     // Llamamos a la función adecuada según el caso
@@ -19,6 +20,7 @@ async function cargarDatosEnFormulario(idActividad) {
     try {
         const response = await fetch(`Modulos/traerActividad.php?idActividad=${idActividad}`);
         const actividad = await response.json();
+        const errorDiv = document.getElementById('errorEditarActividad');
 
         if (actividad.status === "success") {
             // Llenar el formulario con los datos de la actividad
@@ -29,10 +31,16 @@ async function cargarDatosEnFormulario(idActividad) {
 
             // Guardar el ID en la variable global para saber que estamos en modo edición
             idActividadEditando = idActividad;
-
             // Cambiar el texto del botón
             document.querySelector("#form-crear-actividad button[type='submit']").textContent = "Actualizar Actividad";
-        } else {
+
+        } else if (actividad.status === 'error') {
+            errorDiv.textContent = actividad.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+        }
+
+        else {
             console.log("Error al cargar datos:", actividad.message);
         }
     } catch (error) {
@@ -73,7 +81,9 @@ async function manejarFormulario(event) {
             cargarActividades(); // Recargar actividades tras crear o editar
             limpiarFormulario();
             mostrarAlerta('success', result.message); // Mensaje de éxito
-        } else {
+        }
+
+        else {
             console.log(result.message);
         }
     } catch (error) {
@@ -93,11 +103,19 @@ async function cargarActividades() {
     try {
         const response = await fetch("Modulos/buscarActividades.php");
         const data = await response.json();
+        const errorDiv = document.getElementById('errorListarActividad');
 
         if (data.status === "success") {
             renderizarActividades(data.data);
             agregarListenersBotones(); // Agregar los listeners a los botones después de renderizar las actividades
-        } else {
+        }
+        else if (data.status === 'error') {
+            errorDiv.textContent = data.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+        }
+
+        else {
             console.log(data.message);
         }
     } catch (error) {
@@ -145,7 +163,7 @@ function renderizarActividades(actividades) {
     });
 }
 
-// Cargar cursos en el select del formulario
+// Cargar cursos en el select del formulario "Crear Nueva Actividad"
 async function cargarCurso() {
     try {
         const response = await fetch("Modulos/selectCursos.php");
@@ -173,6 +191,7 @@ async function crearActividad() {
     const consigna = document.getElementById("consigna-actividad").value;
     const fechaLimite = document.getElementById("fecha-limite").value;
     const cursoId = document.getElementById("curso-select").value;
+    const errorDiv = document.getElementById('errorCrearActividad');
 
     try {
         const response = await fetch("Modulos/crearActividades.php", {
@@ -189,7 +208,12 @@ async function crearActividad() {
             cargarActividades();
             document.getElementById("form-crear-actividad").reset();
             mostrarAlerta('success', data.message); // Mensaje de éxito
-        } else {
+        } else if (data.status === 'error') {
+            errorDiv.textContent = data.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+        }
+        else {
             mostrarAlerta('danger', data.message); // Mensaje de error
             console.log(data.message);
         }
@@ -216,7 +240,8 @@ function mostrarAlerta(tipo, mensaje) {
 
 async function eliminarActividad(idActividad) {
     if (!confirm("¿Estás seguro de que deseas eliminar esta actividad?")) return;
-
+    const exito = document.getElementById('eliminarExito');
+    const errorDiv = document.getElementById('errorActividad');
     try {
         const response = await fetch('Modulos/eliminarActividad.php', {
             method: 'POST',
@@ -224,7 +249,16 @@ async function eliminarActividad(idActividad) {
             body: new URLSearchParams({ idActividad })
         });
         const result = await response.json();
-        alert(result.message);
+        //alert(result.message);
+        if (result.status === "success") {
+            exito.textContent = result.message; // Asigna el mensaje de error
+            exito.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            exito.classList.add('alert', 'alert-success'); // Añade las clases de alerta
+        } else if (result.status === 'error') {
+            errorDiv.textContent = result.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+        }
         cargarActividades();
     } catch (error) {
         console.error('Error al eliminar actividad:', error);

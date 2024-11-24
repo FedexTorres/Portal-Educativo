@@ -8,6 +8,7 @@ async function cargarEntregas() {
         // Realizar la petición para obtener las entregas del profesor
         const response = await fetch("Modulos/obtenerEntregas.php");
         const data = await response.json();
+        const errorDiv = document.getElementById('errorCalificaciones');
 
         if (data.status === "success") {
             const entregas = data.data;
@@ -18,10 +19,12 @@ async function cargarEntregas() {
             // Extraemos los cursos de las entregas y los mostramos en el select
             llenarSelectCursos(entregas);
 
-        } else {
-            console.error(data.message);
-            alert("Error: " + data.message);
+        } else if (data.status === 'error') {
+            errorDiv.textContent = data.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
         }
+
     } catch (error) {
         console.error("Error al cargar las entregas:", error);
         alert("Hubo un error al intentar cargar las entregas.");
@@ -99,9 +102,11 @@ function mostrarModalCalificar(idEntrega) {
 }
 
 // Guardar la calificación desde el modal
+
 async function guardarCalificacionModal() {
     const nota = document.getElementById("inputCalificacion").value;
     const idEntrega = document.getElementById("modalCalificar").getAttribute("data-id-entrega");
+    const errorDiv = document.getElementById('errorModalCalificaciones');
 
     if (!nota) {
         alert("Por favor, ingrese una calificación válida.");
@@ -120,19 +125,29 @@ async function guardarCalificacionModal() {
         if (data.status === "success") {
             alert("Calificación guardada exitosamente");
             cargarEntregas(); // Recargar la tabla para mostrar la calificación actualizada
-        } else {
-            console.error(data.message);
-            alert("Error al guardar la calificación: " + data.message);
+            // Cerrar el modal solo si la calificación se guardó con éxito
+            const modal = bootstrap.Modal.getInstance(document.getElementById("modalCalificar"));
+            modal.hide();
+        } else if (data.status === 'error') {
+            // Mostrar el mensaje de error
+            errorDiv.textContent = data.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
+
+            // Esperar 3 segundos antes de cerrar el modal
+            setTimeout(() => {
+                const modal = bootstrap.Modal.getInstance(document.getElementById("modalCalificar"));
+                modal.hide(); // Cierra el modal
+                errorDiv.classList.add('d-none'); // Oculta el mensaje de error
+                errorDiv.classList.remove('alert', 'alert-danger'); // Elimina las clases de alerta
+                errorDiv.textContent = ''; // Limpia el mensaje de error
+            }, 2000);
         }
+
     } catch (error) {
         console.error("Error al guardar la calificación:", error);
         alert("Hubo un error al intentar guardar la calificación.");
     }
-
-    // Cerrar el modal después de guardar
-    const modal = bootstrap.Modal.getInstance(document.getElementById("modalCalificar"));
-    modal.hide();
 }
-
 
 

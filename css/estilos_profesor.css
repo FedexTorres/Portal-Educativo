@@ -3,6 +3,23 @@
   color: #fff;
 }
 
+.form-text#contraseñaHelp {
+  background-color: #e31f09;
+  /* Verde turquesa similar al color del botón */
+  color: white;
+  /* Letras blancas */
+  padding: 5px 10px;
+  /* Relleno para que se vea como un "botón" */
+  border-radius: 5px;
+  /* Bordes redondeados */
+  display: inline-block;
+  /* Para que se comporte como un botón */
+  font-size: 1.1rem;
+  /* Tamaño de la fuente */
+  margin-top: 10px;
+  /* Espacio por encima del mensaje */
+}
+
 body {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   margin: 20px;

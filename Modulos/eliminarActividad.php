@@ -1,12 +1,21 @@
 <?php
 session_start();
 require './conexion_bbdd.php';
+require_once './permisos.php';
 
+header('Content-Type: application/json');
+
+// Validar que el usuario esté logueado
 if (!isset($_SESSION['usuario']['id'])) {
-    echo json_encode(['status' => 'error', 'message' => 'No estás logueado']);
+    echo json_encode(['status' => 'error', 'message' => 'No estás autenticado']);
     exit;
 }
 
+// Validar el permiso "Ver material estudio estudiante"
+if (!Permisos::tienePermiso('Eliminar actividad',$_SESSION['usuario']['id'] )) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para eliminar la actividad']);
+    exit;
+}
 $idActividad = $_POST['idActividad'] ?? null;
 
 if (!$idActividad) {

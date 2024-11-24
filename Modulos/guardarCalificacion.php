@@ -1,7 +1,21 @@
 <?php
-require_once './conexion_bbdd.php'; 
+session_start();
 
+require './conexion_bbdd.php';  
+require_once './permisos.php';
 header('Content-Type: application/json');
+
+// Verifica si el usuario está logueado
+if (!isset($_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No estás autenticado']);
+    exit();
+}
+// Verificar permisos
+if (!Permisos::tienePermiso('Calificar', $_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para calificar, cerrando...']);
+    exit;
+}
+
 
 $data = json_decode(file_get_contents("php://input"), true);
 $idEntrega = isset($data['id_entrega']) ? (int)$data['id_entrega'] : 0;

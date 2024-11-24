@@ -1,13 +1,19 @@
 <?php
 session_start();
-require 'conexion_bbdd.php';
 
-// Verificar si el usuario está logueado
+require './conexion_bbdd.php';  
+require_once './permisos.php';
+
+// Verifica si el usuario está logueado
 if (!isset($_SESSION['usuario']['id'])) {
-    echo json_encode(['status' => 'error', 'message' => 'No estás logueado']);
+    echo json_encode(['status' => 'error', 'message' => 'No estás autenticado']);
+    exit();
+}
+// Verificar permisos
+if (!Permisos::tienePermiso('Modificar asistencia', $_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para modificar asistencia']);
     exit;
 }
-
 // Asegurarse de que el ID del curso esté presente
 if (isset($_GET['idCurso'])) {
     $idCurso = $_GET['idCurso'];
