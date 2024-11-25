@@ -1,4 +1,3 @@
-let errorDiv = document.getElementById('errorGlobalAdmin');
 let errorDivCurso = document.getElementById('errorCursos');
 
 
@@ -108,9 +107,7 @@ async function cargarCursos() {
 
         if (data.status === 'success') {
 
-            mostrarCursos(data.cursos);
-            const errorGlobal = document.getElementById('errorGlobal');
-            limpiarErrores(errorGlobal, errorGlobal);
+            mostrarCursos(data.cursos); 
 
             asignarbotones2();
             asignarAjuste()
@@ -118,15 +115,16 @@ async function cargarCursos() {
             moverNOmbre(data.cursos);
 
         } else {
-            errorDiv.textContent = data.message; // Asigna el mensaje de error
-            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
-            errorDiv.classList.add('alert', 'alert-danger');
+            errorDivCurso.textContent = data.message; // Asigna el mensaje de error
+            errorDivCurso.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDivCurso.classList.add('alert', 'alert-danger');
 
         }
     } catch (error) {
-        errorDiv.textContent = error.message; // Asigna el mensaje de error
-        errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
-        errorDiv.classList.add('alert', 'alert-danger');
+        console.log(error);
+        errorDivCurso.textContent = error.message; // Asigna el mensaje de error
+        errorDivCurso.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+        errorDivCurso.classList.add('alert', 'alert-danger');
     }
 }
 
