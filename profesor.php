@@ -22,7 +22,6 @@ require_once ('Modulos/permisos.php');
     <script defer src="scripts/mensajes.js"></script>
     <script defer src="scripts/profesor.js"></script>
     <script defer src="scripts/actividades.js"></script>
-    <script defer src="scripts/mensajes.js"></script>
     <script defer src="scripts/editarPerfil.js"></script>
     <script defer src="scripts/calificaciones.js"></script>
     <script defer src="scripts/profesor-inicio.js"></script>
@@ -40,7 +39,6 @@ require_once ('Modulos/permisos.php');
             <div class="card-body bg-light text-dark border-0">
               <div class="card-body">
               <?php if (isset($_SESSION['usuario']) && Permisos::tienePermiso('Ver pagina profesor', $_SESSION['usuario']['id'])) { ?>
-
                 <ul class="nav flex-column">
                   <li class="nav-item mb-2 ">
                     <button id="btn-inicio" class="btn btn-menu">Inicio</button>
@@ -398,7 +396,7 @@ require_once ('Modulos/permisos.php');
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-success btn-eliminar" id="guardarMaterial" data-bs-dismiss="modal">Guardar</button>
+                        <button type="submit" class="btn btn-success" id="guardarMaterial" data-bs-dismiss="modal">Guardar</button>
                     </div>
                     </form>
                 </div>

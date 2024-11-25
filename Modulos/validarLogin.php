@@ -71,7 +71,7 @@ if (isset($_POST["correo"], $_POST["clave"]) && !empty($_POST["correo"]) && !emp
             'status' => 'success',
             'data' => [
                 'usuario' => $resultado['nombre'],
-                'rol' => $_SESSION['usuario']['rol'],
+                'rol' => $_SESSION['usuario']['id'],
                 'redirect' => $redireccion
             ]
         ]);

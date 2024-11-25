@@ -1,10 +1,8 @@
 <?php
-
 session_start();
-
-  // Incluimos el navbar-base que cargará el navbar-logueado o navbar-visitante según la sesión
-  include 'navbar-base.php';
-
+require_once ('Modulos/permisos.php');
+// Incluimos el navbar-base que cargará el navbar-logueado o navbar-visitante según la sesión
+include 'navbar-base.php';
 ?>
 
 <!DOCTYPE html>
@@ -41,6 +39,7 @@ session_start();
           <nav class="col-md-2 d-none d-md-block bg-light">
             <div class="card-body bg-light text-dark border-0">
               <div class="card-body">
+              <?php if (isset($_SESSION['usuario']) && Permisos::tienePermiso('Ver pagina administrador', $_SESSION['usuario']['id'])) { ?> 
                 <br>
                 <h4 class="card-title">Menú</h4>
                 <br>
@@ -61,6 +60,7 @@ session_start();
                     <button id="perfil-btn" class="btn btn-menu">Editar Perfil</button>
                   </li>
                 </ul>
+                <?php } ?>
               </div>
             </div>
           </nav>

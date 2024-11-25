@@ -36,7 +36,6 @@ async function validarLogin(e) {
             const resultado = await response.json(); // Procesamos la respuesta como JSON
 
             if (resultado.status === 'success') {
-                //alert("login exitoso");
                 // Si el login es exitoso, redirigir a la URL específica según el rol
                 window.location.href = resultado.data.redirect; // Usamos la URL recibida del servidor
             } else {
@@ -47,6 +46,12 @@ async function validarLogin(e) {
             mostrarErrorGlobal('Ocurrió un problema al iniciar sesión.');
         }
     }
+}
+// Funciones para mostrar errores globales
+function mostrarErrorGlobal(mensaje) {
+    const errorGlobal = document.getElementById('errorGlobal');
+    errorGlobal.classList.remove('d-none');
+    errorGlobal.innerHTML = mensaje;
 }
 
 // Funciones para mostrar errores globales
