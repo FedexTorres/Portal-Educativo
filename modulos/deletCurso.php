@@ -1,9 +1,21 @@
 <?php
+session_start();
 
 // Incluir la conexión a la base de datos
 require './conexion_bbdd.php';
+require_once './permisos.php';
+
 header('Content-Type: application/json');
 
+if (!isset($_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No estás autenticado']);
+    exit;
+}
+
+if (!Permisos::tienePermiso('Eliminar cursos',$_SESSION['usuario']['id'] )) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para eliminar cursos']);
+    exit;
+}
 // Verificar si la solicitud es POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtener los datos del formulario

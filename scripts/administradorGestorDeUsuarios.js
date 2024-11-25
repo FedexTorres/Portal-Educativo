@@ -8,6 +8,10 @@ const nonuevoUsuario = document.getElementById("cerrarmodalcrearuser");
 let modaleliminar = document.getElementById("elimarusuariomodal");
 let noeliminar = document.getElementById("NoEliminar");
 
+let errorDiv = document.getElementById('errorGlobalAdmin');
+let errorDivUser = document.getElementById('errorUsuarios');
+
+
 nuevoUsuario.addEventListener("click", function(){
     mymodal.classList.add('mostrar');
     esCreacion = true;
@@ -46,25 +50,30 @@ window.addEventListener("click", function(event) {
 async function traerUsuarios() {
     
     let url = 'modulos/getUsuarios.php';
-    
     try {
+
         let response = await fetch(url, {
             method: 'post', 
         });
         procesarInformacion(await response.json());
+
     } catch (error) {
-        console.log('FALLO FETCH!');
-        console.log(error);
+
+        errorDiv.textContent = error.message; // Asigna el mensaje de error
+        errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+        errorDiv.classList.add('alert', 'alert-danger');
+        
     }
 }
 
 const procesarInformacion = function(data) {
 
     let elTabla = document.getElementById('tablaUsuarios');
-
-    if (data.length == 0) {
+    if (data.status === 'error') {
         // mostrar warning
-        console.log("error de algo");
+        errorDiv.textContent = data.message; // Asigna el mensaje de error
+        errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+        errorDiv.classList.add('alert', 'alert-danger');
     } else {
         // mostrar tabla
         let elTBody = elTabla.querySelector('tbody');
@@ -78,11 +87,8 @@ const procesarInformacion = function(data) {
             newElTr.innerHTML += '<td><button type="button" value="'+user.id+'" class="btn btn-info btn-Editar-Usuario">Editar</button>       <button type="button" id="'+user.nombre+'" value="'+user.id+'" class="btn btn-danger btn-Eliminar-Usuario">Eliminar</button></td>';
 
             elTBody.appendChild(newElTr);
-
         }
         asignarbotones();
-
-
     };
 }
 
@@ -237,10 +243,17 @@ async function UsurioNuevo(e){
                     traerUsuarios();
     
                 } else if (resultado.status === 'error') {
-                    console.log("Fallo: ".resultado.message);
+
+                    errorDivUser.textContent = resultado.message; // Asigna el mensaje de error
+                    errorDivUser.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+                    errorDivUser.classList.add('alert', 'alert-danger');
+
                 }
             } catch (error) {
-                console.log("Fallo: ".error.message);
+                
+                errorDivUser.textContent = error.message; // Asigna el mensaje de error
+                errorDivUser.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+                errorDivUser.classList.add('alert', 'alert-danger');
             }
     
         } else{
@@ -263,20 +276,19 @@ async function UsurioNuevo(e){
                     traerUsuarios();
     
                 } else if (resultado.status === 'error') {
-                    console.log("Fallo: ".resultado.message);
+
+                    errorDivUser.textContent = resultado.message; // Asigna el mensaje de error
+                    errorDivUser.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+                    errorDivUser.classList.add('alert', 'alert-danger');
+
                 }
             } catch (error) {
-                console.log("Fallo: ".error.message);
+                errorDivUser.textContent = error.message; // Asigna el mensaje de error
+                errorDivUser.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+                errorDivUser.classList.add('alert', 'alert-danger');
             }
-
         }
-
-
     }
-
-
-
-
 }
 
 
@@ -377,10 +389,15 @@ async function eliminarUsuario(id){
 
 
         } else if (resultado.status === 'error') {
-            console.log("Fallo: ".resultado.message);
+            errorDivUser.textContent = resultado.message; // Asigna el mensaje de error
+            errorDivUser.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDivUser.classList.add('alert', 'alert-danger');
+
         }
     } catch (error) {
-        console.log(error.message);
+        errorDivUser.textContent = error.message; // Asigna el mensaje de error
+        errorDivUser.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+        errorDivUser.classList.add('alert', 'alert-danger');
     }
 }
 

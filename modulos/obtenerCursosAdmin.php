@@ -1,7 +1,21 @@
 <?php
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
-require 'conexion_bbdd.php';
+require './conexion_bbdd.php';
+require_once './permisos.php';
+
+if (!isset($_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No estás autenticado']);
+    exit;
+}
+
+if (!Permisos::tienePermiso('Visualizar cursos',$_SESSION['usuario']['id'] )) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para visualizar los cursos']);
+    exit;
+}
+
+
+
 
 try {
 

@@ -1,7 +1,20 @@
 <?php
+session_start();
 
-require('../modulos/conexion_bbdd.php');
+require './conexion_bbdd.php';
+require_once './permisos.php';
 
+header('Content-Type: application/json');
+
+if (!isset($_SESSION['usuario']['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'No estás autenticado']);
+    exit;
+}
+
+if (!Permisos::tienePermiso('Visualizar usuarios',$_SESSION['usuario']['id'] )) {
+    echo json_encode(['status' => 'error', 'message' => 'No tienes permiso para visualizar los usuarios']);
+    exit;
+}
 
 
 $query = "SELECT usuarios.nombre as nombre, usuarios.correo, r.nombre as rol, usuarios.id 

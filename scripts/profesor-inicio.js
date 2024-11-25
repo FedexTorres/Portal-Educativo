@@ -76,7 +76,7 @@ function acordeon() {
 async function misCursosProfesor() {
     limpiarErrorProfe("misCursosTraidos");
     try {
-        const response = await fetch('Modulos/getMisCursosProfesor.php');
+        const response = await fetch('Modulos/listaCursosProfesor.php');
         const data = await response.json();
 
         if (data.status === 'success') {

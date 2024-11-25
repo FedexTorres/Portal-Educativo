@@ -1,3 +1,5 @@
+let errorDiv = document.getElementById('errorGlobalAdmin');
+let errorDivCurso = document.getElementById('errorCursos');
 
 
 function mostrarCursos(cursos) {
@@ -116,11 +118,15 @@ async function cargarCursos() {
             moverNOmbre(data.cursos);
 
         } else {
-            mostrarErrorGlobal(data.message || 'No se encontraron cursos disponibles');
+            errorDiv.textContent = data.message; // Asigna el mensaje de error
+            errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDiv.classList.add('alert', 'alert-danger');
 
         }
     } catch (error) {
-        mostrarErrorGlobal(`Error en la conexión: ${error.message}`);
+        errorDiv.textContent = error.message; // Asigna el mensaje de error
+        errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+        errorDiv.classList.add('alert', 'alert-danger');
     }
 }
 
@@ -219,12 +225,14 @@ async function creaciondecurso(e) {
 
 
             } else if (resultado.status === 'error') {
-                // mostrarErrorGlobal(resultado.message);
-                console.log("Fallo: ".resultado.message);
+                errorDivCurso.textContent = resultado.message; // Asigna el mensaje de error
+                errorDivCurso.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+                errorDivCurso.classList.add('alert', 'alert-danger');
             }
         } catch (error) {
-            // mostrarErrorGlobal(`Error en la conexión: ${error.message}`);
-            console.error("Fallo:", error);
+            errorDivCurso.textContent = error.message; // Asigna el mensaje de error
+            errorDivCurso.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDivCurso.classList.add('alert', 'alert-danger');
         }
     }
 
@@ -442,15 +450,21 @@ async function ajustesCurso(e) {
                 alert("Ajustes guardados");
 
             } else if (resultado.status === 'error') {
-                console.log(resultado.message);
+                errorDivCurso.textContent = resultado.message; // Asigna el mensaje de error
+                errorDivCurso.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+                errorDivCurso.classList.add('alert', 'alert-danger');
             }
 
         } else if (existeProfe.status === 'error') {
-            console.log(existeProfe.message);
+            errorDivCurso.textContent = existeProfe.message; // Asigna el mensaje de error
+            errorDivCurso.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDivCurso.classList.add('alert', 'alert-danger');
         }
 
     } catch (error) {
-        console.error("Fallo:", error);
+        errorDivCurso.textContent = error.message; // Asigna el mensaje de error
+        errorDivCurso.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+        errorDivCurso.classList.add('alert', 'alert-danger');
     }
 }
 
@@ -487,10 +501,14 @@ async function procesarEliminacion(curso) {
             alert("Se elimino correctamente el curso");
 
         } else if (resultado.status === 'error') {
-            console.log(resultado.message);
+            errorDivCurso.textContent = resultado.message; // Asigna el mensaje de error
+            errorDivCurso.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+            errorDivCurso.classList.add('alert', 'alert-danger');
         }
     } catch (error) {
-        console.error("Fallo:", error);
+        errorDivCurso.textContent = error.message; // Asigna el mensaje de error
+        errorDivCurso.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
+        errorDivCurso.classList.add('alert', 'alert-danger');
     }
 }
 

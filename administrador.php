@@ -70,7 +70,8 @@ session_start();
       <section id="seccion-inicio"  class="col-md-9 ms-sm-auto col-lg-10 px-4 bg-light">
         <h1 class="my-4 titulo">Inicio</h1>
         <hr>
-        <p>hay que pensar que poner aca.</p>
+        <p>Lista de permisos negados:</p>
+        <div id="errorGlobalAdmin" class="d-none"></div>
       </section>
     
     <!--  SECCION MIS CURSOS -->
@@ -82,11 +83,12 @@ session_start();
       <button type="button" class="btn btn-success" id="botonCreacionCurso">Crear curso nuevo</button>
       <br>
 
+      <div id="errorCursos" class="d-none"></div>
+
       <div class="row" id="courses-section">
       <!--Aca se agregan los cursos-->
       </div>
       <br>
-      <div id="errorGlobal" class="alert alert-danger d-none"></div>
 
 
     </section>
@@ -135,7 +137,7 @@ session_start();
         <button type="button" class="btn btn-success" id="botonCrearusuario">Crear Usuario</button>
       </div>
       <div class="mb-3">
-        <input type="text" id="filtro-buscar" class="form-control" placeholder="Buscar usuario">
+        <div id="errorUsuarios" class="d-none"></div>
       </div>
       <div class="mb-3">
         <table class="table table-bordered" id="tablaUsuarios">
