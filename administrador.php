@@ -301,7 +301,7 @@ include 'navbar-base.php';
       <!-- Modal footer -->
       <div class="modal-footer">
         <button type="submit" class="btn btn-success">Guardar</button>
-        <button type="button" class="btn btn-danger" id="cancelarCreacionCurso">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="cancelarCreacionCurso" data-bs-dismiss="modal">Cancelar</button>
       </div>
       </form>
     </div>
@@ -309,39 +309,6 @@ include 'navbar-base.php';
 </div>
 
 
-<!-- Modal para Editar curso -->
-
-<div class="modal" id="myModal2">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Editar Modal</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <!-- Modal body -->
-      <form action="" id="editarCurso">
-      <div class="modal-body">      
-          <label for="texteditar" class="form-label">Nombre</label>
-          <input type="text" name="texteditar" id="texteditar" class="form-control" placeholder="Titulo" required>
-          <br>
-          <label for="textEditarcurso" class="form-label">Descripcion</label>
-          <textarea name="textEditarcurso" id="textEditarcurso" class="form-control" placeholder="Profesor: none | Período: none" required></textarea>
-          <label for="imgeditar" class="form-label">Imagen</label>
-          <input type="file" id="imgeditar" name="imgeditar" class="form-control" required>
-      </div>
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-success">Guardar Cambios</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
 
 
 <!-- Modal para Eliminar curso -->

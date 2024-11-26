@@ -134,14 +134,17 @@ async function cargarCursos() {
 
 let botoncrearcurso = document.getElementById("botonCreacionCurso");
 let modalcrearcurso = document.getElementById("myModalCreacionCurso");
-let nocrearcurso = document.getElementById("cancelarCreacionCurso");
 
 
 
 let form = document.getElementById("crearCurso");
 form.addEventListener("submit", creaciondecurso);
-botoncrearcurso.addEventListener("click", function () { modalcrearcurso.classList.add('mostrar'); });
-nocrearcurso.addEventListener("click", function () { modalcrearcurso.classList.remove("mostrar"); });
+
+
+botoncrearcurso.addEventListener("click", function () {
+    $(myModalCreacionCurso).modal("show"); 
+});
+
 
 
 async function creaciondecurso(e) {
@@ -212,7 +215,8 @@ async function creaciondecurso(e) {
 
             if (resultado.status === 'success') {
 
-                modalcrearcurso.classList.remove("mostrar");
+                $(myModalCreacionCurso).modal("toggle"); 
+
                 cargarCursos();
                 limpiarCampos(nombreC);
                 limpiarCampos(descripcionC);
@@ -448,15 +452,25 @@ async function ajustesCurso(e) {
                 alert("Ajustes guardados");
 
             } else if (resultado.status === 'error') {
+
                 errorDivCurso.textContent = resultado.message; // Asigna el mensaje de error
                 errorDivCurso.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
                 errorDivCurso.classList.add('alert', 'alert-danger');
             }
 
         } else if (existeProfe.status === 'error') {
-            errorDivCurso.textContent = existeProfe.message; // Asigna el mensaje de error
-            errorDivCurso.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
-            errorDivCurso.classList.add('alert', 'alert-danger');
+
+            algonuevo = document.createElement("div");
+            algonuevo.textContent = existeProfe.message;
+
+            botocerrar = `<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+
+            algonuevo.innerHTML +=botocerrar;
+    
+            errorDivCurso.classList.remove('d-none'); 
+            algonuevo.classList.add('alert', 'alert-danger', 'alert-dismissible');
+            errorDivCurso.append(algonuevo);
+
         }
 
     } catch (error) {
