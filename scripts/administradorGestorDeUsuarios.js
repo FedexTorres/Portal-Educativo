@@ -3,7 +3,7 @@ const nuevoUsuario = document.getElementById("botonCrearusuario");
 let esCreacion = true;
 let idModificar = "";
 
-const nonuevoUsuario = document.getElementById("cerrarmodalcrearuser");
+//const nonuevoUsuario = document.getElementById("cerrarmodalcrearuser");
 
 let modaleliminar = document.getElementById("elimarusuariomodal");
 let noeliminar = document.getElementById("NoEliminar");
@@ -13,7 +13,8 @@ let errorDivUser = document.getElementById('errorUsuarios');
 
 
 nuevoUsuario.addEventListener("click", function(){
-    mymodal.classList.add('mostrar');
+    //mymodal.classList.add('mostrar');
+    $(Crearusuario).modal("show");
     esCreacion = true;
     //limpiarCampos()
 
@@ -30,19 +31,19 @@ nuevoUsuario.addEventListener("click", function(){
 
 
 
-nonuevoUsuario.addEventListener("click", function(){mymodal.classList.remove("mostrar");})
+//nonuevoUsuario.addEventListener("click", function(){mymodal.classList.remove("mostrar");})
 
 noeliminar.addEventListener("click", function(){modaleliminar.classList.remove("mostrar");})
 
 window.addEventListener("click", function(event) {
     if (event.target === mymodal) {
-        mymodal.classList.remove("mostrar"); // Ocultar el modal si haces clic fuera
+        //mymodal.classList.remove("mostrar"); // Ocultar el modal si haces clic fuera
     }
     else if (event.target === modaleliminar){
         modaleliminar.classList.remove("mostrar");
     }
     else if(event.target === modalcrearcurso){
-        modalcrearcurso.classList.remove("mostrar");
+        //modalcrearcurso.classList.remove("mostrar");
     }
 });
 
@@ -239,7 +240,8 @@ async function UsurioNuevo(e){
     
                 if (resultado.status === 'success') {
                     
-                    mymodal.classList.remove("mostrar");
+                    //mymodal.classList.remove("mostrar");
+                    $(Crearusuario).modal("toggle");
                     traerUsuarios();
     
                 } else if (resultado.status === 'error') {
@@ -272,7 +274,8 @@ async function UsurioNuevo(e){
     
                 if (resultado.status === 'success') {
                     
-                    mymodal.classList.remove("mostrar");
+                    //mymodal.classList.remove("mostrar");
+                    $(Crearusuario).modal("toggle");
                     traerUsuarios();
     
                 } else if (resultado.status === 'error') {
@@ -307,8 +310,9 @@ function asignarbotones(){
     document.querySelectorAll('.btn-Editar-Usuario').forEach(boton => {
         boton.addEventListener('click', function () {
             esCreacion=false;
-            TraerDatosUsuarioModificar(this.value);    
-            mymodal.classList.add('mostrar');
+            TraerDatosUsuarioModificar(this.value); 
+            $(Crearusuario).modal("show");   
+            //mymodal.classList.add('mostrar');
             document.getElementById("tituloFormUsuarios").innerHTML="Editar Usuario";
             idModificar=this.value;
         })

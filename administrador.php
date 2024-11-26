@@ -396,7 +396,7 @@ include 'navbar-base.php';
         <!-- Modal footer -->
         <div class="modal-footer">
           <button type="submit" class="btn btn-success">Crear</button>
-          <button type="button" class="btn btn-danger" id="cerrarmodalcrearuser">No</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
         </div>
       </form>
     </div>
