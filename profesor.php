@@ -13,12 +13,12 @@ require_once ('Modulos/permisos.php');
     <title>Profesor</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="css/estilos_profesor.css">
+    <link rel="stylesheet" href="css/scroll_mensajes.css">
     <script defer src="scripts/mensajes.js"></script>
     <script defer src="scripts/profesor.js"></script>
     <script defer src="scripts/actividades.js"></script>
@@ -27,8 +27,8 @@ require_once ('Modulos/permisos.php');
     <script defer src="scripts/profesor-inicio.js"></script>
     <script defer src="scripts/regAsistencia.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> -->
 
 </head>
 <body class="text-dark">   
@@ -84,6 +84,7 @@ require_once ('Modulos/permisos.php');
           <div id="errorActividad" class="d-none"></div>
       <!-- Tabla de Actividades -->
               <h2>Lista de Actividades</h2>
+              <div class="table-scroll">
               <table id="tabla-actividades" class="table table-bordered">
                   <thead>
                       <tr>
@@ -98,6 +99,7 @@ require_once ('Modulos/permisos.php');
                       <!-- Aquí se insertarán las filas de actividades dinámicamente -->
                   </tbody>
               </table>
+              </div>
           </div>
               <!-- Formulario para Crear Actividad -->
           <div class="col-md-5" >
@@ -204,9 +206,9 @@ require_once ('Modulos/permisos.php');
             </div>
             <div class="modal-body">
               <div id="listaAsistencias" class="list-group">
-                  <div id="errorModalAsistencias" class="d-none"></div>
-                    <!-- Aquí se cargarán dinámicamente las asistencias -->
-                </div>
+                <!-- Aquí se cargarán dinámicamente las asistencias -->
+              </div>
+              <div id="errorModalAsistencias" class="d-none"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -402,6 +404,13 @@ require_once ('Modulos/permisos.php');
                 </div>
             </div>
     </div>
+          <!-- Footer -->
+      <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+          <p>© 2024 Desafíos Educativos. Todos los derechos reservados.</p>
+          <p>Contacto: info@desafioseducativos.com | Tel: 123-456-789</p>
+        </div>
+      </footer>
 </body>
 </html>
 

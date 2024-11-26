@@ -20,6 +20,7 @@ include 'navbar-base.php';
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="css/estilo_administrador.css">
+    <link rel="stylesheet" href="css/scroll_mensajes.css">
     <script src="scripts/administrador.js" defer></script>
     <script src="scripts/administradorGestorDeUsuarios.js" defer></script>
     <script src="scripts/administradorGestorDeCursos.js" defer></script>

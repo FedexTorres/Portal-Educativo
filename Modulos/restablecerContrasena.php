@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $deleteToken->execute();
     
         $conn->commit();
-        echo json_encode(['status' => 'success', 'message' => 'Contraseña actualizada correctamente.']);
+        echo json_encode(['status' => 'success', 'message' => 'Contraseña actualizada correctamente... 3, 2, 1...']);
     } catch (Exception $e) {
         $conn->rollBack();
         error_log("Error en restablecerContrasena: " . $e->getMessage());

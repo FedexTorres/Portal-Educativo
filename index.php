@@ -18,6 +18,7 @@ require_once ('Modulos/permisos.php');
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/scroll_mensajes.css">
     <script defer src="scripts/estudiante-misCursos.js"></script>
     <script defer src="scripts/estudiante-menus.js"></script>
     <script defer src="scripts/editarPerfil.js"></script>
@@ -98,7 +99,11 @@ require_once ('Modulos/permisos.php');
     <section id="seccion-mis-cursos" class="col-md-10 ms-sm-auto col-lg-10 px-4 bg-light seccion d-none">
       <h1 class="my-4 titulo">Mis Cursos</h1>
       <hr>
-      <!-- <p>Lista de cursos en los que estás inscrito.</p> -->
+      <h3 class="my-4 titulo">Lista de cursos en los que estás inscripto</h3>
+      <div id="contenido-scroll" class="contenido-scroll">
+         <!-- <p>Lista de cursos en los que estás inscrito.</p> -->
+    </div>
+     
 
     </section>
 
@@ -199,18 +204,14 @@ require_once ('Modulos/permisos.php');
       </form>
       <br>
     </section>
-
-
-
-
-<br>
-<hr>
-<br>
+    <br>  
+    <hr>
+    <br>
   <!-- Footer -->
   <footer class="bg-dark text-light py-4">
     <div class="container text-center">
-      <p>© 2024 Plataforma Educativa. Todos los derechos reservados.</p>
-      <p>Contacto: info@plataformaeducativa.com | Tel: 123-456-789</p>
+      <p>© 2024 Desafíos Educativos. Todos los derechos reservados.</p>
+      <p>Contacto: info@desafioseducativos.com | Tel: 123-456-789</p>
     </div>
   </footer>
 

@@ -3,6 +3,23 @@
     color: #fff;
 }
 
+.form-text#contraseñaHelp {
+    background-color: #e31f09;
+    /* Verde turquesa similar al color del botón */
+    color: white;
+    /* Letras blancas */
+    padding: 5px 10px;
+    /* Relleno para que se vea como un "botón" */
+    border-radius: 5px;
+    /* Bordes redondeados */
+    display: inline-block;
+    /* Para que se comporte como un botón */
+    font-size: 1.1rem;
+    /* Tamaño de la fuente */
+    margin-top: 10px;
+    /* Espacio por encima del mensaje */
+}
+
 body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     margin: 20px;
@@ -32,16 +49,16 @@ body {
 
 
 
-.autocompletar{
+.autocompletar {
     position: relative;
     /* display: inline-block; */
 }
 
-strong{
+strong {
     color: black;
 }
 
-#tipo-mascota{
+#tipo-mascota {
     background-color: #eee;
     border: none;
     border-radius: 30px;
@@ -51,7 +68,7 @@ strong{
     width: 500px;
 }
 
-.lista-autocompletar-items{
+.lista-autocompletar-items {
     color: #000;
     position: absolute;
     border: 1px solid #d4d4d4;
@@ -64,21 +81,22 @@ strong{
     width: 93%;
 }
 
-.lista-autocompletar-items div{
+.lista-autocompletar-items div {
     padding: 10px;
     cursor: pointer;
     background-color: #fff;
     border-bottom: 1px solid #d4d4d4;
 }
 
-.lista-autocompletar-items div:hover{
+.lista-autocompletar-items div:hover {
     background-color: dodgerblue;
 }
 
-.autocompletar-active{
+.autocompletar-active {
     background-color: dodgerblue !important;
     color: #a1caff;
 }
-.autocompletar-active strong{
+
+.autocompletar-active strong {
     color: #fff;
 }

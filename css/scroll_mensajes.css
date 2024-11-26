@@ -1,0 +1,47 @@
+#lista-mensajes,
+#mensajes-enviados {
+    max-height: 500px;
+    /* Ajusta la altura máxima del contenedor */
+    overflow-y: auto;
+    /* Activa el desplazamiento vertical */
+    border: 1px solid #ddd;
+    /* Añade un borde para mejor visibilidad */
+    padding: 10px;
+    /* Margen interno */
+    border-radius: 5px;
+    /* Esquinas redondeadas */
+}
+
+#listaAsistencias {
+    max-height: 600px;
+    /* Altura máxima del contenedor */
+    overflow-y: auto;
+    /* Activa el desplazamiento vertical */
+    border: 1px solid #ddd;
+    /* Añade un borde para mejor visibilidad */
+    padding: 10px;
+    /* Margen interno */
+    border-radius: 5px;
+    /* Esquinas redondeadas */
+}
+
+.table-scroll {
+    max-height: 500px;
+    /* Ajusta la altura según tu diseño */
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    /* Evitar que el scroll quede pegado a los bordes */
+    border-radius: 5px;
+}
+
+.contenido-scroll {
+    max-height: 500px;
+    /* Ajusta la altura deseada */
+    overflow-y: auto;
+    /* Activa el scroll vertical */
+    padding: 10px;
+    border: 1px solid #ddd;
+    /* Opcional */
+    border-radius: 5px;
+}

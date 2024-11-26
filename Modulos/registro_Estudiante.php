@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmtRol->bindParam(':id_usuario', $id_usuario);
             $stmtRol->execute();
 
-            echo json_encode(['status' => 'success', 'message' => 'Registro exitoso.']);
+            echo json_encode(['status' => 'success', 'message' => 'Registro exitoso. Redirigiendo al login...']);
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Error al registrar el usuario.']);
         }

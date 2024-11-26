@@ -97,5 +97,14 @@ session_start();
 
         </div>
     </div>
+    <br>
+    <br>
+              <!-- Footer -->
+              <footer class="bg-dark text-light py-4">
+                <div class="container text-center">
+                  <p>© 2024 Desafíos Educativos. Todos los derechos reservados.</p>
+                  <p>Contacto: info@desafioseducativos.com | Tel: 123-456-789</p>
+                </div>
+              </footer>
 </body>
 </html>

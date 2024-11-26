@@ -33,7 +33,11 @@ async function cargarEntregas() {
 
 // Llenar el select con los cursos obtenidos
 function llenarSelectCursos(cursos) {
-    // Crear el select y el contenedor del formulario
+
+    // Limpiar el contenido previo del contenedor
+    const formContainer = document.getElementById("form-container");
+    formContainer.innerHTML = "";
+
     const div = document.createElement("div");
     div.classList.add("mb-3");
 
@@ -60,6 +64,13 @@ function llenarSelectCursos(cursos) {
         cursoSelect.appendChild(option);
     });
 
+    // Añadir el listener para capturar la selección
+    cursoSelect.addEventListener('change', (event) => {
+        const cursoSeleccionado = event.target.value;
+        // Filtrar las entregas según el curso seleccionado
+        filtrarEntregasPorCurso(cursoSeleccionado, cursos);
+    });
+
     // Agregar el label y el select al contenedor
     div.appendChild(label);
     div.appendChild(cursoSelect);
@@ -67,6 +78,19 @@ function llenarSelectCursos(cursos) {
     // Añadir todo al contenedor de formulario donde quieras insertar este select
     document.getElementById("form-container").appendChild(div);
 }
+
+
+function filtrarEntregasPorCurso(cursoSeleccionado, entregas) {
+    // Si no hay curso seleccionado, mostramos todas las entregas
+    if (!cursoSeleccionado) {
+        renderizarTablaEntregas(entregas);
+    } else {
+        // Filtrar entregas por curso con metodo filter, recorre el array entregas y lo filtra segun el curso seleccionado.
+        const entregasFiltradas = entregas.filter(entrega => entrega.curso === cursoSeleccionado);
+        renderizarTablaEntregas(entregasFiltradas);
+    }
+}
+
 
 // Renderizar la tabla de entregas
 function renderizarTablaEntregas(entregas) {

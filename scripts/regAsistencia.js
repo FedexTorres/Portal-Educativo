@@ -45,6 +45,14 @@ function mostrarCursos(cursos) {
 // Función para cargar los alumnos de un curso
 function mostrarAlumnos(idCurso) {
     const errorDiv = document.getElementById('errorTomarAsistencias');
+    const formAsistencia = document.getElementById('formAsistencia');
+    const listaAlumnos = document.getElementById('listaAlumnos');
+
+    // Limpiar datos previos
+    formAsistencia.reset();  // Limpiar los campos del formulario
+    errorDiv.classList.add('d-none');  // Ocultar los mensajes de error
+    listaAlumnos.innerHTML = '';  // Limpiar la lista de alumnos
+
     fetch('Modulos/cargarAlumnosPorCurso.php', {
         method: 'POST',
         body: JSON.stringify({ id_curso: idCurso }),  // Enviar JSON
@@ -56,37 +64,46 @@ function mostrarAlumnos(idCurso) {
                 mostrarFormularioAsistencia(data.data, idCurso);
                 // Abre el modal
                 $('#modalAsistencia').modal('show');
-            } else if (data.status === 'error') {
+            } else if (data.status === 'info') {
                 errorDiv.textContent = data.message; // Asigna el mensaje de error
                 errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
                 errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
                 $('#modalAsistencia').modal('show');
-            }
-
-            else {
+            } else {
                 console.error(data.message);
             }
         })
         .catch(error => console.error('Error al cargar los alumnos:', error));
 }
 
+// Abrir el modal para listar asistencias
+function abrirModalModificarAsistencia(idCurso) {
+    cargarAsistencias(idCurso); // Cargar datos del curso
+    $('#modalModificarAsistencia').modal('show'); // Mostrar el modal
+}
+
 // Cargar todas las asistencias de un curso y mostrarlas en el modal
 async function cargarAsistencias(idCurso) {
+    const errorDiv = document.getElementById('errorModalAsistencias');
+    const listaAsistencias = document.getElementById('listaAsistencias');
+
     try {
         const response = await fetch(`Modulos/obtenerAsistencias.php?idCurso=${idCurso}`);
         const data = await response.json();
-        const errorDiv = document.getElementById('errorModalAsistencias');
+        listaAsistencias.innerHTML = '';  // Limpiar la lista de asistencias
+        errorDiv.textContent = ''; // Limpiar errores
+        errorDiv.classList.add('d-none'); // Quitar la visibilidad del error
 
-        if (data.status === 'error') {
+        if (data.status === 'success') {
+            // Mostrar las asistencias en el modal
+            mostrarAsistencias(data.data); // Pasar la lista de asistencias desde la clave `data`
+        }
+        else if (data.status === 'error') {
             errorDiv.textContent = data.message; // Asigna el mensaje de error
             errorDiv.classList.remove('d-none'); // Muestra el div eliminando la clase d-none
             errorDiv.classList.add('alert', 'alert-danger'); // Añade las clases de alerta
-            // alert(data.message);
-            return;
         }
 
-        // Mostrar las asistencias en el modal
-        mostrarAsistencias(data.data); // Pasar la lista de asistencias desde la clave `data`
     } catch (error) {
         console.error('Error al cargar las asistencias:', error);
     }
@@ -111,11 +128,6 @@ function mostrarAsistencias(asistencias) {
     });
 }
 
-// Abrir el modal para listar asistencias
-function abrirModalModificarAsistencia(idCurso) {
-    cargarAsistencias(idCurso); // Cargar datos del curso
-    $('#modalModificarAsistencia').modal('show'); // Mostrar el modal
-}
 
 // Editar una asistencia específica
 async function editarAsistencia(idAsistencia) {

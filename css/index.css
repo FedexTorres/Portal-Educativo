@@ -1,3 +1,4 @@
+/* Estilo general del body */
 body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     margin: 20px;
@@ -5,33 +6,22 @@ body {
 
 .form-text#contraseñaHelp {
     background-color: #e31f09;
-    /* Verde turquesa similar al color del botón */
     color: white;
-    /* Letras blancas */
     padding: 5px 10px;
-    /* Relleno para que se vea como un "botón" */
     border-radius: 5px;
-    /* Bordes redondeados */
     display: inline-block;
-    /* Para que se comporte como un botón */
     font-size: 1.1rem;
-    /* Tamaño de la fuente */
     margin-top: 10px;
-    /* Espacio por encima del mensaje */
 }
-
 
 .navbar-brand .logo-navbar {
     height: 120px;
-    /* mantiene la proporcion de la imagen */
     width: auto;
 }
 
 .navbar-text {
     line-height: 1.5;
-    /* Ajusta según sea necesario */
     font-size: 1rem;
-    /* Asegúrate de que ambos tengan el mismo tamaño */
 }
 
 .error {
@@ -75,7 +65,39 @@ body {
     color: #fff;
 }
 
-
 .btn-info:hover {
     background-color: #138496;
+}
+
+/* reglas para hacer el footer fijo */
+
+/* Aseguramos que html y body ocupen toda la altura */
+html,
+body {
+    height: 100%;
+    /* Garantiza que ocupe toda la altura del viewport */
+    margin: 0;
+    /* Eliminamos el margen predeterminado */
+    display: flex;
+    /* Aplicamos flexbox */
+    flex-direction: column;
+    /* Organiza los elementos en columna */
+}
+
+/* Estilo para el contenedor principal */
+body>div {
+    flex: 1;
+    /* Hace que el contenedor principal ocupe el espacio disponible */
+}
+
+/* Estilo para el footer */
+footer {
+    background-color: #343a40;
+    /* Fondo oscuro */
+    color: #ffffff;
+    /* Texto blanco */
+    text-align: center;
+    /* Centrado de texto */
+    padding: 20px 0;
+    /* Relleno vertical */
 }

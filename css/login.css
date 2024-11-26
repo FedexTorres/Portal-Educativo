@@ -1,13 +1,24 @@
+/* Estilos generales */
 body {
     background-color: #f8f9fa;
     /* color suave de fondo */
+    margin: 0;
+    /* Eliminamos el margen por defecto */
+    display: flex;
+    /* Usamos Flexbox para el layout */
+    flex-direction: column;
+    /* Organiza los elementos de manera vertical */
+    height: 100vh;
+    /* Asegura que el body ocupe al menos toda la altura del viewport */
 }
 
+/* Estilo para las tarjetas */
 .card {
     border-radius: 10px;
     /* bordes redondeados para un estilo más suave */
 }
 
+/* Estilo para los títulos */
 h1 {
     font-size: 2rem;
     /* Título grande para la plataforma */
@@ -28,6 +39,7 @@ h2 {
     margin-bottom: 20px;
 }
 
+/* Estilo para los enlaces */
 a {
     font-size: 0.9rem;
     color: #007bff;
@@ -38,9 +50,9 @@ a:hover {
     text-decoration: underline;
 }
 
+/* Estilo para el token */
 .pepe {
     width: 32rem;
-
 }
 
 .token {
@@ -60,4 +72,48 @@ a:hover {
     /* Borde alrededor del token */
     border-radius: 5px;
     /* Esquinas redondeadas */
+}
+
+/* Estilos para centrar el formulario de login */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    /* Hace que el formulario ocupe el espacio disponible */
+}
+
+/* Estilos para el footer */
+footer {
+    background-color: #343a40;
+    /* Fondo oscuro */
+    color: #ffffff;
+    /* Texto blanco */
+    text-align: center;
+    /* Centrado de texto */
+    padding: 20px 0;
+    /* Relleno vertical */
+    margin-top: auto;
+    /* Hace que el footer esté al final */
+}
+
+/* Estilos para centrar el formulario */
+.form-container form {
+    max-width: 400px;
+    /* Ancho máximo del formulario */
+    width: 100%;
+    /* El formulario ocupará el 100% del espacio hasta el ancho máximo */
+    background-color: #ffffff;
+    /* Fondo blanco */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Sombra suave alrededor */
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+    color: #17a2b8;
+    /* Color para el título del formulario */
 }

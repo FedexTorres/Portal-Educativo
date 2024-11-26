@@ -139,7 +139,7 @@ async function validarFormularioRegistro(e) {
             console.log(resultado);
 
             if (resultado.status === 'success') {
-                mostrarMensajeExito("Registro exitoso. Redirigiendo...");
+                mostrarMensajeExito(resultado.message);
                 setTimeout(() => {
                     window.location.href = './login.php';
                 }, 2500);

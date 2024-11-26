@@ -1,3 +1,4 @@
+/* Estilos de los botones */
 .btn-menu {
   background-color: #17a2b8;
   color: #fff;
@@ -5,19 +6,12 @@
 
 .form-text#contraseñaHelp {
   background-color: #e31f09;
-  /* Verde turquesa similar al color del botón */
   color: white;
-  /* Letras blancas */
   padding: 5px 10px;
-  /* Relleno para que se vea como un "botón" */
   border-radius: 5px;
-  /* Bordes redondeados */
   display: inline-block;
-  /* Para que se comporte como un botón */
   font-size: 1.1rem;
-  /* Tamaño de la fuente */
   margin-top: 10px;
-  /* Espacio por encima del mensaje */
 }
 
 body {
@@ -43,12 +37,10 @@ body {
 
 .navbar-brand .logo-navbar {
   height: 120px;
-  /* mantiene la proporcion de la imagen */
   width: auto;
 }
 
-
-
+/* Estilo para los colapsables */
 .collapsible {
   background-color: #eee;
   color: #444;
@@ -61,17 +53,14 @@ body {
   font-size: 15px;
 }
 
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
 .active,
 .collapsible:hover {
   background-color: #ccc;
 }
 
-/* Style the collapsible content. Note: hidden by default */
 .content {
   padding: 0 18px;
   max-height: 0;
-
   overflow: hidden;
   background-color: #f1f1f1;
   transition: max-height 0.2s ease-out;
@@ -87,4 +76,34 @@ body {
 
 .active:after {
   content: "\2212";
+}
+
+/* reglas para hacer el footer fijo */
+
+html,
+body {
+  height: 100%;
+  /* Aseguramos que el body y html ocupen todo el alto */
+  margin: 0;
+  /* Eliminamos el margen por defecto */
+  display: flex;
+  /* Usamos flexbox para estructurar la página */
+  flex-direction: column;
+  /* Alineamos los elementos en columna */
+}
+
+body>div {
+  flex: 1;
+  /* Hace que el contenedor principal ocupe todo el espacio disponible */
+}
+
+footer {
+  background-color: #343a40;
+  /* Fondo oscuro para el footer */
+  color: #ffffff;
+  /* Texto blanco */
+  text-align: center;
+  /* Centra el contenido del footer */
+  padding: 20px 0;
+  /* Relleno vertical para el footer */
 }

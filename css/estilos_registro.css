@@ -1,19 +1,21 @@
+/* Estilos generales */
 body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     margin: 20px;
 }
 
-
+/* Estilos para la imagen del logo en la barra de navegación */
 .navbar-brand .logo-navbar {
     height: 140px;
-    /* mantiene la proporcion de la imagen */
     width: auto;
 }
 
+/* Estilo del título */
 .titulo {
     color: #17a2b8;
 }
 
+/* Estilos para los botones del menú */
 .btn-menu {
     background-color: #17a2b8;
     color: #fff;
@@ -29,20 +31,24 @@ body {
     cursor: pointer;
 }
 
+/* Estilos para las imágenes del carousel */
 .carousel-image {
     height: 300px;
     object-fit: cover;
 }
 
+/* Estilos para las imágenes de las tarjetas */
 .card-image {
     height: 200px;
     object-fit: cover;
 }
 
+/* Estilo de la tarjeta sin borde */
 .card {
     border: none;
 }
 
+/* Estilos para los botones de información */
 .btn-info {
     background-color: #17a2b8;
     color: #fff;
@@ -52,6 +58,40 @@ body {
     background-color: #138496;
 }
 
+/* Clase para ocultar elementos */
 .d-none {
     display: none !important;
+}
+
+/* Nuevas reglas para hacer el footer fijo */
+
+/* Aseguramos que html y body ocupen toda la altura */
+html,
+body {
+    height: 100%;
+    /* Garantiza que ocupe toda la altura del viewport */
+    margin: 0;
+    /* Eliminamos el margen predeterminado */
+    display: flex;
+    /* Aplicamos flexbox */
+    flex-direction: column;
+    /* Organiza los elementos en columna */
+}
+
+/* Estilo para el contenedor principal */
+body>div {
+    flex: 1;
+    /* Hace que el contenedor principal ocupe el espacio disponible */
+}
+
+/* Estilo para el footer */
+footer {
+    background-color: #343a40;
+    /* Fondo oscuro */
+    color: #ffffff;
+    /* Texto blanco */
+    text-align: center;
+    /* Centrado de texto */
+    padding: 20px 0;
+    /* Relleno vertical */
 }

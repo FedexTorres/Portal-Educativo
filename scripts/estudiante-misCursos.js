@@ -120,14 +120,7 @@ async function cargarMisCursos() {
 }
 
 async function renderizarCursos(cursos) {
-    const seccionMisCursos = document.getElementById('seccion-mis-cursos');
-
-    // Limpiar cursos anteriores si es necesario
-    seccionMisCursos.innerHTML = `
-        <h1 class="my-4 titulo">Mis Cursos</h1>
-        <hr>
-        <h3 class="my-4 titulo">Lista de cursos en los que estás inscripto</h3>
-    `;
+    const seccionMisCursos = document.getElementById('contenido-scroll');
 
     cursos.forEach(curso => {
         const cursoCard = document.createElement('div');
