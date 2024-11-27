@@ -28,12 +28,10 @@ $id_usuario = $_SESSION['usuario']['id']; // ID del usuario logueado (el profeso
 $id_curso = $data['id_curso'];  // Curso seleccionado
 
 try {
-    // Consulta para obtener los alumnos inscritos en el curso, excluyendo al usuario logueado
     $query = "SELECT u.id, u.nombre, u.apellido 
-              FROM usuarios u 
-              JOIN cursos_usuarios cu ON u.id = cu.id_usuario 
-              WHERE cu.id_curso = :id_curso AND u.id != :id_usuario";
-
+            FROM usuarios u 
+            JOIN inscripciones i ON u.id = i.id_usuario
+            WHERE i.id_curso = :id_curso AND u.id != :id_usuario";
     $stmt = $conn->prepare($query);
     $stmt->bindParam(':id_curso', $id_curso, PDO::PARAM_INT);
     $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);

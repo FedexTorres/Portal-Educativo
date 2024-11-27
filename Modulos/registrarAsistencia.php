@@ -50,6 +50,19 @@ try {
         exit;
     }
 
+    //Verificar si ya existe una asistencia registrada en la misma fecha para el curso 
+    $query = "SELECT COUNT(*) AS total FROM asistencias_fechas WHERE id_curso = :id_curso AND fecha = :fecha";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':id_curso', $id_curso, PDO::PARAM_INT);
+    $stmt->bindParam(':fecha', $fecha, PDO::PARAM_STR);
+    $stmt->execute();
+    $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($resultado['total'] > 0) {
+        echo json_encode(['status' => 'error', 'message' => 'Ya existe una asistencia registrada en esta fecha para este curso.']);
+        exit;
+    }
+
     // Guardar la fecha de asistencia
     $query = "INSERT INTO asistencias_fechas (id_curso, fecha) VALUES (:id_curso, :fecha)";
     $stmt = $conn->prepare($query);

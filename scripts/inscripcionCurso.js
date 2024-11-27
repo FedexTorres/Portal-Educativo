@@ -31,7 +31,6 @@ function mostrarMjsExito(cursoId, mensaje) {
 // Función principal para manejar la inscripción al curso
 async function inscribirEnCurso(e) {
     const cursoId = e.target.getAttribute('data-id'); // Tomamos el cursoId directamente del botón
-    console.log(cursoId);
     if (!cursoId) {
         mostrarErrorModal(cursoId, "Error: el ID del curso no se ha encontrado.");
         return;
@@ -41,7 +40,6 @@ async function inscribirEnCurso(e) {
     datos.append('curso_id', cursoId);
 
     try {
-        console.log('Enviando solicitud al servidor...');
         const respuesta = await fetch('Modulos/inscripcionCurso.php', {
             method: 'POST',
             body: datos,
